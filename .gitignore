@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+
+.env
+
+data/*.db
+data/*.db-journal
+output/audio/*
+output/video/*
+!output/audio/.gitkeep
+!output/video/.gitkeep
+
+.dist/
+
+# Locally-curated stock background videos (not source, not committed).
+assets/backgrounds/*
+!assets/backgrounds/README.md
+
