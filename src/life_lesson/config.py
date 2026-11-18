@@ -33,6 +33,10 @@ class Settings:
     music_dir: Path | None = None
     credits_file: Path | None = None
     tts_style_directives: bool = True
+    channel_handle: str = "@SakidJai_สะกิดใจ"
+    channel_url: str = "https://www.youtube.com/@SakidJai_%E0%B8%AA%E0%B8%B0%E0%B8%81%E0%B8%B4%E0%B8%94%E0%B9%83%E0%B8%88"
+    export_dir: Path | None = None
+    visual_mode: str = "illustrated"
 
     @property
     def audio_output_dir(self) -> Path:
@@ -63,5 +67,9 @@ def get_settings() -> Settings:
         thai_font_path=os.environ.get("THAI_FONT_PATH") or None,
         music_dir=_resolve_path(os.environ.get("MUSIC_DIR", "assets/music")),
         credits_file=_resolve_path(os.environ.get("CREDITS_FILE", "assets/credits.txt")),
+        channel_handle=os.environ.get("CHANNEL_HANDLE", "@SakidJai_สะกิดใจ"),
+        channel_url=os.environ.get("CHANNEL_URL", "https://www.youtube.com/@SakidJai_%E0%B8%AA%E0%B8%B0%E0%B8%81%E0%B8%B4%E0%B8%94%E0%B9%83%E0%B8%88"),
+        visual_mode=os.environ.get("VISUAL_MODE", "illustrated").lower(),
+        export_dir=_resolve_path(os.environ.get("EXPORT_DIR", "output/export")),
         tts_style_directives=os.environ.get("TTS_STYLE_DIRECTIVES", "1").lower() not in ("0", "false", "no"),
     )

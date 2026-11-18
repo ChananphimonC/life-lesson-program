@@ -71,6 +71,7 @@ def build_description(
     block_starts_ms: list[int],
     *,
     credits: list[str] | None = None,
+    channel_line: str | None = None,
 ) -> str:
     parts: list[str] = []
     if script.summary:
@@ -94,6 +95,8 @@ def build_description(
             uniq = list(dict.fromkeys(sources))
             parts.append("แหล่งข้อมูล: " + ", ".join(uniq))
 
+    if channel_line:
+        parts.append(channel_line)
     parts.append(FICTION_DISCLAIMER)
 
     credit_lines = [AI_DISCLOSURE] + list(credits or [])
@@ -200,6 +203,7 @@ def write_publish_bundle(
     duration_ms: int,
     *,
     credits: list[str] | None = None,
+    channel_line: str | None = None,
 ) -> dict[str, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     paths = {
@@ -210,7 +214,7 @@ def write_publish_bundle(
     }
     paths["title"].write_text(build_title(script, spec) + "\n", encoding="utf-8")
     paths["description"].write_text(
-        build_description(script, spec, block_starts_ms, credits=credits), encoding="utf-8"
+        build_description(script, spec, block_starts_ms, credits=credits, channel_line=channel_line), encoding="utf-8"
     )
     paths["thumbnail"].write_text(
         json.dumps(build_thumbnail_spec(script, spec, duration_ms), ensure_ascii=False, indent=2),

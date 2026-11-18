@@ -77,11 +77,17 @@ _COLOR_BALANCE = {
 }
 
 
-def grade_filter(mood: BlockMood | None) -> str:
+def grade_filter(mood: BlockMood | None, illustrated: bool = False) -> str:
     """ffmpeg video filter chain (no labels) for this mood; '' when no mood."""
     if mood is None:
         return "vignette=PI/5"
-    parts = [_LIGHT_EQ[mood.light], _COLOR_BALANCE[mood.color]]
+    # Illustrations already bake the light level into the drawing, so only the
+    # flicker animation is applied on top (avoids double-darkening).
+    if illustrated:
+        light = _LIGHT_EQ["flicker"] if mood.light == "flicker" else "eq=contrast=1.04"
+    else:
+        light = _LIGHT_EQ[mood.light]
+    parts = [light, _COLOR_BALANCE[mood.color]]
     if mood.weather == "fog":
         parts += ["curves=all='0/0.14 1/0.88'", "gblur=sigma=1.6"]
     if mood.weather == "storm":
@@ -110,4 +116,4 @@ def rain_chain(width: int, height: int, mood: BlockMood | None) -> str | None:
 
 
 def rain_opacity(mood: BlockMood) -> float:
-    return 0.3 if mood.weather == "rain" else 0.42
+    return 0.2 if mood.weather == "rain" else 0.3

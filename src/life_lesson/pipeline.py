@@ -12,6 +12,7 @@ unhappy after 3 rewrites: a human must decide), REJECTED (sensitive topic).
 
 from __future__ import annotations
 
+import json
 import logging
 import sqlite3
 from dataclasses import dataclass
@@ -116,6 +117,12 @@ def run_pipeline(
             video_path = _assemble_video(conn, settings, episode_id, audio_path, spec, scenes)
             publish_dir = _write_publish_bundle(
                 settings, episode_id, script, spec, block_starts_ms, duration_ms, scenes, video_path
+            )
+            thumb = publish_dir / "thumbnail.png"
+            repo.update_episode_meta(
+                conn, episode_id, title=script.title, format=spec.name,
+                publish_dir=str(publish_dir),
+                thumbnail_path=str(thumb) if thumb.exists() else None,
             )
         except PipelineError as exc:
             logger.error("Pipeline failed for episode %s: %s", episode_id, exc)
@@ -264,7 +271,9 @@ def _assemble_video(
     scenes: list[Scene],
 ) -> Path:
     output_path = settings.video_output_dir / f"{episode_id}.mp4"
-    needs_scenes = len(scenes) > 1 or any(s.mood for s in scenes)
+    needs_scenes = (
+        settings.visual_mode == "illustrated" or len(scenes) > 1 or any(s.mood for s in scenes)
+    )
 
     if needs_scenes:
         assemble_scene_video(
@@ -277,6 +286,7 @@ def _assemble_video(
             height=spec.height,
             show_cards=spec.name != "short",
             font_path=settings.thai_font_path,
+            visual_mode=settings.visual_mode,
         )
     else:
         assemble_video(
@@ -292,6 +302,10 @@ def _assemble_video(
     repo.update_episode_state(conn, episode_id, "VIDEO", video_path=str(output_path))
     logger.info("Video assembled for episode %s: %s", episode_id, output_path)
     return output_path
+
+
+def channel_line(settings: Settings) -> str:
+    return f"ดูเรื่องเต็มและเรื่องใหม่ได้ที่ช่อง {settings.channel_handle}\n{settings.channel_url}"
 
 
 def _credits(settings: Settings) -> list[str]:
@@ -319,7 +333,12 @@ def _write_publish_bundle(
 ) -> Path:
     out_dir = settings.output_dir / "publish" / episode_id
     write_publish_bundle(
-        out_dir, script, spec, block_starts_ms, duration_ms, credits=_credits(settings)
+        out_dir, script, spec, block_starts_ms, duration_ms,
+        credits=_credits(settings), channel_line=channel_line(settings),
+    )
+    # Needed later to rebuild chapters / cut Shorts without re-running TTS.
+    (out_dir / "timeline.json").write_text(
+        json.dumps({"block_starts_ms": block_starts_ms, "duration_ms": duration_ms}), encoding="utf-8"
     )
     write_shot_list(scenes, out_dir / "shot_list.json")
 

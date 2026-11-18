@@ -24,6 +24,7 @@ from PIL import Image, ImageDraw, ImageFont
 from life_lesson.errors import VideoAssemblyError
 from life_lesson.generation.atmosphere import BlockMood, grade_filter, rain_chain, rain_opacity
 from life_lesson.generation.schema import ScriptOutput
+from life_lesson.video.illustrator import character_colors, illustrate_scene, infer_setting
 from life_lesson.publish.fonts import find_thai_font
 
 logger = logging.getLogger(__name__)
@@ -43,6 +44,9 @@ class Scene:
     time_label: str | None
     visual_cue: str | None
     mood: BlockMood | None = None
+    setting: str = "room"
+    looks: tuple = ()  # character colour dicts for the illustrator
+    character_names: tuple = ()
 
     @property
     def duration_s(self) -> float:
@@ -63,7 +67,7 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
             continue
         groups.append(
             {"start": start, "title": title, "time_label": block.time_label,
-             "cue": block.visual_cue, "moods": []}
+             "cue": block.visual_cue, "moods": [], "cues": [], "settings": []}
         )
     if not groups:
         return []
@@ -76,6 +80,9 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
             gi += 1
         if block.mood is not None:
             groups[gi]["moods"].append(block.mood)
+        groups[gi]["cues"].append(block.visual_cue or "")
+        if block.setting:
+            groups[gi]["settings"].append(block.setting)
 
     merged: list[dict] = [groups[0]]
     for g in groups[1:]:
@@ -87,7 +94,12 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
     for i, g in enumerate(merged):
         end = merged[i + 1]["start"] if i + 1 < len(merged) else total_ms
         mood = max(g["moods"], key=lambda m: m.tension) if g["moods"] else None
-        scenes.append(Scene(i, g["start"], end, g["title"], g["time_label"], g["cue"], mood))
+        cue_text = " ".join(g["cues"])
+        setting = infer_setting(cue_text, g["settings"][0] if g["settings"] else None)
+        present = [c for c in script.characters if c.name and c.name in cue_text] or script.characters[:1]
+        looks = tuple(character_colors(c.outfit, c.palette, c.name) for c in present)
+        scenes.append(Scene(i, g["start"], end, g["title"], g["time_label"], g["cue"], mood,
+                            setting, looks, tuple(c.name for c in present)))
     return scenes
 
 
@@ -97,6 +109,7 @@ def write_shot_list(scenes: list[Scene], path: Path) -> Path:
     for sc in scenes:
         row = asdict(sc)
         row["mood"] = sc.mood.model_dump() if sc.mood else None  # pydantic, not a dataclass
+        row.pop("looks", None)  # drawing colours are derived data; names are kept
         rows.append(row)
     path.write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
     return path
@@ -157,15 +170,32 @@ def _run(command: list[str], what: str) -> None:
         raise VideoAssemblyError(f"ffmpeg failed while {what}: {result.stderr[-1500:]}")
 
 
+def _motion_filter(scene: Scene, width: int, height: int) -> str:
+    """Slow camera push-in (stronger when tense) with a gentle sideways drift."""
+    frames = max(2, int(scene.duration_s * 30))
+    push = 0.20 if (scene.mood and scene.mood.tension >= 4) else 0.11
+    return (
+        f"zoompan=z='1.0+{push}*on/{frames}':"
+        f"x='(iw-iw/zoom)/2+iw*0.018*sin(on/210)':y='(ih-ih/zoom)/2':"
+        f"d={frames}:s={width}x{height}:fps=30"
+    )
+
+
 def _scene_command(
     ffmpeg: str, clip: Path, card: Path | None, scene: Scene, width: int, height: int, out: Path
 ) -> list[str]:
     dur = scene.duration_s
     fade_out_at = max(0.0, dur - FADE_S)
-    cmd = [ffmpeg, "-y", "-stream_loop", "-1", "-i", str(clip)]
+    illustrated = clip.suffix.lower() == ".png"
+    if illustrated:
+        cmd = [ffmpeg, "-y", "-i", str(clip)]
+        first = f"[0:v]{_motion_filter(scene, width, height)},setsar=1,"
+    else:
+        cmd = [ffmpeg, "-y", "-stream_loop", "-1", "-i", str(clip)]
+        first = "[0:v]"
     steps = [
-        f"[0:v]scale={width}:{height}:force_original_aspect_ratio=increase,"
-        f"crop={width}:{height},{grade_filter(scene.mood)}[g0]"
+        f"{first}scale={width}:{height}:force_original_aspect_ratio=increase,"
+        f"crop={width}:{height},{grade_filter(scene.mood, illustrated)}[g0]"
     ]
     label, next_input = "g0", 1
 
@@ -212,17 +242,31 @@ def assemble_scene_video(
     show_cards: bool = True,
     font_path: str | None = None,
     background_offset: int = 0,
+    visual_mode: str = "stock",
 ) -> Path:
     if not scenes:
         raise VideoAssemblyError("No scenes to assemble")
-    clips = list_backgrounds(background_dir)
-    chosen = assign_backgrounds(len(scenes), clips, background_offset)
+    illustrated = visual_mode == "illustrated"
+    if not illustrated:
+        clips = list_backgrounds(background_dir)
+        chosen = assign_backgrounds(len(scenes), clips, background_offset)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     with tempfile.TemporaryDirectory(prefix="scenes_") as tmp:
         tmp_dir = Path(tmp)
         parts: list[Path] = []
-        for scene, clip in zip(scenes, chosen):
+        for n, scene in enumerate(scenes):
+            if illustrated:
+                clip = tmp_dir / f"art{scene.index:03d}.png"
+                # drawn 1.2x larger than the frame so the camera push-in stays sharp
+                illustrate_scene(
+                    (int(width * 1.2), int(height * 1.2)),
+                    setting=scene.setting, mood=scene.mood,
+                    characters=[dict(look) for look in scene.looks],
+                    seed=f"{scene.index}-{scene.title}", out_path=clip,
+                )
+            else:
+                clip = chosen[n]
             card = None
             if show_cards:
                 card = render_chapter_card(scene, (width, height), tmp_dir / f"card{scene.index}.png", font_path=font_path)

@@ -63,6 +63,7 @@ def _settings(tmp_path: Path) -> Settings:
         output_dir=tmp_path / "output",
         ffmpeg_binary="ffmpeg",
         log_level="INFO",
+        visual_mode="stock",
     )
 
 
