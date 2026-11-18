@@ -37,6 +37,7 @@ def build_master_command(
     narration: Path,
     output: Path,
     music: Path | None,
+    bed_gain_db: float = MUSIC_GAIN_DB,
 ) -> list[str]:
     loud = f"loudnorm=I={TARGET_LUFS}:TP={TRUE_PEAK_DB}:LRA={LRA}"
     if music is None:
@@ -47,7 +48,7 @@ def build_master_command(
     graph = (
         # narration is split: one copy drives the ducking, one is mixed
         "[0:a]asplit=2[voice][sc];"
-        f"[1:a]volume={MUSIC_GAIN_DB}dB,aformat=sample_rates=44100:channel_layouts=mono[bed];"
+        f"[1:a]volume={bed_gain_db}dB,aformat=sample_rates=44100:channel_layouts=mono[bed];"
         "[bed][sc]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=600[ducked];"
         "[voice]aformat=sample_rates=44100:channel_layouts=mono[v];"
         "[v][ducked]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[mix];"
@@ -67,9 +68,10 @@ def master_audio(
     narration: Path,
     output: Path,
     music: Path | None = None,
+    bed_gain_db: float = MUSIC_GAIN_DB,
 ) -> Path:
     output.parent.mkdir(parents=True, exist_ok=True)
-    command = build_master_command(ffmpeg_binary, narration, output, music)
+    command = build_master_command(ffmpeg_binary, narration, output, music, bed_gain_db)
     logger.info("Mastering audio (music=%s)", music)
     try:
         result = subprocess.run(command, capture_output=True, text=True, check=False)

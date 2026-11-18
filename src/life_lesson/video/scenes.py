@@ -93,9 +93,12 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
 
 def write_shot_list(scenes: list[Scene], path: Path) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        json.dumps([asdict(s) for s in scenes], ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    rows = []
+    for sc in scenes:
+        row = asdict(sc)
+        row["mood"] = sc.mood.model_dump() if sc.mood else None  # pydantic, not a dataclass
+        rows.append(row)
+    path.write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
     return path
 
 

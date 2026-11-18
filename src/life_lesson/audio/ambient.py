@@ -118,14 +118,16 @@ def build_ambient_bed(
 
     Returns None when no scene has any ambient sound and no music was given.
     """
+    graphs = [scene_filtergraph(sc.mood, sc.duration_s) for sc in scenes]
+    if music is None and all(g is None for g in graphs):
+        return None  # nothing audible: skip ffmpeg entirely
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="ambient_") as tmp:
         tmp_dir = Path(tmp)
         parts: list[Path] = []
         any_sound = False
-        for scene in scenes:
+        for scene, graph in zip(scenes, graphs):
             dur = scene.duration_s
-            graph = scene_filtergraph(scene.mood, dur)
             part = tmp_dir / f"bed{scene.index:03d}.wav"
             if graph is None:
                 cmd = [ffmpeg_binary, "-y", "-f", "lavfi", "-i", f"anullsrc=r={SR}:cl=mono", "-t", f"{dur:.3f}", str(part)]
@@ -135,9 +137,6 @@ def build_ambient_bed(
                 cmd = [ffmpeg_binary, "-y", "-filter_complex", graph, "-map", "[out]", "-t", f"{dur:.3f}", "-ar", str(SR), "-ac", "1", str(part)]
             _run(cmd, f"rendering ambient for scene {scene.index}")
             parts.append(part)
-
-        if not any_sound and music is None:
-            return None
 
         listing = tmp_dir / "list.txt"
         listing.write_text("".join(f"file '{p.as_posix()}'\n" for p in parts), encoding="utf-8")

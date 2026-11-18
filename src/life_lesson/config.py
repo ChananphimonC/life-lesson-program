@@ -32,6 +32,7 @@ class Settings:
     thai_font_path: str | None = None
     music_dir: Path | None = None
     credits_file: Path | None = None
+    tts_style_directives: bool = True
 
     @property
     def audio_output_dir(self) -> Path:
@@ -62,4 +63,5 @@ def get_settings() -> Settings:
         thai_font_path=os.environ.get("THAI_FONT_PATH") or None,
         music_dir=_resolve_path(os.environ.get("MUSIC_DIR", "assets/music")),
         credits_file=_resolve_path(os.environ.get("CREDITS_FILE", "assets/credits.txt")),
+        tts_style_directives=os.environ.get("TTS_STYLE_DIRECTIVES", "1").lower() not in ("0", "false", "no"),
     )

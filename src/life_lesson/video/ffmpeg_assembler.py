@@ -105,3 +105,15 @@ def assemble_video(
         )
 
     return output_path
+
+
+def extract_frame(ffmpeg_binary: str, video: Path, at_seconds: float, output_png: Path) -> Path:
+    """Grab one frame (e.g. as a thumbnail backdrop)."""
+    output_png.parent.mkdir(parents=True, exist_ok=True)
+    result = subprocess.run(
+        [ffmpeg_binary, "-y", "-ss", f"{at_seconds:.2f}", "-i", str(video), "-frames:v", "1", str(output_png)],
+        capture_output=True, text=True, check=False,
+    )
+    if result.returncode != 0 or not output_png.exists():
+        raise VideoAssemblyError(f"could not extract frame: {result.stderr[-500:]}")
+    return output_png
