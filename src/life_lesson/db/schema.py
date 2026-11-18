@@ -59,4 +59,29 @@ CREATE TABLE IF NOT EXISTS generation_attempts (
     raw_response TEXT,
     created_at TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS playlists (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    kind TEXT NOT NULL DEFAULT 'playlist',
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS playlist_items (
+    playlist_id TEXT NOT NULL REFERENCES playlists(id) ON DELETE CASCADE,
+    episode_id TEXT NOT NULL REFERENCES episodes(id) ON DELETE CASCADE,
+    position INTEGER NOT NULL,
+    PRIMARY KEY (playlist_id, episode_id)
+);
 """
+
+# Library columns added after v0.1; applied by `repository.init_db` to existing
+# databases too (SQLite has no ADD COLUMN IF NOT EXISTS).
+EPISODE_LIBRARY_COLUMNS = {
+    "title": "TEXT",
+    "format": "TEXT",
+    "kind": "TEXT NOT NULL DEFAULT 'episode'",
+    "parent_episode_id": "TEXT",
+    "publish_dir": "TEXT",
+    "thumbnail_path": "TEXT",
+}
