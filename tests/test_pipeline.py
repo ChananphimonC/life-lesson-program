@@ -9,6 +9,7 @@ from life_lesson.generation.critic import CATEGORIES
 from life_lesson import pipeline as pipeline_module
 
 from .conftest import make_silence_wav
+from .test_suspense import GOOD
 
 VALID_SCRIPT_JSON = json.dumps(
     {
@@ -302,7 +303,7 @@ def test_tts_receives_voice_directive(tmp_path, monkeypatch):
 
 
 def test_script_doctor_replaces_a_flat_script_and_logs_it(tmp_path, monkeypatch):
-    from .test_suspense import GOOD, _script as _lint_script
+    from .test_suspense import _script as _lint_script
 
     settings = _settings(tmp_path)
     better = _lint_script(GOOD, tensions=[3, 3, 4, 4, 5, 5, 4, 3])
@@ -316,7 +317,14 @@ def test_script_doctor_replaces_a_flat_script_and_logs_it(tmp_path, monkeypatch)
         calls.append(prompt)
         return json.dumps(flat) if len(calls) == 1 else better.model_dump_json()
 
+    def critic_or_judge(s, prompt):
+        if prompt.startswith("You are a sharp Thai audience reader"):  # the reader-judge
+            new_is_b = prompt.index(GOOD[0]) > prompt.index("VERSION B:")
+            return json.dumps({"winner": "B" if new_is_b else "A"})
+        return PASS_CRITIC_JSON
+
     monkeypatch.setattr(pipeline_module, "generate_script_text", llm)
+    monkeypatch.setattr(pipeline_module, "generate_critic_text", critic_or_judge)
     monkeypatch.setattr(pipeline_module, "pick_random_background", lambda d: tmp_path / "f.mp4")
     monkeypatch.setattr(pipeline_module, "assemble_video", _touch_video)
     monkeypatch.setattr(pipeline_module, "assemble_scene_video", _touch_video)
@@ -324,7 +332,7 @@ def test_script_doctor_replaces_a_flat_script_and_logs_it(tmp_path, monkeypatch)
     tts = FakeTTSProvider()
     result = pipeline_module.run_pipeline("situation", settings=settings, tts_provider=tts)
     assert result.state == "DONE", result.error_message
-    assert any("ข้อความ" in t or "เที่ยงคืน" in t for t in tts.texts)  # the rewritten text was voiced
+    assert any(GOOD[0] in t for t in tts.texts)  # the rewritten text was voiced
     with repo.open_db(settings.db_path) as conn:
         rows = conn.execute("SELECT status, error_message FROM generation_attempts WHERE stage='punchup'").fetchall()
         assert len(rows) == 1 and rows[0]["status"] == "improved"

@@ -65,7 +65,10 @@ class LintReport:
 
     def summary(self) -> str:
         lines = [f"score {self.score}/100"]
-        lines += [f"- [{f.severity}{"/soft" if f.soft else ""}] {f.code}: {f.message}" + (f" (blocks {f.blocks})" if f.blocks else "") for f in self.findings]
+        for f in self.findings:
+            tag = f"{f.severity}/soft" if f.soft else f.severity
+            where = f" (blocks {f.blocks})" if f.blocks else ""
+            lines.append(f"- [{tag}] {f.code}: {f.message}{where}")
         return "\n".join(lines)
 
 
