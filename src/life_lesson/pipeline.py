@@ -42,6 +42,7 @@ from life_lesson.generation.prompts import (
 )
 from life_lesson.generation.safety import screen_topic
 from life_lesson.generation.schema import ScriptOutput, check_format, validate_script_json
+from life_lesson.publish.credits import build_credits, channel_line
 from life_lesson.publish.metadata import build_thumbnail_spec, write_publish_bundle
 from life_lesson.publish.thumbnail import render_thumbnail
 from life_lesson.tts.base import TTSProvider
@@ -330,21 +331,7 @@ def _gather_references(settings: Settings, scenes: list[Scene]) -> tuple[list[Sc
     return out, credits
 
 
-def channel_line(settings: Settings) -> str:
-    return f"ดูเรื่องเต็มและเรื่องใหม่ได้ที่ช่อง {settings.channel_handle}\n{settings.channel_url}"
-
-
-def _credits(settings: Settings) -> list[str]:
-    lines = [
-        f"เสียงบรรยาย: {settings.gemini_tts_model} (voice: {settings.gemini_tts_voice})",
-        "เสียงบรรยากาศ: สังเคราะห์ด้วยซอฟต์แวร์",
-    ]
-    path = settings.credits_file
-    if path is not None and path.is_file():
-        lines += [ln.strip() for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip()]
-    else:
-        lines.append("วิดีโอพื้นหลัง/ดนตรี: ระบุแหล่งที่มาและใบอนุญาตก่อนเผยแพร่ (assets/credits.txt)")
-    return lines
+_credits = build_credits  # kept for existing call sites
 
 
 def _write_publish_bundle(

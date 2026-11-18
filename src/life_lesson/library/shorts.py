@@ -134,7 +134,7 @@ def caption_chunks(text: str, start_ms: int, end_ms: int, max_chars: int = 26) -
     return out
 
 
-def _png_text(text: str, size: tuple[int, int], font_path: Path, font_px: int, *, box: bool, fg=(255, 255, 255), pos="bottom") -> Image.Image:
+def _png_text(text: str, size: tuple[int, int], font_path: Path, font_px: int, *, box: bool, fg=(255, 255, 255), y_frac: float = 0.70) -> Image.Image:
     img = Image.new("RGBA", size, (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     font = ImageFont.truetype(str(font_path), font_px)
@@ -143,7 +143,7 @@ def _png_text(text: str, size: tuple[int, int], font_path: Path, font_px: int, *
         font = ImageFont.truetype(str(font_path), font_px)
     tw = d.textlength(text, font=font)
     x = (size[0] - tw) / 2
-    y = size[1] * (0.60 if pos == "bottom" else 0.08)
+    y = size[1] * y_frac
     if box:
         pad = font_px * 0.35
         d.rounded_rectangle([x - pad, y - pad * 0.5, x + tw + pad, y + font_px * 1.25 + pad * 0.3], radius=font_px * 0.3, fill=(0, 0, 0, 150))
@@ -184,7 +184,14 @@ def render_short(
     font_path: str | None = None,
     width: int = 1080,
     height: int = 1920,
+    layout: str = "fit",
 ) -> Path:
+    """layout "fit": whole 16:9 frame over a blurred copy (nothing cropped);
+    "tall": crop the centre 56% of the frame to fill most of the 9:16 screen."""
+    if layout not in ("fit", "tall"):
+        raise VideoAssemblyError("layout must be 'fit' or 'tall'")
+    # fit leaves blurred bands above/below the picture: titles/captions live in the bands
+    title_y, cap_y = (0.27, 0.70) if layout == "fit" else (0.06, 0.66)
     font = find_thai_font(font_path)
     dur = window.duration_s
     total = dur + CTA_SECONDS
@@ -196,7 +203,7 @@ def render_short(
         overlays: list[tuple[Path, float, float]] = []  # png, start_s, end_s
 
         title_png = tmp_dir / "title.png"
-        _png_text(title, (width, height), font, int(width * 0.062), box=True, pos="top").save(title_png)
+        _png_text(title, (width, height), font, int(width * 0.062), box=True, y_frac=title_y).save(title_png)
         overlays.append((title_png, 0.0, dur))
 
         n = 0
@@ -205,7 +212,7 @@ def render_short(
             b_end = min(ends_ms[idx], window.end_ms) - window.start_ms
             for text, a, b in caption_chunks(script.script_blocks[idx].text, b_start, b_end):
                 png = tmp_dir / f"cap{n:03d}.png"
-                _png_text(text, (width, height), font, int(width * 0.066), box=True).save(png)
+                _png_text(text, (width, height), font, int(width * 0.066), box=True, y_frac=cap_y).save(png)
                 overlays.append((png, a / 1000, b / 1000))
                 n += 1
 
@@ -220,7 +227,8 @@ def render_short(
             f"[0:v]tpad=stop_mode=clone:stop_duration={CTA_SECONDS},split[a][b]",
             f"[a]scale={width}:{height}:force_original_aspect_ratio=increase,crop={width}:{height},"
             "gblur=sigma=28,eq=brightness=-0.18[bg]",
-            f"[b]scale={width}:-2[fg]",
+            (f"[b]scale={width}:-2[fg]" if layout == "fit"
+             else f"[b]crop=iw*0.56:ih,scale={width}:-2[fg]"),
             "[bg][fg]overlay=(W-w)/2:(H-h)/2[v0]",
         ]
         label = "v0"
