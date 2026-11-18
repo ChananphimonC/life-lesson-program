@@ -125,14 +125,12 @@ def build_ambient_bed(
     with tempfile.TemporaryDirectory(prefix="ambient_") as tmp:
         tmp_dir = Path(tmp)
         parts: list[Path] = []
-        any_sound = False
         for scene, graph in zip(scenes, graphs):
             dur = scene.duration_s
             part = tmp_dir / f"bed{scene.index:03d}.wav"
             if graph is None:
                 cmd = [ffmpeg_binary, "-y", "-f", "lavfi", "-i", f"anullsrc=r={SR}:cl=mono", "-t", f"{dur:.3f}", str(part)]
             else:
-                any_sound = True
                 # lavfi sources are inlined in the graph, so no -i inputs: use a null input
                 cmd = [ffmpeg_binary, "-y", "-filter_complex", graph, "-map", "[out]", "-t", f"{dur:.3f}", "-ar", str(SR), "-ac", "1", str(part)]
             _run(cmd, f"rendering ambient for scene {scene.index}")

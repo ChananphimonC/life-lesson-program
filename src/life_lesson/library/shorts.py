@@ -15,7 +15,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-from life_lesson.errors import PipelineError, VideoAssemblyError
+from life_lesson.errors import VideoAssemblyError
 from life_lesson.generation.atmosphere import scaled_pause_ms
 from life_lesson.generation.schema import ScriptOutput
 from life_lesson.publish.fonts import find_thai_font

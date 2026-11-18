@@ -19,7 +19,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 from life_lesson.generation.atmosphere import BlockMood
-from life_lesson.video.scene_kb import SceneRecipe, retrieve_recipe
+from life_lesson.video.scene_kb import SceneRecipe
 
 SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall")
 
@@ -32,12 +32,6 @@ _COLOR_WORDS = {
     "เทา": (130, 134, 140), "gray": (130, 134, 140), "grey": (130, 134, 140),
     "น้ำตาล": (120, 80, 50), "brown": (120, 80, 50), "ครีม": (232, 220, 190), "cream": (232, 220, 190),
 }
-
-
-def infer_setting(visual_cue: str | None, explicit: str | None = None) -> str:
-    if explicit in SETTINGS:
-        return explicit  # type: ignore[return-value]
-    return retrieve_recipe(visual_cue).setting
 
 
 def color_from_text(text: str | None, fallback_seed: str = "") -> tuple[int, int, int]:
@@ -56,7 +50,6 @@ def _hex(value: str) -> tuple[int, int, int] | None:
     return None
 
 
-ITEMS = ("apron", "cap", "hairnet", "glasses", "backpack", "hood", "lanyard", "towel")
 _ITEM_WORDS = {
     "apron": ("เอี๊ยม", "ผ้ากันเปื้อน", "apron"),
     "cap": ("หมวก", "cap", "hat"),
@@ -119,7 +112,7 @@ def _glow(base: Image.Image, center, radius, color, strength=0.9):
     cx, cy = center
     d.ellipse([cx - radius, cy - radius, cx + radius, cy + radius], fill=tuple(int(c * strength) for c in color))
     layer = layer.filter(ImageFilter.GaussianBlur(radius * 0.55))
-    return Image.blend(base, Image.composite(layer, base, Image.new("L", base.size, 255)), 0) if False else _screen(base, layer)
+    return _screen(base, layer)
 
 
 def _screen(a: Image.Image, b: Image.Image) -> Image.Image:
@@ -153,7 +146,6 @@ def _stars(d: ImageDraw.ImageDraw, rng, w, h_limit, n=70):
 
 
 def _moon(img, center, r):
-    d = ImageDraw.Draw(img)
     img.paste(_glow(img, center, r * 3, (90, 100, 130), 0.8))
     d = ImageDraw.Draw(img)
     cx, cy = center
@@ -197,9 +189,6 @@ def _lamp_post(img, d, x, base_y, h, night):
     if night:
         return (x, base_y - h + 8)
     return None
-
-
-EXPRESSIONS = ("neutral", "soft", "smile", "worried", "wide")
 
 
 def expression_for(mood: BlockMood | None) -> str:
@@ -304,7 +293,6 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
     outfit, hair, skin, accent = colors["outfit"], colors["hair"], colors["skin"], colors["accent"]
     items = set(items if items is not None else colors.get("items", ()))
     dark = tuple(max(0, c - 40) for c in outfit)
-    light = tuple(min(255, c + 50) for c in outfit)
 
     if sitting:
         torso_top, torso_bot, head_y = ground_y - 112 * s, ground_y - 4 * s, ground_y - 138 * s
@@ -313,7 +301,6 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
     shoulder_y = torso_top + 9 * s
 
     if "backpack" in items:  # behind the body
-        bp = tuple(max(0, c - 70) for c in accent)
         d.rounded_rectangle([x - 30 * s, torso_top + 4 * s, x + 30 * s, torso_bot - 4 * s], 10 * s, fill=(58, 62, 78))
     if not sitting:
         d.rectangle([x - 14 * s, ground_y - 62 * s, x - 3 * s, ground_y], fill=dark)

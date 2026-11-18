@@ -4,26 +4,16 @@ import subprocess
 import wave
 
 import pytest
-from PIL import Image
 
 from life_lesson.errors import PipelineError
 from life_lesson.generation.atmosphere import BlockMood
 from life_lesson.publish.fonts import find_thai_font
 from life_lesson.video.illustrator import (
-    SETTINGS, character_colors, color_from_text, illustrate_scene, infer_setting,
+    SETTINGS, character_colors, color_from_text, illustrate_scene,
 )
 from life_lesson.video.scenes import assemble_scene_video, plan_scenes
 
 from .test_publish_metadata import _script
-
-
-def test_infer_setting_from_thai_and_english_cues():
-    assert infer_setting("นักศึกษานั่งริมหาดบนเกาะ") == "island"
-    assert infer_setting("เรือเล็กกลางทะเลตอนฝนตก") == "sea"
-    assert infer_setting("a woman at her desk") == "room"
-    assert infer_setting("ไม่มีคำบอกใบ้") == "room"
-    assert infer_setting("whatever", explicit="forest") == "forest"
-    assert infer_setting("whatever", explicit="bogus") == "room"
 
 
 def test_outfit_colour_words_drive_the_figure():

@@ -5,7 +5,6 @@ import subprocess
 import pytest
 
 from life_lesson.errors import PipelineError
-from life_lesson.generation.atmosphere import BlockMood
 from life_lesson.generation.schema import ScriptOutput
 from life_lesson.library.shorts import (
     block_end_times, caption_chunks, pick_teaser_window, render_short,

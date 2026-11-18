@@ -109,7 +109,7 @@ def run_pipeline(
                 script, passed = _review_script(conn, settings, episode_id, script, spec)
                 if not passed:
                     msg = (
-                        f"Critic still flagged the script after the maximum rewrites; "
+                        "Critic still flagged the script after the maximum rewrites; "
                         "a human must edit, discard or restart the topic."
                     )
                     repo.update_episode_state(conn, episode_id, "FAILED_REVIEW", error_message=msg)
