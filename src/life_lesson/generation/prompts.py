@@ -60,6 +60,14 @@ like comfort, not like a suggestion. The ending stays open.
 - Separate real from invented: put real-world facts you rely on in "facts" \
 (claim, source_hint as a TYPE of source, confidence). Characters, events and \
 places you invent are fiction and must not appear in "facts".
+- STORY CRAFT: give the main character a specific, ordinary want in the first \
+30 seconds; plant a small open question early and answer it only partly; end \
+each chapter on a concrete image or a line that makes the listener lean in, \
+never on a moral.
+- CHARACTERS: invent at most 3 people. For each, fix ONE outfit and ONE \
+signature item and list them in "characters" (name, role, age_range, outfit, \
+signature_item, palette). Keep the outfit identical in every visual_cue. Never \
+base a character on a real person.
 - Never describe violence, injury, death or any crisis topic.\
 """
 
@@ -105,6 +113,9 @@ matching exactly this structure:
     "format": "{format_name}",
     "motif": "<the recurring object/sound>"
   }},
+  "characters": [
+    {{"name": "<invented name>", "role": "<role>", "age_range": "<e.g. 20s>", "outfit": "<one fixed outfit>", "signature_item": "<one item>", "palette": ["<2-3 colors>"]}}
+  ],
   "facts": [
     {{"claim": "<real-world fact used>", "source_hint": "<type of source>", "confidence": "high|medium|low"}}
   ],

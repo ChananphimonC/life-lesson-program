@@ -55,3 +55,9 @@ def test_unknown_format_rejected():
 
     with pytest.raises(ScriptValidationError):
         build_script_prompt("t", "x", episode_format="movie")
+
+
+def test_prompt_asks_for_character_sheet_and_story_craft():
+    prompt = build_script_prompt("t", "x")
+    assert '"characters"' in prompt and "outfit" in prompt
+    assert "STORY CRAFT" in prompt

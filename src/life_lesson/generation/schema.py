@@ -36,6 +36,18 @@ class Fact(BaseModel):
     confidence: Literal["high", "medium", "low"] = "medium"
 
 
+class Character(BaseModel):
+    """Fixed look for a recurring character so visuals stay consistent
+    across chapters (STYLE_GUIDE.md §13). Invented people only."""
+
+    name: str = Field(min_length=1)
+    role: str | None = None
+    age_range: str | None = None
+    outfit: str = Field(min_length=1)
+    signature_item: str | None = None
+    palette: list[str] = Field(default_factory=list)
+
+
 class ScriptMetadata(BaseModel):
     mood: str
     estimated_duration_seconds: int = Field(gt=0)
@@ -51,6 +63,7 @@ class ScriptOutput(BaseModel):
     metadata: ScriptMetadata
     script_blocks: list[ScriptBlock] = Field(min_length=1)
     facts: list[Fact] = Field(default_factory=list)
+    characters: list[Character] = Field(default_factory=list)
     summary: str | None = None
 
     @field_validator("script_blocks")
