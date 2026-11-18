@@ -29,6 +29,9 @@ class Settings:
     output_dir: Path
     ffmpeg_binary: str
     log_level: str
+    thai_font_path: str | None = None
+    music_dir: Path | None = None
+    credits_file: Path | None = None
 
     @property
     def audio_output_dir(self) -> Path:
@@ -56,4 +59,7 @@ def get_settings() -> Settings:
         output_dir=_resolve_path(os.environ.get("OUTPUT_DIR", "output")),
         ffmpeg_binary=os.environ.get("FFMPEG_BINARY", "ffmpeg"),
         log_level=os.environ.get("LOG_LEVEL", "INFO"),
+        thai_font_path=os.environ.get("THAI_FONT_PATH") or None,
+        music_dir=_resolve_path(os.environ.get("MUSIC_DIR", "assets/music")),
+        credits_file=_resolve_path(os.environ.get("CREDITS_FILE", "assets/credits.txt")),
     )
