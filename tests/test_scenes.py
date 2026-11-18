@@ -130,3 +130,22 @@ def test_rain_keeps_colours(tmp_path):
         # rain adds light streaks but must not shift hue: green stays within reach of clear
         assert all(abs(a - b) < 30 for a, b in zip(clear, other)), (clear, other)
         assert other[2] >= other[1] >= other[0] - 5  # still a cool, blue-ish picture
+
+
+@needs_ffmpeg
+def test_rain_layer_is_sparse_so_it_never_veils_the_picture():
+    """Regression: rain once covered ~8-13% of every frame and hid the artwork."""
+    import io
+
+    from life_lesson.generation.atmosphere import BlockMood, rain_chain
+
+    for weather, limit in (("rain", 3.5), ("storm", 5.5)):
+        chain = rain_chain(480, 270, BlockMood(weather=weather))
+        out = subprocess.run(["ffmpeg", "-loglevel", "error", "-f", "lavfi", "-i", chain, "-frames:v", "1",
+                              "-vf", "format=gray", "-f", "image2pipe", "-vcodec", "png", "-"],
+                             capture_output=True, check=True).stdout
+        from PIL import Image
+
+        img = Image.open(io.BytesIO(out)).convert("L")
+        share = 100 * sum(1 for p in img.get_flattened_data() if p > 128) / (480 * 270)
+        assert 0.3 < share < limit, (weather, share)

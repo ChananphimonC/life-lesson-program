@@ -102,18 +102,20 @@ def rain_chain(width: int, height: int, mood: BlockMood | None) -> str | None:
     """lavfi source + filters producing sparse vertical rain streaks, or None.
 
     Built from mid-grey temporal noise (so every frame differs), blurred
-    vertically into streaks, then thresholded so only the brightest ~8-12%
+    vertically into streaks, then thresholded so only the brightest ~2-3%
     survive -- black elsewhere, so a 'screen' blend leaves the picture intact.
     """
     if mood is None or mood.weather not in ("rain", "storm"):
         return None
-    sigma_v, cut_lo, cut_hi = (9, 0.84, 0.91) if mood.weather == "rain" else (13, 0.79, 0.87)
+    # Light rain ~2% of pixels, storm ~3%: enough to read as rain without veiling the drawing.
+    noise, sigma_v = (70, 9) if mood.weather == "rain" else (90, 12)
+    cut_lo, cut_hi = 0.92, 0.965
     return (
         f"color=c=gray:s={width}x{height}:r=30,"
-        f"noise=alls=100:allf=t,format=gray,gblur=sigma=0.5:sigmaV={sigma_v},eq=contrast=7,"
+        f"noise=alls={noise}:allf=t,format=gray,gblur=sigma=0.5:sigmaV={sigma_v},eq=contrast=7,"
         f"curves=all='0/0 {cut_lo}/0 {cut_hi}/0.9 1/1',format=gbrp"
     )
 
 
 def rain_opacity(mood: BlockMood) -> float:
-    return 0.2 if mood.weather == "rain" else 0.3
+    return 0.3 if mood.weather == "rain" else 0.38

@@ -246,9 +246,9 @@ def _scene_command(
     )
     cmd += [
         "-filter_complex", ";".join(steps), "-map", "[v]", "-t", f"{dur:.3f}",
-        "-an", "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
-        # rain/noise layers are incompressible: cap the rate so long episodes stay uploadable
-        "-maxrate", "6M", "-bufsize", "12M", str(out),
+        "-an", "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "19",
+        # sharp 1080p flat art needs a generous rate; the cap keeps long episodes uploadable
+        "-maxrate", "9M", "-bufsize", "18M", "-tune", "animation", str(out),
     ]
     return cmd
 
@@ -306,7 +306,7 @@ def assemble_scene_video(
         _run(
             [
                 ffmpeg_binary, "-y", "-i", str(silent), "-i", str(audio_path),
-                "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "aac",
+                "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
                 "-ar", "44100", "-shortest", "-movflags", "+faststart", str(output_path),
             ],
             "muxing audio",
