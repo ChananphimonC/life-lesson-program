@@ -63,3 +63,22 @@ pytest
 Tests cover schema validation, the SQLite repository layer, prompt content,
 and pipeline orchestration/state transitions using fakes for the Gemini and
 TTS calls (no network access or API key required to run the test suite).
+
+
+## Library: manage finished clips
+
+```bash
+python -m life_lesson.library list                       # episodes + Shorts
+python -m life_lesson.library show <id>                  # ids can be a short prefix
+python -m life_lesson.library export <id> [--to DIR]     # copy the MP4 for upload/download
+python -m life_lesson.library thumbnail <id> --title "..." --tag "23:47" --frame-at 12
+python -m life_lesson.library description <id>           # rebuild title + description
+python -m life_lesson.library short <id> --full-url URL  # 30-55 s Short from the real episode
+python -m life_lesson.library playlist create "ซีรีส์" ; playlist add "ซีรีส์" <id>...
+python -m life_lesson.library delete <id> --yes          # files only inside OUTPUT_DIR
+```
+
+Shorts end with a card pointing to the channel (`CHANNEL_HANDLE`, default `@SakidJai_สะกิดใจ`).
+Visuals are drawn offline by default (`VISUAL_MODE=illustrated`: no stock footage, no paid API);
+`REFERENCE_SEARCH=1` optionally nudges colours from open-licence reference photos (Openverse).
+See [`docs/GROWTH_PLAYBOOK.md`](docs/GROWTH_PLAYBOOK.md).
