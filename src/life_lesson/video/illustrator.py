@@ -115,7 +115,7 @@ def character_colors(
     items = tuple(sorted(items_from_text(outfit) | set(extra_items)))
     if sleeve is None:
         sleeve = "short" if any(w in (outfit or "").lower() for w in _SHORT_SLEEVE_WORDS) else "long"
-    return {"outfit": main, "hair": hair_rgb, "skin": skin, "accent": accent, "items": items, "sleeve": sleeve,
+    return {"name": name, "outfit": main, "hair": hair_rgb, "skin": skin, "accent": accent, "items": items, "sleeve": sleeve,
             "hair_style": style or "short", "female": female}
 
 
@@ -234,7 +234,7 @@ def expression_for(mood: BlockMood | None) -> str:
     return "neutral"
 
 
-def _draw_face(d, x, head_y, s, expression: str, female: bool = False):
+def _draw_face(d, x, head_y, s, expression: str, female: bool = False, talking: bool = False):
     ink = (34, 28, 30)
     ey = head_y - 1 * s
     wide = expression == "wide"
@@ -270,6 +270,10 @@ def _draw_face(d, x, head_y, s, expression: str, female: bool = False):
             d.ellipse([x + sign * 12 * s - 3.2 * s, head_y + 5 * s, x + sign * 12 * s + 3.2 * s, head_y + 9.5 * s], fill=(238, 160, 150))
     my = head_y + 10 * s
     w = max(2, int(1.8 * s))
+    if talking and expression != "asleep":   # the speaker: mouth open mid-word, brows lifted a little
+        d.ellipse([x - 4.4 * s, my - 2.6 * s, x + 4.4 * s, my + 6.4 * s], fill=(122, 38, 44))
+        d.ellipse([x - 2.6 * s, my + 2.6 * s, x + 2.6 * s, my + 6.0 * s], fill=(226, 120, 120))
+        return
     if expression == "asleep":  # eyes shut: pretending to sleep
         d.line([(x - 4 * s, my + 1 * s), (x + 4 * s, my + 1 * s)], fill=ink, width=w)
         return
@@ -330,12 +334,15 @@ def _draw_arm(d, shoulder, target, s, colors):
     return hand
 
 
-def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutral", hands=None, items=None):
+def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutral", hands=None, items=None, talking=False):
     """`hands` = {"L": (x, y), "R": (x, y)} screen-side targets in pixels; default pose if None."""
     outfit, hair, skin, accent = colors["outfit"], colors["hair"], colors["skin"], colors["accent"]
     items = set(items if items is not None else colors.get("items", ()))
     dark = tuple(max(0, c - 40) for c in outfit)
 
+    female = bool(colors.get("female"))
+    sho = (19.5 if female else 22) * s          # shoulder half-width: arms hang from here
+    leg_in, leg_out = (4.5, 11.5) if female else (3, 14)
     if sitting:
         torso_top, torso_bot, head_y = ground_y - 112 * s, ground_y - 4 * s, ground_y - 138 * s
     else:
@@ -345,8 +352,8 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
     if "backpack" in items:  # behind the body
         d.rounded_rectangle([x - 30 * s, torso_top + 4 * s, x + 30 * s, torso_bot - 4 * s], 10 * s, fill=(58, 62, 78))
     if not sitting:
-        d.rectangle([x - 14 * s, ground_y - 62 * s, x - 3 * s, ground_y], fill=dark)
-        d.rectangle([x + 3 * s, ground_y - 62 * s, x + 14 * s, ground_y], fill=dark)
+        d.rectangle([x - leg_out * s, ground_y - 62 * s, x - leg_in * s, ground_y], fill=dark)
+        d.rectangle([x + leg_in * s, ground_y - 62 * s, x + leg_out * s, ground_y], fill=dark)
         if "shopping_bags" in items:  # market bags dumped around the feet
             for dx, col, hh in ((-44, (232, 120, 120), 40), (36, (120, 180, 230), 34), (58, (240, 214, 120), 28)):
                 bx = x + dx * s
@@ -356,9 +363,25 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
             d.rounded_rectangle([x + sign * 8.5 * s - 10 * s, ground_y - 5 * s, x + sign * 8.5 * s + 10 * s, ground_y + 2 * s], 3 * s, fill=(36, 36, 44))
     style = colors.get("hair_style", "short")
     if style == "long" and "hood" not in items:       # long hair falls behind the shoulders
-        d.rounded_rectangle([x - 27 * s, head_y - 22 * s, x + 27 * s, torso_top + 62 * s], 16 * s, fill=hair)
-        d.rounded_rectangle([x - 27 * s, torso_top + 40 * s, x + 27 * s, torso_top + 62 * s], 10 * s, fill=tuple(max(0, c - 14) for c in hair))
-    d.rounded_rectangle([x - 22 * s, torso_top, x + 22 * s, torso_bot], 12 * s, fill=outfit)
+        d.rounded_rectangle([x - 27 * s, head_y - 22 * s, x + 27 * s, torso_top + 50 * s], 16 * s, fill=hair)
+        for k in range(-2, 3):  # wavy ends: overlapping curls instead of a straight cut
+            cx_ = x + k * 11 * s
+            d.ellipse([cx_ - 8.5 * s, torso_top + 40 * s + (k % 2) * 5 * s, cx_ + 8.5 * s, torso_top + 64 * s + (k % 2) * 5 * s], fill=hair)
+        light = tuple(min(255, c + 26) for c in hair)
+        for k in (-20, -11, -2, 8, 17):  # long soft strands
+            pts = [(x + k * s + 3.2 * s * math.sin(t * 0.18 + k), head_y - 12 * s + t * s) for t in range(0, int((torso_top - head_y) / max(s, 0.01)) + 56, 6)]
+            if len(pts) > 1:
+                d.line(pts, fill=light, width=max(1, int(1.4 * s)))
+    if female:  # hourglass: shoulders, a defined waist, gentle hips
+        H = torso_bot - torso_top
+        half = [(0.0, 15.0), (0.06, 19.5), (0.30, 18.0), (0.58, 13.5), (0.82, 17.5), (1.0, 20.0)]
+        right = [(x + hw * s, torso_top + t * H) for t, hw in half]
+        left = [(x - hw * s, torso_top + t * H) for t, hw in reversed(half)]
+        d.polygon(right + left, fill=outfit)
+        for px_, py_ in ((x - 17 * s, torso_top + 5 * s), (x + 17 * s, torso_top + 5 * s)):  # rounded shoulders
+            d.ellipse([px_ - 4.5 * s, py_ - 4.5 * s, px_ + 4.5 * s, py_ + 4.5 * s], fill=outfit)
+    else:
+        d.rounded_rectangle([x - 22 * s, torso_top, x + 22 * s, torso_bot], 12 * s, fill=outfit)
     if "collar" in items:  # white blouse collar
         d.polygon([(x - 4 * s, torso_top + 1 * s), (x - 17 * s, torso_top + 4 * s), (x - 10 * s, torso_top + 17 * s)], fill=(250, 250, 248), outline=(214, 214, 210))
         d.polygon([(x + 4 * s, torso_top + 1 * s), (x + 17 * s, torso_top + 4 * s), (x + 10 * s, torso_top + 17 * s)], fill=(250, 250, 248), outline=(214, 214, 210))
@@ -368,12 +391,13 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
         d.polygon([(x, torso_top + 12 * s), (x + 13 * s, torso_top + 5 * s), (x + 13 * s, torso_top + 19 * s)], fill=bc)
         d.ellipse([x - 4 * s, torso_top + 8 * s, x + 4 * s, torso_top + 16 * s], fill=tuple(max(0, c - 30) for c in bc))
     if "skirt_white" in items and not sitting:  # flared white skirt over the upper legs
-        d.polygon([(x - 23 * s, torso_bot - 6 * s), (x + 23 * s, torso_bot - 6 * s),
+        d.polygon([(x - 20 * s, torso_bot - 6 * s), (x + 20 * s, torso_bot - 6 * s),
                    (x + 31 * s, ground_y - 36 * s), (x - 31 * s, ground_y - 36 * s)], fill=(246, 246, 242), outline=(214, 214, 210), width=max(1, int(1.5 * s)))
     if "waist_wrap" in items:  # cardigan tied round the waist: band, knot and two tails
         wc = (122, 126, 134)
         wy = torso_bot - 4 * s
-        d.rounded_rectangle([x - 24 * s, wy - 7 * s, x + 24 * s, wy + 7 * s], 4 * s, fill=wc)
+        wh = (18 if female else 24) * s
+        d.rounded_rectangle([x - wh, wy - 7 * s, x + wh, wy + 7 * s], 4 * s, fill=wc)
         d.ellipse([x + 8 * s, wy - 9 * s, x + 22 * s, wy + 5 * s], fill=tuple(c - 14 for c in wc))
         d.polygon([(x + 10 * s, wy + 3 * s), (x + 6 * s, wy + 26 * s), (x + 15 * s, wy + 22 * s)], fill=wc)
         d.polygon([(x + 17 * s, wy + 3 * s), (x + 22 * s, wy + 24 * s), (x + 27 * s, wy + 14 * s)], fill=tuple(c - 14 for c in wc))
@@ -395,7 +419,7 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
             d.line([(x + sign * 12 * s, torso_top + 2 * s), (x + sign * 15 * s, torso_bot - 6 * s)], fill=(58, 62, 78), width=max(3, int(5 * s)))
 
     # arms (default: hanging at the sides, or forearms forward when seated)
-    sh_l, sh_r = (x - 22 * s, shoulder_y), (x + 22 * s, shoulder_y)
+    sh_l, sh_r = (x - sho, shoulder_y), (x + sho, shoulder_y)
     if hands is None:
         if sitting:
             hands = {"L": (x - 6 * s, ground_y - 22 * s), "R": (x + 40 * s, ground_y - 22 * s)}
@@ -421,6 +445,9 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
         if style == "ponytail":
             d.ellipse([x + 14 * s, head_y - 14 * s, x + 34 * s, head_y + 30 * s], fill=hair)
         d.pieslice([x - 19 * s, head_y - 24 * s, x + 19 * s, head_y + 14 * s], 180, 360, fill=hair)
+        if style in ("long", "bob", "curly", "ponytail"):  # a glossy highlight and a parting
+            d.arc([x - 14 * s, head_y - 22 * s, x + 6 * s, head_y - 4 * s], 200, 300, fill=tuple(min(255, c + 34) for c in hair), width=max(2, int(2.4 * s)))
+            d.line([(x + 2 * s, head_y - 24 * s), (x - 6 * s, head_y - 8 * s)], fill=tuple(max(0, c - 16) for c in hair), width=max(1, int(1.2 * s)))
         if style == "bun":
             d.ellipse([x - 10 * s, head_y - 36 * s, x + 10 * s, head_y - 18 * s], fill=hair)
         if style in ("short", "bob", "ponytail"):
@@ -435,7 +462,7 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
     if "cap" in items:
         d.pieslice([x - 20 * s, head_y - 28 * s, x + 20 * s, head_y + 8 * s], 180, 360, fill=accent)
         d.rounded_rectangle([x - 22 * s, head_y - 6 * s, x + 24 * s, head_y - 1 * s], 2 * s, fill=tuple(max(0, c - 40) for c in accent))
-    _draw_face(d, x, head_y, s, expression, colors.get("female", False))
+    _draw_face(d, x, head_y, s, expression, colors.get("female", False), talking)
     if "earbuds" in items:
         for sign in (-1, 1):
             d.ellipse([x + sign * 19 * s - 3 * s, head_y + 1 * s, x + sign * 19 * s + 3 * s, head_y + 7 * s], fill=(250, 250, 250))
@@ -853,6 +880,8 @@ def illustrate_scene(
     reference_palette: tuple = (),
     subject_out: dict | None = None,
     props: tuple = (),
+    speaker: str | None = None,
+    focus_out: dict | None = None,
 ) -> Image.Image:
     """Draw one scene. `characters` = list of dicts from `character_colors`."""
     if font_path is None:  # signs carry Thai text: find a font ourselves (best effort)
@@ -881,6 +910,21 @@ def illustrate_scene(
         cook_present=any("apron" in c.get("items", ()) for c in (characters or [])), props=tuple(props), layout=layout,
     )
 
+    focus: dict = {}
+
+    def draw_fig(d_, x_, gy_, s_, col_, **kw):
+        """Draw one person; the speaker is a touch bigger, mid-word, softly lit, and recorded as the close-up target."""
+        talking = bool(speaker) and col_.get("name") == speaker
+        if talking:
+            s_ = s_ * 1.08
+            if kw.get("expression") == "asleep":
+                kw["expression"] = "neutral"
+        pos = _draw_character(d_, x_, gy_, s_, col_, talking=talking, **kw)
+        if talking:
+            focus["x"], focus["y"] = pos["head"][0] / w, pos["head"][1] / h
+            lights.append(((pos["head"][0], pos["head"][1]), int(h * 0.2), (104, 92, 80)))
+        return pos
+
     figs = characters or []
     bus_subject_x = None
     hero = (characters or [None])[0]  # the first character is the heroine
@@ -895,7 +939,7 @@ def illustrate_scene(
             if mood is not None and mood.tension >= 5 and layout["stand_slots"] and i == 0 and layout["standing"]:
                 px = int(w * layout["stand_slots"][0])
                 hands["R"] = (px + 24 * s * 1.2, ground - 96 * s * 1.2)   # he catches her arm
-            _draw_character(d, cx, info["bench_top"] + int(22 * sc), sc, col, sitting=True,
+            draw_fig(d, cx, info["bench_top"] + int(22 * sc), sc, col, sitting=True,
                             expression="asleep" if (pretending and i == 0) else face, hands=hands)
             if col is hero:
                 lights.append(((cx, info["bench_top"] - int(70 * sc)), int(h * 0.24), (92, 78, 70)))
@@ -906,7 +950,7 @@ def illustrate_scene(
             hands = {"R": (cx + 28 * ss_, shoulder_y - 30 * ss_), "L": (cx - 22 * ss_, shoulder_y + 58 * ss_)}
             if k == 0 and mood is not None and mood.tension >= 3 and "protagonist_seated" not in props:   # presses her belly
                 hands["L"] = (cx - 4 * ss_, ground - 84 * ss_)
-            _draw_character(d, cx, ground, ss_, col, expression=face, hands=hands)
+            draw_fig(d, cx, ground, ss_, col, expression=face, hands=hands)
             if col is hero:
                 lights.append(((cx, ground - int(100 * ss_)), int(h * 0.24), (92, 78, 70)))
             if bus_subject_x is None:
@@ -924,12 +968,12 @@ def illustrate_scene(
             if "apron" in col.get("items", ()) and not cook_placed:
                 cook_placed = True
                 subject_x = info["cook_x"] / w
-                _draw_character(d, info["cook_x"], ground, s, col, expression=face,
+                draw_fig(d, info["cook_x"], ground, s, col, expression=face,
                                 hands={"L": info["spatula_hand"], "R": info["handle_end"]})
             else:  # customers stand to the right of the counter, side by side
                 cx = int(w * (0.64 + 0.125 * customers))
                 customers += 1
-                pos = _draw_character(d, cx, ground, s, col, expression=face)
+                pos = draw_fig(d, cx, ground, s, col, expression=face)
                 if "headlamp" in col.get("items", ()):
                     lights.append(((pos["head"][0], pos["head"][1] - int(10 * s)), int(h * 0.2), (255, 246, 210)))
             continue
@@ -944,11 +988,13 @@ def illustrate_scene(
             hands = {"L": (x - 4 * s, desk_top - 6), "R": (x + 38 * s, desk_top - 6)}
         if subject_x is None:
             subject_x = x / w
-        pos = _draw_character(d, x, gy, s * (1.1 if seat else (1.3 if setting == "alley" else 1.0)), col, sitting=seat is not None,
+        pos = draw_fig(d, x, gy, s * (1.1 if seat else (1.3 if setting == "alley" else 1.0)), col, sitting=seat is not None,
                               expression=face, hands=hands)
         if "headlamp" in col.get("items", ()):  # the lamp lights his face and the wall behind
             lights.append(((pos["head"][0], pos["head"][1] - int(10 * s)), int(h * 0.22), (255, 246, 210)))
 
+    if focus_out is not None:
+        focus_out.update(focus)
     if subject_out is not None:
         subject_out["x"] = subject_x if subject_x is not None else 0.5
     d = ImageDraw.Draw(img)

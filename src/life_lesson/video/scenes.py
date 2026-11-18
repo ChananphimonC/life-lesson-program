@@ -51,6 +51,7 @@ class Scene:
     recipe_id: str = ""
     ref_palette: tuple = ()
     props: tuple = ()
+    speaker: str | None = None
 
     @property
     def duration_s(self) -> float:
@@ -70,13 +71,14 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
         same_title = title is None or title == groups[-1]["title"] if groups else False
         # a change of place inside one chapter is a new scene (the dark alley is not the stall)
         same_place = not (block.setting and groups and groups[-1]["place"] and block.setting != groups[-1]["place"])
-        if groups and same_title and same_place:
+        same_speaker = not groups or block.speaker == groups[-1]["speaker"]   # a speaking line gets its own close-up scene
+        if groups and same_title and same_place and same_speaker:
             if block.setting and not groups[-1]["place"]:
                 groups[-1]["place"] = block.setting
             continue
         groups.append(
             {"start": start, "title": title, "time_label": block.time_label, "place": block.setting,
-             "cue": block.visual_cue, "moods": [], "cues": [], "settings": []}
+             "cue": block.visual_cue, "moods": [], "cues": [], "settings": [], "speaker": block.speaker}
         )
     if not groups:
         return []
@@ -122,7 +124,7 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
             for c in present
         )
         scenes.append(Scene(i, g["start"], end, g["title"], g["time_label"], g["cue"], mood,
-                            setting, looks, tuple(c.name for c in present), recipe.id, (), scene_props))
+                            setting, looks, tuple(c.name for c in present), recipe.id, (), scene_props, g["speaker"]))
     return scenes
 
 
@@ -193,9 +195,17 @@ def _run(command: list[str], what: str) -> None:
         raise VideoAssemblyError(f"ffmpeg failed while {what}: {result.stderr[-1500:]}")
 
 
-def _motion_filter(scene: Scene, width: int, height: int) -> str:
-    """Slow camera push-in (stronger when tense) with a gentle sideways drift."""
+def _motion_filter(scene: Scene, width: int, height: int, focus: dict | None = None) -> str:
+    """Slow camera push-in (stronger when tense) with a gentle sideways drift;
+    a speaking line pushes in on the speaker's face instead (a real close-up)."""
     frames = max(2, int(scene.duration_s * 30))
+    if focus and "x" in focus:
+        fx, fy = focus["x"], focus["y"]
+        return (
+            f"zoompan=z='1.35+0.45*on/{frames}':"
+            f"x='min(max(iw*{fx:.4f}-iw/zoom/2,0),iw-iw/zoom)':y='min(max(ih*{fy:.4f}-ih/zoom/2,0),ih-ih/zoom)':"
+            f"d={frames}:s={width}x{height}:fps=30"
+        )
     push = 0.20 if (scene.mood and scene.mood.tension >= 4) else 0.11
     return (
         f"zoompan=z='1.0+{push}*on/{frames}':"
@@ -205,14 +215,15 @@ def _motion_filter(scene: Scene, width: int, height: int) -> str:
 
 
 def _scene_command(
-    ffmpeg: str, clip: Path, card: Path | None, scene: Scene, width: int, height: int, out: Path
+    ffmpeg: str, clip: Path, card: Path | None, scene: Scene, width: int, height: int, out: Path,
+    focus: dict | None = None,
 ) -> list[str]:
     dur = scene.duration_s
     fade_out_at = max(0.0, dur - FADE_S)
     illustrated = clip.suffix.lower() == ".png"
     if illustrated:
         cmd = [ffmpeg, "-y", "-i", str(clip)]
-        first = f"[0:v]{_motion_filter(scene, width, height)},setsar=1,"
+        first = f"[0:v]{_motion_filter(scene, width, height, focus)},setsar=1,"
     else:
         cmd = [ffmpeg, "-y", "-stream_loop", "-1", "-i", str(clip)]
         first = "[0:v]"
@@ -281,6 +292,7 @@ def assemble_scene_video(
         tmp_dir = Path(tmp)
         parts: list[Path] = []
         for n, scene in enumerate(scenes):
+            focus: dict = {}
             if illustrated:
                 clip = tmp_dir / f"art{scene.index:03d}.png"
                 # drawn 1.2x larger than the frame so the camera push-in stays sharp
@@ -290,6 +302,7 @@ def assemble_scene_video(
                     characters=[dict(look) for look in scene.looks],
                     seed=f"{scene.index}-{scene.title}", out_path=clip,
                     font_path=font_path, reference_palette=scene.ref_palette, props=scene.props,
+                    speaker=scene.speaker, focus_out=focus,
                 )
             else:
                 clip = chosen[n]
@@ -298,7 +311,7 @@ def assemble_scene_video(
             if show_cards and new_title:
                 card = render_chapter_card(scene, (width, height), tmp_dir / f"card{scene.index}.png", font_path=font_path)
             part = tmp_dir / f"scene{scene.index:03d}.mp4"
-            _run(_scene_command(ffmpeg_binary, clip, card, scene, width, height, part), f"rendering scene {scene.index}")
+            _run(_scene_command(ffmpeg_binary, clip, card, scene, width, height, part, focus), f"rendering scene {scene.index}")
             parts.append(part)
 
         listing = tmp_dir / "list.txt"

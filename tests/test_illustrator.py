@@ -96,3 +96,18 @@ def test_faces_differ_between_expressions():
     calm = illustrate_scene((640, 360), setting="street", mood=BlockMood(light="dim", voice="calm", tension=2), characters=chars, seed="f")
     scared = illustrate_scene((640, 360), setting="street", mood=BlockMood(light="dim", voice="urgent", tension=5), characters=chars, seed="f")
     assert calm.tobytes() != scared.tobytes()
+
+
+def test_speaker_gets_focus_and_open_mouth(tmp_path):
+    from life_lesson.video.illustrator import character_colors, illustrate_scene
+
+    cast = [character_colors("เสื้อยืดสีฟ้า", None, name="ไอซ์", hair="ผมสั้น สีดำ", gender="ชาย"),
+            character_colors("เสื้อเบลาส์สีแดง", None, name="ใบเฟิร์น", hair="ผมยาว สีน้ำตาล", gender="หญิง")]
+    focus: dict = {}
+    illustrate_scene((640, 360), setting="bus", mood=BlockMood(light="dark"), characters=cast, seed=1,
+                     out_path=tmp_path / "a.png", speaker="ไอซ์", focus_out=focus)
+    assert 0 < focus["x"] < 1 and 0 < focus["y"] < 1
+    quiet: dict = {}
+    illustrate_scene((640, 360), setting="bus", mood=BlockMood(light="dark"), characters=cast, seed=1,
+                     out_path=tmp_path / "b.png", focus_out=quiet)
+    assert quiet == {}
