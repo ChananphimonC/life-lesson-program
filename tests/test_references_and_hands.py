@@ -254,3 +254,87 @@ def test_menu_sign_text_is_drawn_even_when_no_font_is_passed():
     sign = img.crop((int(960 * 0.06), int(540 * 0.2), int(960 * 0.36), int(540 * 0.36)))
     light = sum(1 for r, g, b in sign.get_flattened_data() if r > 230 and g > 220)  # cream lettering on the red board
     assert light > 150
+
+
+# ---- the bus (frames of "แกล้งหลับ ทั้งคันรถ") -----------------------------------
+
+def _bus_script():
+    from pathlib import Path
+
+    from life_lesson.generation.schema import validate_script_json
+
+    return validate_script_json((Path(__file__).resolve().parents[1] / "stories" / "bus_seat" / "script.json").read_text(encoding="utf-8"))
+
+
+def test_the_bus_story_is_a_valid_standard_script_with_no_mechanical_lint_findings():
+    from life_lesson.generation.formats import get_format
+    from life_lesson.generation.schema import check_format
+    from life_lesson.generation.suspense import lint_script
+
+    s = _bus_script()
+    check_format(s, get_format("standard"))
+    assert all(b.setting == "bus" for b in s.script_blocks)
+    assert lint_script(s, "story").objective_penalty == 0
+
+
+def test_bus_cues_resolve_to_the_bus_and_pick_story_props():
+    from life_lesson.video.scene_kb import props_from_cue, retrieve_recipe
+
+    assert retrieve_recipe("ใบเฟิร์นยืนโหนราวเหล็กในรถเมล์แน่น").setting == "bus"
+    assert "passengers_awake" in props_from_cue("ผู้โดยสารทั้งคันรถเมล์ลืมตาพร้อมกัน")
+    assert "protagonist_seated" in props_from_cue("ใบเฟิร์นนั่งลงบนรถเมล์")
+
+
+def test_items_for_the_bus_cast_come_from_their_outfits_and_roles():
+    s = _bus_script()
+    scenes = plan_scenes(s, [i * 20_000 for i in range(12)], 240_000)
+    by_name = {}
+    for sc in scenes:
+        for n, look in zip(sc.character_names, sc.looks):
+            by_name.setdefault(n, look)
+    assert {"skirt_white", "waist_wrap"} <= set(by_name["ใบเฟิร์น"]["items"])
+    assert {"earbuds", "seated"} <= set(by_name["ไอซ์"]["items"])
+    assert "shopping_bags" in by_name["ป้าแตน"]["items"]
+
+
+def _bus_frame(props=(), mood=None, who=("ใบเฟิร์น", "ไอซ์")):
+    from life_lesson.generation.atmosphere import BlockMood
+
+    s = _bus_script()
+    looks = []
+    for c in s.characters:
+        if c.name in who:
+            looks.append(character_colors(c.outfit, c.palette, c.name, extra_items=("seated",) if "นั่ง" in c.role else ()))
+    return illustrate_scene((640, 360), setting="bus", mood=mood or BlockMood(light="dim", tension=3), characters=looks, seed="b", props=props)
+
+
+def test_every_bus_prop_changes_the_picture_and_eyes_open_vs_shut_differ():
+    base = _bus_frame()
+    assert base.tobytes() != _bus_frame(props=("passengers_awake",)).tobytes()      # the whole bus opens its eyes
+    assert base.tobytes() != _bus_frame(props=("protagonist_seated",)).tobytes()    # she has the seat, he stands
+
+
+def test_standing_passenger_is_not_shorter_than_the_seated_ones():
+    """Regression: seated figures (a desk pose) once towered over the close standing one."""
+    img = _bus_frame()
+    px = img.load()
+    blue = (127, 179, 224)  # her shirt colour: topmost shirt pixel ~ head height proxy
+    ys = [y for y in range(360) for x in range(0, 640, 2) if all(abs(a - b) < 14 for a, b in zip(px[x, y], blue))]
+    assert ys and min(ys) < 360 * 0.62  # her torso reaches up into the window band, like the seated passengers' heads
+
+
+def test_engine_sound_exists_and_is_audible():
+    import shutil
+    import subprocess
+
+    import pytest
+
+    from life_lesson.audio.ambient import scene_filtergraph
+    from life_lesson.generation.atmosphere import BlockMood
+
+    g = scene_filtergraph(BlockMood(sounds=["engine"]), 2.0)
+    assert g and "lowpass=f=110" in g
+    if shutil.which("ffmpeg") is None:
+        pytest.skip("no ffmpeg")
+    r = subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-filter_complex", g, "-map", "[out]", "-t", "2", "-f", "null", "-"], capture_output=True)
+    assert r.returncode == 0

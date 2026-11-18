@@ -157,7 +157,7 @@ def _teaser(summary: str | None, max_chars: int = SUBLINE_MAX_CHARS) -> str:
 
 def build_thumbnail_spec(script: ScriptOutput, spec: FormatSpec, duration_ms: int) -> dict:
     line1, line2 = _split_headline(script.title.strip())
-    first = script.script_blocks[0]
+    first = next((b for b in script.script_blocks if b.sequence == script.cover_block), script.script_blocks[0])
     minutes = max(1, round(duration_ms / 60000))
     pill = f"{spec.label_th} · {minutes} นาที" if spec.name != "short" else "Shorts"
     main = script.characters[0] if script.characters else None

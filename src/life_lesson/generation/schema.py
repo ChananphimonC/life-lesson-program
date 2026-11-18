@@ -29,7 +29,7 @@ class ScriptBlock(BaseModel):
     time_label: str | None = None
     mood: BlockMood | None = None
     # Where the scene happens, so the illustrator can draw it (free, offline).
-    setting: Literal["room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley"] | None = None
+    setting: Literal["room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus"] | None = None
 
 
 class Fact(BaseModel):
@@ -74,6 +74,7 @@ class ScriptOutput(BaseModel):
     characters: list[Character] = Field(default_factory=list)
     summary: str | None = None
     subline: str | None = None  # <=30 Thai chars teaser for the cover's single sub-line
+    cover_block: int | None = None  # `sequence` of the block whose picture becomes the cover (default: the first)
 
     @field_validator("script_blocks")
     @classmethod

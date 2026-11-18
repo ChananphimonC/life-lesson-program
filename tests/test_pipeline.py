@@ -434,3 +434,18 @@ def test_silent_preview_never_touches_the_voice_cache(tmp_path, monkeypatch):
     _stub_media(monkeypatch, tmp_path)
     r = pipeline_module.run_pipeline("situation", settings=settings, tts_provider=SilentTTSProvider(), punch_up=False)
     assert r.state == "DONE" and not (tmp_path / "cache" / "tts").exists()
+
+
+def test_cover_scene_is_the_one_containing_the_chosen_block():
+    from life_lesson.video.scenes import Scene
+
+    s = json.loads(VALID_SCRIPT_JSON)
+    s["cover_block"] = 3
+    from life_lesson.generation.schema import validate_script_json
+
+    script = validate_script_json(json.dumps(s))
+    scenes = [Scene(0, 0, 4000, "a", None, None), Scene(1, 4000, 9000, "b", None, None), Scene(2, 9000, 20000, "c", None, None)]
+    starts = [0, 3000, 10000, 15000]
+    assert pipeline_module._cover_scene(script, starts, scenes).index == 2
+    script.cover_block = None
+    assert pipeline_module._cover_scene(script, starts, scenes).index == 0

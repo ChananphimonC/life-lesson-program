@@ -48,6 +48,8 @@ def _sound_chain(sound: str, tension: int) -> tuple[str, float] | None:
             f"+0.6*sin(2*PI*46*t)*exp(-30*mod(t+{period}-{period * 0.32:.3f},{period}))':s={SR}:d={{d}}"
         )
         return (e, -19.0)
+    if sound == "engine":  # low diesel rumble with a slight shudder
+        return (_NOISE.format(color="brown", d="{d}") + ",lowpass=f=110,tremolo=f=7:d=0.18", -24.0)
     if sound == "clock":
         return ("aevalsrc='0.5*sin(2*PI*1900*t)*exp(-140*mod(t,1))':s=%d:d={d}" % SR, -30.0)
     raise ValueError(f"unknown sound {sound!r}")

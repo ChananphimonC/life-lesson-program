@@ -65,6 +65,11 @@ RECIPES: tuple[SceneRecipe, ...] = (
         search_query="dark dead end alley night rain wet pavement",
     ),
     SceneRecipe(
+        id="city_bus", setting="bus",
+        keywords=("รถเมล์", "บนรถ", "รถโดยสาร", "ราวเหล็ก", "ที่นั่งสีฟ้า", "รถประจำทาง", "bus"),
+        search_query="crowded city bus interior evening handrail passengers",
+    ),
+    SceneRecipe(
         id="night_street", setting="street",
         keywords=("ถนน", "ซอย", "ป้ายรถ", "ทางเท้า", "ร้านสะดวกซื้อ", "street", "alley", "bus stop"),
         search_query="city street night lamp post",
@@ -122,6 +127,10 @@ def props_from_cue(cue_text: str | None) -> tuple[str, ...]:
         props.append("second_plate")
     if "ไข่ดาวหายไป" in text or "ครึ่งฟอง" in text:
         props.append("half_eaten")
+    if any(k in text for k in ("ลืมตาพร้อมกัน", "ตื่นพร้อมกัน", "ทั้งคันลืมตา")):
+        props.append("passengers_awake")
+    if any(k in text for k in ("นั่งลง", "นั่งบน", "ได้นั่ง")):
+        props.append("protagonist_seated")
     if "เงา" in text:
         props.append("far_silhouette")
     return tuple(props)

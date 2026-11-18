@@ -14,7 +14,7 @@ from life_lesson.generation.formats import FormatSpec, get_format
 
 SCRIPT_PROMPT_NAME = "script_generation"
 SCRIPT_PROMPT_STAGE = "script"
-SCRIPT_PROMPT_VERSION = "script-v0.5.2"
+SCRIPT_PROMPT_VERSION = "script-v0.5.3"
 
 _CONTENT_CONSTRAINTS = """\
 This is a LIFE REFLECTION, not life advice or motivational content.
@@ -155,7 +155,7 @@ base a character on a real person.
 Use only these values: light (bright|dim|dark|golden|neon|flicker), weather \
 (clear|rain|storm|fog|wind), color (warm|cool|teal|amber|mono|green), voice \
 (calm|hushed|warm|wistful|tense|urgent), sounds (any of rain|thunder|wind|\
-waves|room_tone|heartbeat|clock|silence), tension (integer 1-5). \
+waves|room_tone|heartbeat|clock|engine|silence), tension (integer 1-5). \
 Shape a TENSION CURVE: start low or with one sharp image, climb across the \
 exploration, peak at the start of the shift, then let it fall (not to 1) in \
 the outro so the ending stays open. Change light/weather at turning points; \
@@ -163,7 +163,7 @@ let weather mirror the feeling without naming it (rain when plans fall \
 apart, fog when nobody is sure, a flickering lamp when money is short). \
 Match voice to tension (hushed for secrets, tense/urgent only at peaks).
 - SETTING & WARDROBE: give every block a "setting" (room|office|street|city|sea|\
-island|forest|night_sky|food_stall|alley) and mention concrete props in visual_cue \
+island|forest|night_sky|food_stall|alley|bus) and mention concrete props in visual_cue \
 (e.g. wok on a flame, plastic stools, menu board). Say what each person wears \
 in their "outfit" including accessories that fit the place and the job (apron, \
 hairnet, raincoat hood, backpack, lanyard, glasses) and whether sleeves are \
@@ -211,6 +211,7 @@ matching exactly this structure:
   "title": "<short Thai title>",
   "summary": "<1-2 Thai sentences for the video description: the situation, no promises>",
   "subline": "<cover teaser, at most 30 Thai characters, one clause, no spoilers>",
+  "cover_block": <sequence number of the single most striking block, whose picture becomes the cover; not the ending>,
   "metadata": {{
     "mood": "<short mood description>",
     "estimated_duration_seconds": <int, within the target range>,

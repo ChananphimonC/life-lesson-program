@@ -353,6 +353,15 @@ def _master(
     return output
 
 
+def _cover_scene(script: ScriptOutput, block_starts_ms: list[int], scenes: list[Scene]) -> Scene:
+    """The scene shown on the cover: the one containing `cover_block`, else the first."""
+    for i, block in enumerate(script.script_blocks):
+        if block.sequence == script.cover_block:
+            start = block_starts_ms[i]
+            return next((sc for sc in scenes if sc.start_ms <= start < sc.end_ms), scenes[0])
+    return scenes[0]
+
+
 def _even(value: float) -> int:
     return max(2, int(value) // 2 * 2)
 
@@ -449,7 +458,7 @@ def _write_publish_bundle(
     frame = None
     try:
         if settings.visual_mode == "illustrated" and scenes:
-            hook = scenes[0]
+            hook = _cover_scene(script, block_starts_ms, scenes)
             frame = out_dir / "frame.png"
             thumbnail_backdrop(
                 (spec.width, spec.height), setting=hook.setting, mood=hook.mood,

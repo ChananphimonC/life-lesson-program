@@ -23,7 +23,7 @@ from life_lesson.generation.atmosphere import BlockMood
 from life_lesson.publish.fonts import find_thai_font
 from life_lesson.video.scene_kb import SceneRecipe
 
-SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley")
+SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus")
 
 _COLOR_WORDS = {
     "เหลือง": (240, 196, 40), "yellow": (240, 196, 40), "แดง": (206, 52, 48), "red": (206, 52, 48),
@@ -62,6 +62,10 @@ _ITEM_WORDS = {
     "lanyard": ("สายคล้องคอ", "บัตรนักศึกษา", "บัตรพนักงาน", "lanyard"),
     "towel": ("ผ้าขนหนู", "ผ้าเช็ดมือ", "towel"),
     "headlamp": ("ไฟคาดหัว", "headlamp"),
+    "earbuds": ("หูฟัง", "earbuds"),
+    "waist_wrap": ("ผูกเอว", "waist"),
+    "skirt_white": ("กระโปรงสีขาว", "กระโปรงขาว"),
+    "shopping_bags": ("ถุงตลาด", "ถุงพลาสติก"),
 }
 _SHORT_SLEEVE_WORDS = ("แขนสั้น", "โปโล", "เสื้อยืด", "t-shirt", "polo", "short sleeve")
 
@@ -213,7 +217,11 @@ def _draw_face(d, x, head_y, s, expression: str):
     ink = (34, 28, 30)
     ey = head_y - 1 * s
     wide = expression == "wide"
-    for sign in (-1, 1):
+    if expression == "asleep":
+        for sign in (-1, 1):
+            cx = x + sign * 7.5 * s
+            d.arc([cx - 4.2 * s, ey - 4 * s, cx + 4.2 * s, ey + 3 * s], 10, 170, fill=ink, width=max(2, int(1.8 * s)))
+    for sign in (-1, 1) if expression != "asleep" else ():
         cx = x + sign * 7.5 * s
         rw, rh = (5.0, 5.8) if wide else (3.8, 4.4)
         d.ellipse([cx - rw * s, ey - rh * s, cx + rw * s, ey + rh * s], fill=(252, 250, 246))
@@ -234,6 +242,9 @@ def _draw_face(d, x, head_y, s, expression: str):
         d.line([(outer, o_y), (inner, i_y)], fill=ink, width=max(2, int(1.8 * s)))
     my = head_y + 10 * s
     w = max(2, int(1.8 * s))
+    if expression == "asleep":  # eyes shut: pretending to sleep
+        d.line([(x - 4 * s, my + 1 * s), (x + 4 * s, my + 1 * s)], fill=ink, width=w)
+        return
     if expression == "smile":
         d.arc([x - 7 * s, my - 6 * s, x + 7 * s, my + 5 * s], 15, 165, fill=ink, width=w)
         for sign in (-1, 1):  # blush
@@ -308,9 +319,24 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
     if not sitting:
         d.rectangle([x - 14 * s, ground_y - 62 * s, x - 3 * s, ground_y], fill=dark)
         d.rectangle([x + 3 * s, ground_y - 62 * s, x + 14 * s, ground_y], fill=dark)
+        if "shopping_bags" in items:  # market bags dumped around the feet
+            for dx, col, hh in ((-44, (232, 120, 120), 40), (36, (120, 180, 230), 34), (58, (240, 214, 120), 28)):
+                bx = x + dx * s
+                d.rounded_rectangle([bx - 14 * s, ground_y - hh * s, bx + 14 * s, ground_y + 2 * s], 8 * s, fill=col)
+                d.arc([bx - 9 * s, ground_y - (hh + 14) * s, bx + 9 * s, ground_y - (hh - 4) * s], 180, 360, fill=tuple(c - 40 for c in col), width=max(2, int(2 * s)))
         for sign in (-1, 1):  # shoes / rubber sandals
             d.rounded_rectangle([x + sign * 8.5 * s - 10 * s, ground_y - 5 * s, x + sign * 8.5 * s + 10 * s, ground_y + 2 * s], 3 * s, fill=(36, 36, 44))
     d.rounded_rectangle([x - 22 * s, torso_top, x + 22 * s, torso_bot], 12 * s, fill=outfit)
+    if "skirt_white" in items and not sitting:  # flared white skirt over the upper legs
+        d.polygon([(x - 23 * s, torso_bot - 6 * s), (x + 23 * s, torso_bot - 6 * s),
+                   (x + 31 * s, ground_y - 36 * s), (x - 31 * s, ground_y - 36 * s)], fill=(246, 246, 242), outline=(214, 214, 210), width=max(1, int(1.5 * s)))
+    if "waist_wrap" in items:  # cardigan tied round the waist: band, knot and two tails
+        wc = (122, 126, 134)
+        wy = torso_bot - 4 * s
+        d.rounded_rectangle([x - 24 * s, wy - 7 * s, x + 24 * s, wy + 7 * s], 4 * s, fill=wc)
+        d.ellipse([x + 8 * s, wy - 9 * s, x + 22 * s, wy + 5 * s], fill=tuple(c - 14 for c in wc))
+        d.polygon([(x + 10 * s, wy + 3 * s), (x + 6 * s, wy + 26 * s), (x + 15 * s, wy + 22 * s)], fill=wc)
+        d.polygon([(x + 17 * s, wy + 3 * s), (x + 22 * s, wy + 24 * s), (x + 27 * s, wy + 14 * s)], fill=tuple(c - 14 for c in wc))
 
     if "apron" in items:
         ap = (60, 62, 76) if sum(outfit) > 560 else (236, 230, 214)
@@ -361,6 +387,10 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
         d.pieslice([x - 20 * s, head_y - 28 * s, x + 20 * s, head_y + 8 * s], 180, 360, fill=accent)
         d.rounded_rectangle([x - 22 * s, head_y - 6 * s, x + 24 * s, head_y - 1 * s], 2 * s, fill=tuple(max(0, c - 40) for c in accent))
     _draw_face(d, x, head_y, s, expression)
+    if "earbuds" in items:
+        for sign in (-1, 1):
+            d.ellipse([x + sign * 19 * s - 3 * s, head_y + 1 * s, x + sign * 19 * s + 3 * s, head_y + 7 * s], fill=(250, 250, 250))
+        d.line([(x - 19 * s, head_y + 7 * s), (x - 16 * s, head_y + 30 * s), (x - 4 * s, torso_top + 16 * s)], fill=(235, 235, 235), width=max(1, int(1.4 * s)))
     if "headlamp" in items:
         d.rounded_rectangle([x - 7 * s, head_y - 19 * s, x + 7 * s, head_y - 11 * s], 3 * s, fill=(250, 240, 190), outline=(60, 60, 66), width=max(1, int(1.5 * s)))
         d.line([(x - 19 * s, head_y - 12 * s), (x + 19 * s, head_y - 12 * s)], fill=(60, 60, 66), width=max(2, int(2 * s)))
@@ -375,7 +405,7 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
 
 # -- scenes --------------------------------------------------------------------
 
-def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Random, fig_s: float = 1.0, font_path: Path | None = None, ref=(), cook_present: bool = True, props=()):
+def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Random, fig_s: float = 1.0, font_path: Path | None = None, ref=(), cook_present: bool = True, props=(), layout: dict | None = None):
     w, h = size
     top, bottom = _sky_colors(mood)
     if ref:  # reference photos nudge the palette toward real-world colour
@@ -457,6 +487,11 @@ def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Ra
         d.rectangle([0, ground, w, h], fill=_lerp(near, (0, 0, 0), 0.4))
     elif setting == "night_sky":
         d.ellipse([-w * 0.2, ground - 40, w * 1.2, h * 1.6], fill=near)
+    elif setting == "bus":
+        lay = layout or {}
+        img, ground, lights, fg, info = _bus(img, size, mood, rng, fig_s, night, props,
+                                             lay.get("stand_xs", []), lay.get("bench_slots", []), lay.get("named_slots", []))
+        d = ImageDraw.Draw(img)
     elif setting == "alley":
         img, ground, lights, fg, info = _alley(img, size, mood, rng, fig_s, night, props)
         d = ImageDraw.Draw(img)
@@ -676,6 +711,73 @@ def _alley(img, size, mood, rng, s, night, props=()):
     return img, ground, lights, [], info
 
 
+def _bus(img, size, mood, rng, s, night, props, stand_xs, bench_slots, named_slots):
+    """Inside a city bus (longitudinal bench seats along the wall, windows above,
+    fluorescent strip, handrails). Background passengers sit with eyes closed unless
+    `passengers_awake` is in props."""
+    w, h = size
+    d = ImageDraw.Draw(img)
+    light = mood.light if mood else "dim"
+    sky_a, sky_b = {
+        "golden": ((236, 150, 84), (252, 214, 150)),
+        "bright": ((120, 176, 228), (232, 232, 220)),
+    }.get(light, ((22, 26, 52), (70, 62, 96)) if light != "dark" else ((8, 10, 24), (30, 30, 56)))
+    wall = (186, 190, 194) if light in ("golden", "bright") else (84, 90, 100)
+    d.rectangle([0, 0, w, h], fill=wall)
+    d.rectangle([0, 0, w, int(h * 0.15)], fill=_lerp(wall, (255, 255, 255), 0.15))              # ceiling
+    for fx in (0.12, 0.40, 0.68):                                                              # fluorescent strips
+        d.rounded_rectangle([int(w * fx), int(h * 0.055), int(w * (fx + 0.2)), int(h * 0.075)], 6, fill=(246, 250, 255))
+    # four windows with the evening city sliding past
+    wins = []
+    for i in range(4):
+        x0 = int(w * (0.03 + i * 0.24)); x1 = x0 + int(w * 0.21)
+        y0, y1 = int(h * 0.17), int(h * 0.50)
+        img.paste(_gradient((x1 - x0, y1 - y0), sky_a, sky_b), (x0, y0))
+        d = ImageDraw.Draw(img)
+        _skyline(d, rng, x1, y1, (int(h * 0.04), int(h * 0.13)), _lerp(sky_a, (0, 0, 0), 0.65), (252, 220, 130) if light not in ("golden", "bright") else None, 0.25, bw=(18, 46))
+        d.rectangle([x0 - 6, y0 - 6, x0, y1 + 6], fill=(40, 44, 52)); d.rectangle([x1, y0 - 6, x1 + 6, y1 + 6], fill=(40, 44, 52))
+        d.rectangle([x0 - 6, y0 - 8, x1 + 6, y0], fill=(40, 44, 52)); d.rectangle([x0 - 6, y1, x1 + 6, y1 + 8], fill=(40, 44, 52))
+        wins.append((x0, x1))
+    # wall panel + priority-seat sign
+    d.rectangle([0, int(h * 0.50), w, int(h * 0.64)], fill=_lerp(wall, (60, 70, 90), 0.35))
+    sx = int(w * 0.04)
+    d.rounded_rectangle([sx, int(h * 0.54), sx + int(w * 0.11), int(h * 0.60)], 6, fill=(60, 110, 200))
+    for k in range(4):
+        d.ellipse([sx + 10 + k * int(w * 0.024), int(h * 0.555), sx + 10 + k * int(w * 0.024) + int(w * 0.016), int(h * 0.555) + int(w * 0.016)], fill=(250, 250, 250))
+    # bench along the wall
+    bench_top = int(h * 0.74)
+    d.rectangle([0, int(h * 0.60), w, bench_top], fill=(54, 96, 182))                          # seat back
+    d.rectangle([0, bench_top, w, int(h * 0.80)], fill=(70, 120, 214))                         # cushion
+    d.rectangle([0, int(h * 0.80), w, int(h * 0.84)], fill=(40, 60, 110))
+    d.rectangle([0, int(h * 0.84), w, h], fill=(52, 54, 60))                                   # floor
+    for fx in range(0, w, 48):
+        d.line([(fx, int(h * 0.86)), (fx, h)], fill=(40, 42, 46), width=3)
+    awake = "passengers_awake" in props
+    palettes = ["#d07a6e", "#6ea078", "#e6c878", "#8c78be", "#5a96be"]
+    names = ["ผู้โดยสาร1", "ผู้โดยสาร2", "ผู้โดยสาร3", "ผู้โดยสาร4", "ผู้โดยสาร5"]
+    for k, fx in enumerate(bench_slots):
+        cx = int(w * fx)
+        sc = s * 0.95
+        for dx in (-14, 3):  # legs hang below the cushion
+            d.rectangle([cx + dx * sc, bench_top - 4 * sc, cx + (dx + 11) * sc, int(h * 0.88)], fill=(48, 52, 70))
+        if fx in named_slots:
+            continue  # a named character is drawn here later
+        col = character_colors("เสื้อ", [palettes[k % len(palettes)]], names[k])
+        _draw_character(d, cx, bench_top + int(22 * sc), sc, col, sitting=True,
+                        expression="neutral" if awake else "asleep",
+                        hands={"L": (cx - 10 * sc, bench_top - 14 * sc), "R": (cx + 10 * sc, bench_top - 14 * sc)})
+    # overhead rail with hanging loops, and a vertical pole next to each standing passenger
+    d.rectangle([0, int(h * 0.19), w, int(h * 0.205)], fill=(205, 210, 216))
+    for k in range(9):
+        lx = int(w * (0.06 + k * 0.115))
+        d.line([(lx, int(h * 0.205)), (lx, int(h * 0.30))], fill=(70, 70, 76), width=max(2, int(3 * s)))
+        d.ellipse([lx - 9 * s, int(h * 0.30), lx + 9 * s, int(h * 0.30) + 22 * s], outline=(240, 240, 240), width=max(3, int(4 * s)))
+    for sx_ in stand_xs:
+        d.rectangle([sx_ - 4 * s, int(h * 0.19), sx_ + 4 * s, int(h * 0.92)], fill=(214, 218, 224))
+    lights = [((int(w * fx) + int(w * 0.1), int(h * 0.075)), int(h * 0.30), (230, 240, 255)) for fx in (0.12, 0.40, 0.68)]
+    return img, int(h * 0.94), lights, [], {"bench_top": bench_top}
+
+
 def _steam(img: Image.Image, origin, s: float, rng: random.Random) -> Image.Image:
     layer = Image.new("RGB", img.size, (0, 0, 0))
     d = ImageDraw.Draw(layer)
@@ -711,18 +813,55 @@ def illustrate_scene(
     ss = 2  # supersample for smooth edges
     w, h = size[0] * ss, size[1] * ss
     rng = random.Random(int(hashlib.md5(f"{seed}{setting}".encode()).hexdigest(), 16) % (2**32))
-    s = h / 720 * 1.3 * (1.45 if setting == "food_stall" else 1.0)
+    s = h / 720 * 1.3 * (1.45 if setting == "food_stall" else (1.5 if setting == "bus" else 1.0))
+    layout = None
+    if setting == "bus":
+        seated = [c for c in (characters or []) if "seated" in c.get("items", ())]
+        standing = [c for c in (characters or []) if "seated" not in c.get("items", ())]
+        if "protagonist_seated" in props and standing:   # she has a seat now; whoever had it stands
+            seated, standing = [standing[0]] + seated[1:], seated[:1] + standing[1:]
+        slots = [0.10, 0.28, 0.46, 0.64, 0.82]
+        s_stand = s * 1.2
+        named_slots = [0.46, 0.64, 0.28, 0.82, 0.10][: len(seated)]
+        stand_slots = [0.33, 0.72, 0.52, 0.18]
+        layout = {"bench_slots": slots, "named_slots": named_slots, "stand_xs": [int(w * fx) + int(28 * s_stand) for fx in stand_slots[: len(standing)]],
+                  "seated": seated, "standing": standing, "stand_slots": stand_slots}
     img, ground, lights, seat, fg, info = _scene_background(
         setting, (w, h), mood, rng, s, font_path, tuple(reference_palette),
-        cook_present=any("apron" in c.get("items", ()) for c in (characters or [])), props=tuple(props),
+        cook_present=any("apron" in c.get("items", ()) for c in (characters or [])), props=tuple(props), layout=layout,
     )
 
     figs = characters or []
+    bus_subject_x = None
+    if layout is not None:  # bus: seated people on the bench, standers holding the poles
+        face = expression_for(mood)
+        d = ImageDraw.Draw(img)
+        pretending = "passengers_awake" not in props and "protagonist_seated" not in props and (mood is None or mood.tension < 5)
+        for i, (col, fx) in enumerate(zip(layout["seated"], layout["named_slots"])):
+            cx = int(w * fx)
+            sc = s * 0.95
+            hands = {"L": (cx - 10 * sc, info["bench_top"] - 14 * sc), "R": (cx + 10 * sc, info["bench_top"] - 14 * sc)}
+            if mood is not None and mood.tension >= 5 and layout["stand_slots"] and i == 0 and layout["standing"]:
+                px = int(w * layout["stand_slots"][0])
+                hands["R"] = (px + 24 * s * 1.2, ground - 96 * s * 1.2)   # he catches her arm
+            _draw_character(d, cx, info["bench_top"] + int(22 * sc), sc, col, sitting=True,
+                            expression="asleep" if (pretending and i == 0) else face, hands=hands)
+        for k, (col, fx) in enumerate(zip(layout["standing"], layout["stand_slots"])):
+            cx = int(w * fx)
+            ss_ = s * 1.2
+            shoulder_y = ground - 120 * ss_
+            hands = {"R": (cx + 28 * ss_, shoulder_y - 30 * ss_), "L": (cx - 22 * ss_, shoulder_y + 58 * ss_)}
+            if k == 0 and mood is not None and mood.tension >= 3 and "protagonist_seated" not in props:   # presses her belly
+                hands["L"] = (cx - 4 * ss_, ground - 84 * ss_)
+            _draw_character(d, cx, ground, ss_, col, expression=face, hands=hands)
+            if bus_subject_x is None:
+                bus_subject_x = cx / w
+        figs = []
     n = len(figs)
     face = expression_for(mood)
     cook_placed = False
     customers = 0
-    subject_x = None
+    subject_x = bus_subject_x
     for i, col in enumerate(figs):
         d = ImageDraw.Draw(img)
         hands = None

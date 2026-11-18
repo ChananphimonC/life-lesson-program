@@ -103,3 +103,11 @@ def test_cover_subline_never_cuts_a_word_in_half():
 def test_explicit_subline_wins_over_the_summary_teaser():
     s = _script(list("abcde"), subline="ไรเดอร์แบตเหลือเจ็ดเปอร์เซ็นต์")
     assert build_thumbnail_spec(s, get_format("standard"), 60_000)["subline"] == "ไรเดอร์แบตเหลือเจ็ดเปอร์เซ็นต์"
+
+
+def test_cover_block_chooses_the_cover_moment_and_its_time_tag():
+    s = _script(list("abcde"), cover_block=3)
+    s.script_blocks[2].time_label = "18:42"
+    spec = build_thumbnail_spec(s, get_format("standard"), 60_000)
+    assert spec["context_tag"] == "18:42"
+    assert build_thumbnail_spec(_script(list("abcde")), get_format("standard"), 60_000)["context_tag"] == "23:47"  # default: first block

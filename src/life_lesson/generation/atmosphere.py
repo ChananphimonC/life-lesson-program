@@ -18,7 +18,7 @@ Light = Literal["bright", "dim", "dark", "golden", "neon", "flicker"]
 Weather = Literal["clear", "rain", "storm", "fog", "wind"]
 Color = Literal["warm", "cool", "teal", "amber", "mono", "green"]
 Voice = Literal["calm", "hushed", "warm", "wistful", "tense", "urgent"]
-Sound = Literal["rain", "thunder", "wind", "waves", "room_tone", "heartbeat", "clock", "silence"]
+Sound = Literal["rain", "thunder", "wind", "waves", "room_tone", "heartbeat", "clock", "engine", "silence"]
 
 
 class BlockMood(BaseModel):
