@@ -75,3 +75,30 @@ def test_example_json_in_prompt_is_not_broken_by_formatting():
     # .format() with unescaped braces would raise; every format must build
     for fmt in ("short", "standard", "long"):
         build_script_prompt("t", "x", episode_format=fmt)
+
+
+def test_series_prompts_differ_where_they_must():
+    refl = build_script_prompt("t", "x", series="reflection")
+    know = build_script_prompt("t", "x", series="knowledge")
+    story = build_script_prompt("t", "x", series="story")
+    assert "LIFE REFLECTION" in refl and "comfort" in refl and "SUSPENSE ENGINE" in refl
+    for p in (know, story):
+        assert "comfort" not in p and "earn its place" in p and "SUSPENSE ENGINE" in p
+        assert "LIFE REFLECTION" not in p and "NOT life advice" not in p
+    assert "source" in know and "belief" in know.lower() and "FICTION" in story
+
+
+def test_brief_is_included_and_unknown_series_rejected():
+    import pytest
+
+    p = build_script_prompt("t", "x", series="story", brief="premise: นักศึกษาติดเกาะ")
+    assert "AUTHOR BRIEF" in p and "นักศึกษาติดเกาะ" in p
+    assert "AUTHOR BRIEF" not in build_script_prompt("t", "x")
+    with pytest.raises(ValueError):
+        build_script_prompt("t", "x", series="poetry")
+
+
+def test_suspense_rules_cover_the_core_techniques():
+    p = build_script_prompt("t", "x")
+    for phrase in ("HOOK", "CLOCK", "OPEN LOOPS", "CHAPTER-END HOOK", "PLANT AND PAY OFF", "REVERSAL", "NEVER narrate what the picture"):
+        assert phrase in p

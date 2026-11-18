@@ -172,7 +172,7 @@ def log_generation_attempt(
 
 # -- library: episode metadata, listing, deletion ----------------------------
 
-_META_FIELDS = ("title", "format", "kind", "parent_episode_id", "publish_dir", "thumbnail_path")
+_META_FIELDS = ("title", "format", "kind", "parent_episode_id", "publish_dir", "thumbnail_path", "series")
 
 
 def update_episode_meta(conn: sqlite3.Connection, episode_id: str, **fields: str | None) -> None:

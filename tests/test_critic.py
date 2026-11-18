@@ -81,3 +81,27 @@ def test_loop_gives_up_after_three_rewrites():
 
     out = run_critic_loop(s, get_format("standard"), call_llm=llm)
     assert not out.passed and out.rewrites_used == 3 and len(out.attempts) == 4
+
+
+def test_each_series_has_its_own_categories_and_strict_parse():
+    from life_lesson.generation.critic import CATEGORIES_BY_SERIES, build_critic_prompt, parse_critic_result
+
+    for series, cats in CATEGORIES_BY_SERIES.items():
+        raw = json.dumps({"results": [{"category": c, "passed": True} for c in cats]})
+        assert parse_critic_result(raw, series).passed
+        p = build_critic_prompt(_script(list("abcde")), [], series)
+        assert p.startswith("You are the Critic") and all(c in p for c in cats)
+    # a reflection verdict is not valid for the knowledge series
+    with pytest.raises(ScriptValidationError):
+        parse_critic_result(_result(), "knowledge")
+    with pytest.raises(ScriptValidationError):
+        parse_critic_result(_result(), "bogus")
+
+
+def test_knowledge_series_does_not_flag_advice_or_belief_words():
+    from life_lesson.generation.safety import lexical_flags
+
+    s = _script(list("abcde"))
+    s.script_blocks[1].text = "คุณควรกินผักให้มากขึ้น ตามความเชื่อโบราณเรื่องกรรม"
+    assert lexical_flags(s, "reflection")
+    assert lexical_flags(s, "knowledge") == []

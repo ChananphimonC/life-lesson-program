@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 
 from life_lesson.config import get_settings
 from life_lesson.errors import PipelineError
@@ -36,6 +37,15 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "long = 15-40 min multi-chapter story.",
     )
     parser.add_argument(
+        "--series",
+        choices=["reflection", "knowledge", "story"],
+        default="reflection",
+        help="reflection = Life Lesson (no advice, open ending); knowledge = รู้หรือไม่ "
+        "(sourced facts, advice allowed); story = invented comedy/adventure.",
+    )
+    parser.add_argument("--brief", type=Path, default=None, help="Text/markdown file with premise, cast, beats and facts to build from.")
+    parser.add_argument("--no-punchup", action="store_true", help="Skip the suspense script doctor.")
+    parser.add_argument(
         "--no-critic",
         action="store_true",
         help="Skip the Critic pass (debugging only; episodes still need human review).",
@@ -52,6 +62,9 @@ def main(argv: list[str] | None = None) -> int:
         result = run_pipeline(
             args.topic, args.theme, settings=settings, episode_format=args.format,
             critic=not args.no_critic,
+            series=args.series,
+            brief=args.brief.read_text(encoding="utf-8") if args.brief else None,
+            punch_up=not args.no_punchup,
         )
     except PipelineError as exc:
         print(f"Pipeline failed before an episode record could be created: {exc}", file=sys.stderr)

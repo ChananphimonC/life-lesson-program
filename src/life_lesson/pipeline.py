@@ -26,10 +26,10 @@ from life_lesson.db import repository as repo
 from life_lesson.errors import PipelineError, SensitiveTopicError
 from life_lesson.generation.atmosphere import scaled_pause_ms, styled_text
 from life_lesson.generation.critic import (
-    CATEGORIES,
     CRITIC_PROMPT_NAME,
     CRITIC_PROMPT_STAGE,
     CRITIC_PROMPT_VERSION,
+    categories_for,
     run_critic_loop,
 )
 from life_lesson.generation.formats import FormatSpec, get_format
@@ -39,6 +39,12 @@ from life_lesson.generation.prompts import (
     SCRIPT_PROMPT_STAGE,
     SCRIPT_PROMPT_VERSION,
     build_script_prompt,
+)
+from life_lesson.generation.punchup import (
+    PUNCHUP_PROMPT_NAME,
+    PUNCHUP_PROMPT_STAGE,
+    PUNCHUP_PROMPT_VERSION,
+    run_punchup,
 )
 from life_lesson.generation.safety import screen_topic
 from life_lesson.generation.schema import ScriptOutput, check_format, validate_script_json
@@ -82,6 +88,9 @@ def run_pipeline(
     tts_provider: TTSProvider | None = None,
     episode_format: str | None = None,
     critic: bool = True,
+    series: str = "reflection",
+    brief: str | None = None,
+    punch_up: bool = True,
 ) -> PipelineResult:
     settings = settings or get_settings()
     spec = get_format(episode_format)
@@ -103,10 +112,12 @@ def run_pipeline(
                 return result("REJECTED", error_message=str(exc))
 
             script = _generate_and_persist_script(
-                conn, settings, episode_id, topic_id, topic_text, theme, spec
+                conn, settings, episode_id, topic_id, topic_text, theme, spec, series, brief
             )
+            if punch_up:
+                script = _punch_up(conn, settings, episode_id, script, spec, series)
             if critic:
-                script, passed = _review_script(conn, settings, episode_id, script, spec)
+                script, passed = _review_script(conn, settings, episode_id, script, spec, series)
                 if not passed:
                     msg = (
                         "Critic still flagged the script after the maximum rewrites; "
@@ -128,7 +139,7 @@ def run_pipeline(
             )
             thumb = publish_dir / "thumbnail.png"
             repo.update_episode_meta(
-                conn, episode_id, title=script.title, format=spec.name,
+                conn, episode_id, title=script.title, format=spec.name, series=series,
                 publish_dir=str(publish_dir),
                 thumbnail_path=str(thumb) if thumb.exists() else None,
             )
@@ -149,10 +160,12 @@ def _generate_and_persist_script(
     topic_text: str,
     theme: str | None,
     spec: FormatSpec,
+    series: str = "reflection",
+    brief: str | None = None,
 ) -> ScriptOutput:
     repo.update_episode_state(conn, episode_id, "TOPIC")
 
-    prompt = build_script_prompt(topic_id, topic_text, theme, spec.name)
+    prompt = build_script_prompt(topic_id, topic_text, theme, spec.name, series, brief)
     prompt_version_id = repo.register_prompt_version(
         conn, SCRIPT_PROMPT_NAME, SCRIPT_PROMPT_STAGE, SCRIPT_PROMPT_VERSION, prompt
     )
@@ -178,12 +191,46 @@ def _generate_and_persist_script(
     return script
 
 
+def _punch_up(
+    conn: sqlite3.Connection,
+    settings: Settings,
+    episode_id: str,
+    script: ScriptOutput,
+    spec: FormatSpec,
+    series: str,
+) -> ScriptOutput:
+    """Rewrite a flat script until it scores well on the suspense linter."""
+    version_id = repo.register_prompt_version(
+        conn, PUNCHUP_PROMPT_NAME, PUNCHUP_PROMPT_STAGE, PUNCHUP_PROMPT_VERSION, "suspense punch-up"
+    )
+
+    def on_round(rnd, report) -> None:
+        repo.log_generation_attempt(
+            conn, episode_id, "punchup", rnd.round, "improved" if rnd.accepted else "kept",
+            error_message=f"{rnd.before} -> {rnd.after}", raw_response=rnd.note,
+        )
+
+    outcome = run_punchup(
+        script, spec,
+        call_llm=lambda prompt: generate_script_text(settings, prompt),
+        series=series, threshold=settings.punchup_threshold, on_round=on_round,
+    )
+    logger.info(
+        "Script doctor for episode %s: %d -> %d (%d round(s))",
+        episode_id, outcome.before.score, outcome.after.score, len(outcome.rounds),
+    )
+    if outcome.improved:
+        repo.save_script(conn, episode_id, version_id, outcome.script.model_dump_json(), validated=True)
+    return outcome.script
+
+
 def _review_script(
     conn: sqlite3.Connection,
     settings: Settings,
     episode_id: str,
     script: ScriptOutput,
     spec: FormatSpec,
+    series: str = "reflection",
 ) -> tuple[ScriptOutput, bool]:
     repo.update_episode_state(conn, episode_id, "CRITIC_REVIEW")
     version_id = repo.register_prompt_version(
@@ -191,7 +238,7 @@ def _review_script(
         CRITIC_PROMPT_NAME,
         CRITIC_PROMPT_STAGE,
         CRITIC_PROMPT_VERSION,
-        "categories: " + ", ".join(CATEGORIES),
+        "categories: " + ", ".join(categories_for(series)),
     )
 
     def on_critic(attempt: int, result, raw: str) -> None:
@@ -212,6 +259,7 @@ def _review_script(
         call_llm=lambda prompt: generate_critic_text(settings, prompt),
         on_critic=on_critic,
         on_rewrite=on_rewrite,
+        series=series,
     )
     logger.info(
         "Critic %s for episode %s after %d rewrite(s)",

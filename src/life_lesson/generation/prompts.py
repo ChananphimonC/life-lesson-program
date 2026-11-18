@@ -9,11 +9,12 @@ time, not a substitute for the Critic's later verification pass.
 
 from __future__ import annotations
 
+from life_lesson.generation.critic import SERIES
 from life_lesson.generation.formats import FormatSpec, get_format
 
 SCRIPT_PROMPT_NAME = "script_generation"
 SCRIPT_PROMPT_STAGE = "script"
-SCRIPT_PROMPT_VERSION = "script-v0.4.1"
+SCRIPT_PROMPT_VERSION = "script-v0.5.0"
 
 _CONTENT_CONSTRAINTS = """\
 This is a LIFE REFLECTION, not life advice or motivational content.
@@ -41,6 +42,87 @@ a fix, technique, or instruction. If a sentence could be reworded as \
 action.
 - Be written in natural, spoken, conversational Thai (ภาษาพูด).\
 """
+
+_KNOWLEDGE_CONSTRAINTS = """\
+This is an EXPLAINER episode of the series "รู้หรือไม่ / ทำไม": one host \
+walks the listener through a curious question using people and situations. \
+Information and general advice ARE allowed and the ending need not stay \
+open, but it must be honest.
+
+It MUST:
+- Back every real-world fact, number, study or date with an entry in "facts" \
+that names a real, checkable source (paper, agency, book). Never invent a \
+source; use confidence "low" when unsure.
+- Tell beliefs, traditions and popular theories AS beliefs, respectfully, \
+apart from the evidence; never present them as proven.
+- Label speculation about the future as speculation.
+- Health: no diagnosis, no cure claims; add one short, natural note that this \
+is general knowledge, not medical advice. Finance: general principles only, \
+never recommend buying or selling a specific security.
+- Be playful and curious like a friend explaining something fascinating.
+
+It must NOT quote named people without a source, use fake statistics, \
+fear-monger, or lecture.\
+"""
+
+_STORY_CONSTRAINTS = """\
+This is a FICTION episode (เรื่องแต่งสนุก ๆ): an invented comedy/adventure. \
+It is clearly fictional; it needs no moral and no advice.
+
+It MUST:
+- Be funny or thrilling from the SITUATION and the rhythm, not from exclamations.
+- Put any real-world fact used as a joke in "facts" with a named source; \
+invented events are not facts.
+
+It must NOT defame or mock a real individual, turn a real group's stereotype \
+into a hurtful joke (affectionate personification of institutions is fine), \
+copy an existing film/show/game/book, or touch violence, injury, death, \
+self-harm or crisis themes.\
+"""
+
+_SUSPENSE_ENGINE = """\
+SUSPENSE ENGINE (every series; this is what keeps people watching):
+- HOOK (first 15 seconds): drop the listener mid-moment with one concrete, \
+odd detail, something that does not add up or is about to go wrong, and one \
+question nobody has answered. Never greet, never announce the topic, never \
+"today we will".
+- CLOCK / STAKES: give the story a limit the listener can feel (minutes, a \
+battery percentage, a deadline, the last plate). Say it early; refer back to it.
+- OPEN LOOPS: always keep at least one question unanswered; open a new one \
+before closing the old one. Answer the biggest one only at the shift.
+- ESCALATE: every chapter must change something -- a fact that contradicts \
+what the listener assumed, a cost, a complication, a reversal. No chapter \
+repeats the previous chapter's information.
+- CHAPTER-END HOOK: the last line of every chapter except the final one \
+leans forward: a new question, a reversal, something about to happen, or a \
+number that does not fit.
+- PLANT AND PAY OFF: introduce one ordinary detail early (the motif) and let \
+it matter later in a way the listener did not expect but can see was there.
+- REVERSAL at about 70%: what the listener believed turns out slightly \
+different (never a cheap twist; plant it earlier).
+- SPECIFIC BEATS GENERAL: a name, a price, a time, a smell, a sound.
+- SPOKEN THAI, FOR THE EAR: tell it like a friend across a table. Short \
+sentences, then one long breath. No report connectors (ข้อแรก, สรุปก็คือ, \
+ทั้งนี้, อย่างไรก็ตาม, นอกจากนี้). Ask a question only when the listener \
+truly wonders. Write numbers as spoken Thai words. Start every block with \
+an easy, common word (TTS often garbles the first word). Avoid words the \
+voice mispronounces (ราว, ฝั่ง, ทาย).
+- NEVER narrate what the picture already shows (faces, smiles, gestures, \
+clothes): the voice says what cannot be seen. Put those details in \
+visual_cue and characters.\
+"""
+
+_SUSPENSE_REFLECTION_NOTE = (
+    "For a reflection, suspense means curiosity and an unresolved feeling -- "
+    "never threat, danger or a cliffhanger that demands an answer."
+)
+
+# The reflection-only test as it appears in the rendered _STYLE_RULES text
+# (backslash-newline continuations in the source collapse to one line).
+_COMFORT_LINE = (
+    "- Every block of narration must pass this test: said to a friend, it feels "
+    "like comfort, not like a suggestion. The ending stays open.\n"
+)
 
 _STYLE_RULES = """\
 STYLE (see docs/STYLE_GUIDE.md):
@@ -170,16 +252,44 @@ def build_script_prompt(
     topic_text: str,
     theme: str | None = None,
     episode_format: str | None = None,
+    series: str = "reflection",
+    brief: str | None = None,
 ) -> str:
+    if series not in SERIES:
+        raise ValueError(f"unknown series {series!r}; expected one of {list(SERIES)}")
     spec = get_format(episode_format)
     theme_line = f"Broad theme: {theme}\n" if theme else ""
+    constraints = {
+        "reflection": _CONTENT_CONSTRAINTS,
+        "knowledge": _KNOWLEDGE_CONSTRAINTS,
+        "story": _STORY_CONSTRAINTS,
+    }[series]
+    style = _STYLE_RULES
+    suspense = _SUSPENSE_ENGINE
+    if series == "reflection":
+        suspense += "\n" + _SUSPENSE_REFLECTION_NOTE
+    else:  # no "comfort / open ending" test outside the reflection series
+        assert _COMFORT_LINE in style, "reflection-only rule text changed; update _COMFORT_LINE"
+        style = style.replace(
+            _COMFORT_LINE,
+            "- Every block must earn its place: if it changes nothing for the listener, cut it.\n",
+        )
+    brief_block = (
+        "AUTHOR BRIEF (raw material: premise, cast, beats, facts). Improve its structure "
+        "and pacing, keep its facts and sources, do not copy flat prose:\n"
+        f"{brief.strip()}\n\n"
+        if brief and brief.strip()
+        else ""
+    )
     return (
-        f"{_CONTENT_CONSTRAINTS}\n\n"
-        f"{_STYLE_RULES}\n\n"
+        f"{constraints}\n\n"
+        f"{suspense}\n\n"
+        f"{style}\n\n"
         f"{_format_rules(spec)}\n\n"
         f"{theme_line}"
-        f"Specific situation to reflect on: {topic_text}\n\n"
-        f"Write a Thai life-reflection script about this situation, "
-        f"following the 4-phase structure (hook, exploration, shift, outro).\n\n"
+        f"{brief_block}"
+        f"Specific situation / topic: {topic_text}\n\n"
+        f"Write a Thai script about this, following the 4-phase structure "
+        f"(hook, exploration, shift, outro).\n\n"
         f"{_JSON_INSTRUCTIONS.format(topic_id=topic_id, format_name=spec.name)}"
     )

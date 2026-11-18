@@ -299,3 +299,70 @@ def test_tts_receives_voice_directive(tmp_path, monkeypatch):
     tts = FakeTTSProvider()
     pipeline_module.run_pipeline("situation", settings=settings, tts_provider=tts)
     assert tts.texts[0].startswith("Say in a close, hushed") and tts.texts[1] == "ข้อความ"
+
+
+def test_script_doctor_replaces_a_flat_script_and_logs_it(tmp_path, monkeypatch):
+    from .test_suspense import GOOD, _script as _lint_script
+
+    settings = _settings(tmp_path)
+    better = _lint_script(GOOD, tensions=[3, 3, 4, 4, 5, 5, 4, 3])
+    flat = json.loads(better.model_dump_json())
+    for b in flat["script_blocks"]:
+        b["text"] = "เจ๊ขายของทุกวัน"
+    flat["script_blocks"][0]["text"] = "สวัสดีค่ะ วันนี้เราจะมาพูดถึงร้านตามสั่ง"
+    calls = []
+
+    def llm(s, prompt):
+        calls.append(prompt)
+        return json.dumps(flat) if len(calls) == 1 else better.model_dump_json()
+
+    monkeypatch.setattr(pipeline_module, "generate_script_text", llm)
+    monkeypatch.setattr(pipeline_module, "pick_random_background", lambda d: tmp_path / "f.mp4")
+    monkeypatch.setattr(pipeline_module, "assemble_video", _touch_video)
+    monkeypatch.setattr(pipeline_module, "assemble_scene_video", _touch_video)
+    monkeypatch.setattr(pipeline_module, "build_ambient_bed", lambda *a, **k: None)
+    tts = FakeTTSProvider()
+    result = pipeline_module.run_pipeline("situation", settings=settings, tts_provider=tts)
+    assert result.state == "DONE", result.error_message
+    assert any("ข้อความ" in t or "เที่ยงคืน" in t for t in tts.texts)  # the rewritten text was voiced
+    with repo.open_db(settings.db_path) as conn:
+        rows = conn.execute("SELECT status, error_message FROM generation_attempts WHERE stage='punchup'").fetchall()
+        assert len(rows) == 1 and rows[0]["status"] == "improved"
+
+
+def test_punch_up_can_be_switched_off(tmp_path, monkeypatch):
+    settings = _settings(tmp_path)
+    seen = []
+    monkeypatch.setattr(pipeline_module, "generate_script_text", lambda s, p: (seen.append(p), VALID_SCRIPT_JSON)[1])
+    monkeypatch.setattr(pipeline_module, "pick_random_background", lambda d: tmp_path / "f.mp4")
+    monkeypatch.setattr(pipeline_module, "assemble_video", _touch_video)
+    monkeypatch.setattr(pipeline_module, "assemble_scene_video", _touch_video)
+    monkeypatch.setattr(pipeline_module, "build_ambient_bed", lambda *a, **k: None)
+    pipeline_module.run_pipeline("situation", settings=settings, tts_provider=FakeTTSProvider(), punch_up=False)
+    assert len(seen) == 1  # only the generation call, no doctor call
+
+
+def test_series_flows_to_prompt_critic_and_library(tmp_path, monkeypatch):
+    from life_lesson.generation.critic import KNOWLEDGE_CATEGORIES
+
+    settings = _settings(tmp_path)
+    prompts = []
+    know_pass = json.dumps({"results": [{"category": c, "passed": True} for c in KNOWLEDGE_CATEGORIES]})
+
+    def gen(s, p):
+        prompts.append(p)
+        return VALID_SCRIPT_JSON
+
+    monkeypatch.setattr(pipeline_module, "generate_script_text", gen)
+    monkeypatch.setattr(pipeline_module, "generate_critic_text", lambda s, p: know_pass)
+    monkeypatch.setattr(pipeline_module, "pick_random_background", lambda d: tmp_path / "f.mp4")
+    monkeypatch.setattr(pipeline_module, "assemble_video", _touch_video)
+    monkeypatch.setattr(pipeline_module, "assemble_scene_video", _touch_video)
+    monkeypatch.setattr(pipeline_module, "build_ambient_bed", lambda *a, **k: None)
+    result = pipeline_module.run_pipeline(
+        "ทำไมคนท้องอยากกินของแปลก", settings=settings, tts_provider=FakeTTSProvider(),
+        series="knowledge", brief="เล่าจากครอบครัวของน้องปิ่น", punch_up=False)
+    assert result.state == "DONE", result.error_message
+    assert "EXPLAINER" in prompts[0] and "เล่าจากครอบครัวของน้องปิ่น" in prompts[0]
+    with repo.open_db(settings.db_path) as conn:
+        assert repo.get_episode(conn, result.episode_id)["series"] == "knowledge"

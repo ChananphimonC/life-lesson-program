@@ -84,4 +84,5 @@ EPISODE_LIBRARY_COLUMNS = {
     "parent_episode_id": "TEXT",
     "publish_dir": "TEXT",
     "thumbnail_path": "TEXT",
+    "series": "TEXT NOT NULL DEFAULT 'reflection'",
 }

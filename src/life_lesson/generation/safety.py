@@ -48,20 +48,23 @@ class LexicalFlag:
     block_sequence: int
 
 
-def lexical_flags(script: ScriptOutput) -> list[LexicalFlag]:
+def lexical_flags(script: ScriptOutput, series: str = "reflection") -> list[LexicalFlag]:
+    """Reflection checks everything; other series only flag clinical/crisis terms
+    (advice, beliefs and religion are legitimate topics there)."""
     flags: list[LexicalFlag] = []
+    reflection = series == "reflection"
     for block in script.script_blocks:
         text = block.text
-        for term in _PRESCRIPTIVE:
+        for term in _PRESCRIPTIVE if reflection else ():
             if term in text:
                 flags.append(LexicalFlag("prescriptive_advice", term, block.sequence))
-        for term in _RELIGIOUS:
+        for term in _RELIGIOUS if reflection else ():
             if term in text:
                 flags.append(LexicalFlag("religious_teaching", term, block.sequence))
-        for term in _CLICHE:
+        for term in _CLICHE if reflection else ():
             if term in text:
                 flags.append(LexicalFlag("generic_cliche", term, block.sequence))
-        m = _ATTRIBUTION.search(text)
+        m = _ATTRIBUTION.search(text) if reflection else None
         if m:
             flags.append(LexicalFlag("quote_or_attribution", m.group(0), block.sequence))
         for term in SENSITIVE_TERMS:
