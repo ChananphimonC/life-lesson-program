@@ -50,7 +50,7 @@ KNOWLEDGE_CATEGORIES: dict[str, str] = {
 STORY_CATEGORIES: dict[str, str] = {
     "unsupported_claim": "Presents a real-world fact, number or date as true without a source in `facts` (invented events are fine, but must stay clearly fictional).",
     "defamation_or_stereotype": "Mocks a real individual, or turns a real group/institution's stereotype into a hurtful joke; affectionate personification of institutions is fine.",
-    "therapy_or_clinical": "Drifts into violence, injury, death, self-harm, abuse or crisis territory, or makes clinical claims.",
+    "therapy_or_clinical": "Shows gore, graphic violence, real tragedies, self-harm, abuse or crisis territory, or makes clinical claims. Spooky folklore told as a story is fine.",
     "derivative_content": "Copies the plot, characters or distinctive lines of an existing film, show, game or book.",
     "manipulative_or_preachy": "Preaches a moral at the listener or pressures them instead of entertaining.",
 }

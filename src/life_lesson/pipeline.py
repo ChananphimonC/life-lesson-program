@@ -91,6 +91,7 @@ def run_pipeline(
     series: str = "reflection",
     brief: str | None = None,
     punch_up: bool = True,
+    authored_script: ScriptOutput | None = None,
 ) -> PipelineResult:
     settings = settings or get_settings()
     spec = get_format(episode_format)
@@ -112,7 +113,8 @@ def run_pipeline(
                 return result("REJECTED", error_message=str(exc))
 
             script = _generate_and_persist_script(
-                conn, settings, episode_id, topic_id, topic_text, theme, spec, series, brief
+                conn, settings, episode_id, topic_id, topic_text, theme, spec, series, brief,
+                authored_script,
             )
             if punch_up:
                 script = _punch_up(conn, settings, episode_id, script, spec, series)
@@ -162,8 +164,20 @@ def _generate_and_persist_script(
     spec: FormatSpec,
     series: str = "reflection",
     brief: str | None = None,
+    authored: ScriptOutput | None = None,
 ) -> ScriptOutput:
     repo.update_episode_state(conn, episode_id, "TOPIC")
+
+    if authored is not None:  # a script the author wrote: validate it, do not regenerate it
+        script = authored.model_copy(deep=True)
+        check_format(script, spec)
+        script.metadata.format = spec.name
+        script.metadata.prompt_version = "authored"
+        version_id = repo.register_prompt_version(conn, "authored_script", "script", "authored", "author-supplied script")
+        repo.log_generation_attempt(conn, episode_id, "script", 1, "authored")
+        repo.save_script(conn, episode_id, version_id, script.model_dump_json(), validated=True)
+        repo.update_episode_state(conn, episode_id, "SCRIPT")
+        return script
 
     prompt = build_script_prompt(topic_id, topic_text, theme, spec.name, series, brief)
     prompt_version_id = repo.register_prompt_version(
@@ -319,6 +333,10 @@ def _master(
     return output
 
 
+def _even(value: float) -> int:
+    return max(2, int(value) // 2 * 2)
+
+
 def _assemble_video(
     conn: sqlite3.Connection,
     settings: Settings,
@@ -339,8 +357,8 @@ def _assemble_video(
             background_dir=settings.background_video_dir,
             audio_path=audio_path,
             output_path=output_path,
-            width=spec.width,
-            height=spec.height,
+            width=_even(spec.width * settings.preview_scale),
+            height=_even(spec.height * settings.preview_scale),
             show_cards=spec.name != "short",
             font_path=settings.thai_font_path,
             visual_mode=settings.visual_mode,

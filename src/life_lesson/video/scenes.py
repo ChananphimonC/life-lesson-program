@@ -25,7 +25,7 @@ from life_lesson.errors import VideoAssemblyError
 from life_lesson.generation.atmosphere import BlockMood, grade_filter, rain_chain, rain_opacity
 from life_lesson.generation.schema import ScriptOutput
 from life_lesson.video.illustrator import SETTINGS, character_colors, illustrate_scene
-from life_lesson.video.scene_kb import is_worker, retrieve_recipe
+from life_lesson.video.scene_kb import is_worker, props_from_cue, retrieve_recipe
 from life_lesson.publish.fonts import find_thai_font
 
 logger = logging.getLogger(__name__)
@@ -50,6 +50,7 @@ class Scene:
     character_names: tuple = ()
     recipe_id: str = ""
     ref_palette: tuple = ()
+    props: tuple = ()
 
     @property
     def duration_s(self) -> float:
@@ -66,10 +67,15 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
     groups: list[dict] = []
     for block, start in zip(script.script_blocks, block_starts_ms):
         title = (block.chapter_title or "").strip() or None
-        if groups and (title is None or title == groups[-1]["title"]):
+        same_title = title is None or title == groups[-1]["title"] if groups else False
+        # a change of place inside one chapter is a new scene (the dark alley is not the stall)
+        same_place = not (block.setting and groups and groups[-1]["place"] and block.setting != groups[-1]["place"])
+        if groups and same_title and same_place:
+            if block.setting and not groups[-1]["place"]:
+                groups[-1]["place"] = block.setting
             continue
         groups.append(
-            {"start": start, "title": title, "time_label": block.time_label,
+            {"start": start, "title": title, "time_label": block.time_label, "place": block.setting,
              "cue": block.visual_cue, "moods": [], "cues": [], "settings": []}
         )
     if not groups:
@@ -102,16 +108,19 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
         recipe = retrieve_recipe(cue_text, explicit)
         setting = explicit if explicit in SETTINGS else recipe.setting
         present = [c for c in script.characters if c.name and c.name in cue_text] or script.characters[:1]
+        scene_props = props_from_cue(cue_text)
+        lamp = ("headlamp",) if "ไฟคาดหัว" in cue_text else ()
         looks = tuple(
             character_colors(
                 c.outfit, c.palette, c.name,
-                extra_items=recipe.wardrobe if is_worker(recipe, c.role, c.name, c.outfit) else (),
+                extra_items=(recipe.wardrobe if is_worker(recipe, c.role, c.name, c.outfit) else ())
+                + (lamp if "ไฟคาดหัว" in f"{c.signature_item} {c.outfit}" else ()),
                 sleeve=recipe.sleeve if is_worker(recipe, c.role, c.name, c.outfit) else None,
             )
             for c in present
         )
         scenes.append(Scene(i, g["start"], end, g["title"], g["time_label"], g["cue"], mood,
-                            setting, looks, tuple(c.name for c in present), recipe.id))
+                            setting, looks, tuple(c.name for c in present), recipe.id, (), scene_props))
     return scenes
 
 
@@ -278,12 +287,13 @@ def assemble_scene_video(
                     setting=scene.setting, mood=scene.mood,
                     characters=[dict(look) for look in scene.looks],
                     seed=f"{scene.index}-{scene.title}", out_path=clip,
-                    font_path=font_path, reference_palette=scene.ref_palette,
+                    font_path=font_path, reference_palette=scene.ref_palette, props=scene.props,
                 )
             else:
                 clip = chosen[n]
             card = None
-            if show_cards:
+            new_title = n == 0 or scenes[n - 1].title != scene.title
+            if show_cards and new_title:
                 card = render_chapter_card(scene, (width, height), tmp_dir / f"card{scene.index}.png", font_path=font_path)
             part = tmp_dir / f"scene{scene.index:03d}.mp4"
             _run(_scene_command(ffmpeg_binary, clip, card, scene, width, height, part), f"rendering scene {scene.index}")

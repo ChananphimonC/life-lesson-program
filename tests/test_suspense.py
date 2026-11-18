@@ -82,3 +82,10 @@ def test_series_specific_rules():
     summary = GOOD[:-1] + ["สรุปแล้วบทเรียนของเรื่องนี้คืออย่าทิ้งใคร"]
     assert any(f.code == "summarising_ending" for f in lint_script(_script(summary), "reflection").findings)
     assert not any(f.code == "summarising_ending" for f in lint_script(_script(summary), "story").findings)
+
+
+def test_risky_tts_words_match_whole_words_only():
+    clean = _script(GOOD[:-1] + ["คราวนี้เสียงลากมาจากหลังร้าน"])
+    assert not any(f.code == "tts_risky_words" for f in lint_script(clean).findings)
+    risky = _script(GOOD[:-1] + ["ราวห้าโมงเย็นเขาก็มา"])
+    assert any(f.code == "tts_risky_words" for f in lint_script(risky).findings)

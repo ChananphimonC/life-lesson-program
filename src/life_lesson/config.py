@@ -39,6 +39,7 @@ class Settings:
     visual_mode: str = "illustrated"
     reference_search: bool = False
     punchup_threshold: int = 75
+    preview_scale: float = 1.0
     cache_dir: Path | None = None
 
     @property

@@ -8,6 +8,7 @@ generation yet (that's a later milestone).
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import sys
 from pathlib import Path
 
@@ -23,6 +24,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "topic",
+        nargs="?",
+        default=None,
         help="The specific situation to reflect on, e.g. "
         "'Seeing friends buy houses while you are still renting'.",
     )
@@ -44,6 +47,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "(sourced facts, advice allowed); story = invented comedy/adventure.",
     )
     parser.add_argument("--brief", type=Path, default=None, help="Text/markdown file with premise, cast, beats and facts to build from.")
+    parser.add_argument("--script", type=Path, default=None, help="Use this finished script (JSON) instead of generating one.")
+    parser.add_argument("--silent", action="store_true", help="Preview without voice: silent audio timed to the text (no API quota).")
+    parser.add_argument("--preview", action="store_true", help="Render at 1/3 size for a quick look.")
     parser.add_argument("--no-punchup", action="store_true", help="Skip the suspense script doctor.")
     parser.add_argument(
         "--no-critic",
@@ -57,14 +63,35 @@ def main(argv: list[str] | None = None) -> int:
     args = build_arg_parser().parse_args(argv)
     settings = get_settings()
     configure_logging(settings.log_level)
+    if args.preview:
+        settings = dataclasses.replace(settings, preview_scale=1 / 3)
+
+    authored = None
+    topic = args.topic
+    if args.script:
+        from life_lesson.generation.schema import validate_script_json
+
+        try:
+            authored = validate_script_json(args.script.read_text(encoding="utf-8"))
+        except PipelineError as exc:
+            print(f"error: {args.script}: {exc}", file=sys.stderr)
+            return 1
+        topic = topic or authored.title
+    if not topic:
+        print("error: give a topic, or --script FILE", file=sys.stderr)
+        return 1
+    tts = None
+    if args.silent:
+        from life_lesson.tts.silent import SilentTTSProvider
+
+        tts = SilentTTSProvider()
 
     try:
         result = run_pipeline(
-            args.topic, args.theme, settings=settings, episode_format=args.format,
-            critic=not args.no_critic,
-            series=args.series,
+            topic, args.theme, settings=settings, episode_format=args.format,
+            critic=not args.no_critic, series=args.series,
             brief=args.brief.read_text(encoding="utf-8") if args.brief else None,
-            punch_up=not args.no_punchup,
+            punch_up=not args.no_punchup, authored_script=authored, tts_provider=tts,
         )
     except PipelineError as exc:
         print(f"Pipeline failed before an episode record could be created: {exc}", file=sys.stderr)

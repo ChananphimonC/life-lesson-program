@@ -18,10 +18,12 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
+from life_lesson.errors import PipelineError
 from life_lesson.generation.atmosphere import BlockMood
+from life_lesson.publish.fonts import find_thai_font
 from life_lesson.video.scene_kb import SceneRecipe
 
-SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall")
+SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley")
 
 _COLOR_WORDS = {
     "เหลือง": (240, 196, 40), "yellow": (240, 196, 40), "แดง": (206, 52, 48), "red": (206, 52, 48),
@@ -59,6 +61,7 @@ _ITEM_WORDS = {
     "hood": ("ฮู้ด", "hood", "เสื้อกันฝน", "raincoat"),
     "lanyard": ("สายคล้องคอ", "บัตรนักศึกษา", "บัตรพนักงาน", "lanyard"),
     "towel": ("ผ้าขนหนู", "ผ้าเช็ดมือ", "towel"),
+    "headlamp": ("ไฟคาดหัว", "headlamp"),
 }
 _SHORT_SLEEVE_WORDS = ("แขนสั้น", "โปโล", "เสื้อยืด", "t-shirt", "polo", "short sleeve")
 
@@ -358,17 +361,21 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
         d.pieslice([x - 20 * s, head_y - 28 * s, x + 20 * s, head_y + 8 * s], 180, 360, fill=accent)
         d.rounded_rectangle([x - 22 * s, head_y - 6 * s, x + 24 * s, head_y - 1 * s], 2 * s, fill=tuple(max(0, c - 40) for c in accent))
     _draw_face(d, x, head_y, s, expression)
+    if "headlamp" in items:
+        d.rounded_rectangle([x - 7 * s, head_y - 19 * s, x + 7 * s, head_y - 11 * s], 3 * s, fill=(250, 240, 190), outline=(60, 60, 66), width=max(1, int(1.5 * s)))
+        d.line([(x - 19 * s, head_y - 12 * s), (x + 19 * s, head_y - 12 * s)], fill=(60, 60, 66), width=max(2, int(2 * s)))
     if "glasses" in items:
         ey = head_y - 1 * s
         for sign in (-1, 1):
             d.ellipse([x + sign * 7.5 * s - 7 * s, ey - 7 * s, x + sign * 7.5 * s + 7 * s, ey + 7 * s], outline=(30, 30, 36), width=max(2, int(1.8 * s)))
         d.line([(x - 0.5 * s, ey), (x + 0.5 * s, ey)], fill=(30, 30, 36), width=max(2, int(1.8 * s)))
+    hand_pos["head"] = (x, head_y)
     return hand_pos
 
 
 # -- scenes --------------------------------------------------------------------
 
-def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Random, fig_s: float = 1.0, font_path: Path | None = None, ref=()):
+def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Random, fig_s: float = 1.0, font_path: Path | None = None, ref=(), cook_present: bool = True, props=()):
     w, h = size
     top, bottom = _sky_colors(mood)
     if ref:  # reference photos nudge the palette toward real-world colour
@@ -450,8 +457,11 @@ def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Ra
         d.rectangle([0, ground, w, h], fill=_lerp(near, (0, 0, 0), 0.4))
     elif setting == "night_sky":
         d.ellipse([-w * 0.2, ground - 40, w * 1.2, h * 1.6], fill=near)
+    elif setting == "alley":
+        img, ground, lights, fg, info = _alley(img, size, mood, rng, fig_s, night, props)
+        d = ImageDraw.Draw(img)
     elif setting == "food_stall":
-        img, ground, lights, fg, info = _food_stall(img, size, mood, rng, fig_s, font_path, night, ref)
+        img, ground, lights, fg, info = _food_stall(img, size, mood, rng, fig_s, font_path, night, ref, cook_present, props)
         d = ImageDraw.Draw(img)
     else:  # room
         wall = (46, 40, 52) if night else (214, 200, 180)
@@ -488,7 +498,7 @@ def _flame(d, cx, base_y, s, scale=1.0):
         d.polygon([(cx2 - w, base_y), (cx2 - w * 0.4, top + hh * s * 0.35), (cx2, top), (cx2 + w * 0.4, top + hh * s * 0.35), (cx2 + w, base_y)], fill=col)
 
 
-def _plate_kaprao(d, cx, cy, s):
+def _plate_kaprao(d, cx, cy, s, half_eaten=False):
     d.ellipse([cx - 42 * s, cy - 11 * s, cx + 42 * s, cy + 13 * s], fill=(246, 246, 240), outline=(200, 200, 196), width=max(1, int(1.5 * s)))
     d.ellipse([cx - 40 * s, cy - 24 * s, cx - 2 * s, cy + 2 * s], fill=(252, 250, 242))             # rice
     d.ellipse([cx - 6 * s, cy - 26 * s, cx + 36 * s, cy + 2 * s], fill=(120, 74, 46))                # minced pork
@@ -501,9 +511,11 @@ def _plate_kaprao(d, cx, cy, s):
         d.ellipse([px - 2.5 * s, py - 1.3 * s, px + 2.5 * s, py + 1.3 * s], fill=(206, 52, 40))
     d.ellipse([cx - 20 * s, cy - 8 * s, cx + 8 * s, cy + 11 * s], fill=(252, 250, 244))              # fried egg
     d.ellipse([cx - 10 * s, cy - 3 * s, cx - 2 * s, cy + 5 * s], fill=(248, 178, 28))                # yolk
+    if half_eaten:  # a bite taken out of the egg
+        d.ellipse([cx - 22 * s, cy - 10 * s, cx - 7 * s, cy + 3 * s], fill=(246, 246, 240))
 
 
-def _food_stall(img, size, mood, rng, s, font_path, night, ref=()):
+def _food_stall(img, size, mood, rng, s, font_path, night, ref=(), cook_present=True, props=()):
     """Roadside made-to-order shop (ร้านตามสั่ง): shopfront, counter, wok on flame,
     steam, menu board, plastic stools and a plate of pad kaprao."""
     w, h = size
@@ -570,7 +582,8 @@ def _food_stall(img, size, mood, rng, s, font_path, night, ref=()):
         dd.line([(int(w * 0.05), counter_y + int(14 * s)), (int(w * 0.58), counter_y + int(14 * s))], fill=(120, 126, 136), width=3)
         # gas burner under the wok with flames
         dd.rectangle([wok_x - int(40 * s), counter_y - int(4 * s), wok_x + int(40 * s), counter_y + int(2 * s)], fill=(40, 40, 46))
-        _flame(dd, wok_x, counter_y - int(2 * s), s * 1.15)
+        if cook_present:  # the burner is off once the cook has left (story logic)
+            _flame(dd, wok_x, counter_y - int(2 * s), s * 1.15)
         # wok bowl (half ellipse) and rim
         bowl_bottom = counter_y - int(6 * s)
         dd.pieslice([wok_x - wok_r, 2 * wok_y - bowl_bottom, wok_x + wok_r, bowl_bottom], 0, 180, fill=(30, 30, 34))
@@ -583,17 +596,84 @@ def _food_stall(img, size, mood, rng, s, font_path, night, ref=()):
             kind = rnd.random()
             col = (54, 128, 60) if kind < 0.5 else ((206, 52, 40) if kind < 0.7 else (150, 96, 60))
             dd.ellipse([fx - 4.5 * s, fy - 2.6 * s, fx + 4.5 * s, fy + 2.6 * s], fill=col)
-        # spatula: handle up to the cook's left hand, blade in the food
-        sp_hand = (wok_x - int(28 * s), wok_y - int(46 * s))
-        dd.line([sp_hand, (wok_x + int(6 * s), wok_y - int(4 * s))], fill=(150, 150, 158), width=max(3, int(5 * s)))
-        dd.polygon([(wok_x + int(2 * s), wok_y - int(10 * s)), (wok_x + int(22 * s), wok_y), (wok_x + int(16 * s), wok_y + int(6 * s)), (wok_x - int(2 * s), wok_y - int(2 * s))], fill=(190, 192, 200))
+        if cook_present:
+            # spatula: handle up to the cook's left hand, blade in the food
+            sp_hand = (wok_x - int(28 * s), wok_y - int(46 * s))
+            dd.line([sp_hand, (wok_x + int(6 * s), wok_y - int(4 * s))], fill=(150, 150, 158), width=max(3, int(5 * s)))
+            dd.polygon([(wok_x + int(2 * s), wok_y - int(10 * s)), (wok_x + int(22 * s), wok_y), (wok_x + int(16 * s), wok_y + int(6 * s)), (wok_x - int(2 * s), wok_y - int(2 * s))], fill=(190, 192, 200))
 
     fg.append(front)
     # steam: soft translucent puffs drawn later via glow layer
     info.update(cook_x=cook_x, counter_y=counter_y, wok=(wok_x, wok_y, wok_r), handle_end=handle_end,
                 spatula_hand=(wok_x - int(28 * s), wok_y - int(46 * s)), ground=ground, steam=(wok_x, wok_y - int(40 * s)))
-    lights.append(((wok_x, wok_y), int(h * 0.2), (255, 140, 50)))
+    if cook_present:
+        lights.append(((wok_x, wok_y), int(h * 0.2), (255, 140, 50)))
+    else:
+        info["steam"] = None  # cold wok, no steam
+    if "ledge_plate" in props:  # the plate set out at the back window: the story's key object
+        px, py = int(w * 0.70), int(h * 0.34)
+        d.rectangle([px - int(14 * s), py - int(70 * s), px + int(120 * s), py + int(10 * s)], fill=(28, 24, 26))    # window opening
+        d.rectangle([px - int(14 * s), py + int(2 * s), px + int(120 * s), py + int(12 * s)], fill=(120, 96, 70))   # sill
+        _plate_kaprao(d, px + int(52 * s), py - int(8 * s), s * 0.8, half_eaten="half_eaten" in props)
+        if "second_plate" in props:
+            _plate_kaprao(d, px + int(112 * s), py - int(8 * s), s * 0.62)
+        lights.append(((px + int(52 * s), py - int(24 * s)), int(h * 0.16), (255, 200, 120)))
+        info["ledge_steam"] = (px + int(52 * s), py - int(30 * s))
     return img, ground, lights, fg, info
+
+
+def _alley(img, size, mood, rng, s, night, props=()):
+    """Dead-end soi at night: brick walls closing in toward one far lamp, wet ground, bins."""
+    w, h = size
+    d = ImageDraw.Draw(img)
+    vx, vy = int(w * 0.62), int(h * 0.46)
+    half_w, half_h = int(w * 0.10), int(h * 0.14)
+    ground = int(h * 0.88)
+    wall = (34, 30, 36) if night else (150, 130, 118)
+    lights = []
+    # sky strip between the walls
+    top, bottom = _sky_colors(mood)
+    img.paste(_gradient((w, int(h * 0.5)), _lerp(top, (0, 0, 0), 0.4), bottom), (0, 0))
+    d = ImageDraw.Draw(img)
+    # walls (perspective)
+    d.polygon([(0, 0), (vx - half_w, vy - half_h), (vx - half_w, vy + half_h), (0, h)], fill=wall)
+    d.polygon([(w, 0), (vx + half_w, vy - half_h), (vx + half_w, vy + half_h), (w, h)], fill=_lerp(wall, (0, 0, 0), 0.25))
+    # bricks: rows converging to the vanishing point
+    for k in range(1, 14):
+        t = k / 14
+        for sign, x_edge in ((-1, 0), (1, w)):
+            y0 = int(0 + (vy - half_h) * t)
+            y1 = int(h - (h - (vy + half_h)) * t)
+            xe = int(x_edge + ((vx + sign * half_w) - x_edge) * t)
+            d.line([(x_edge, int(h * t * 0.0 + y0 * 0) + int(h * (1 - t) * 0)), (xe, y0)], fill=_lerp(wall, (0, 0, 0), 0.35), width=2) if False else None
+            d.line([(xe, y0), (xe, y1)], fill=_lerp(wall, (0, 0, 0), 0.3), width=2)
+    # far end wall + lamp
+    d.rectangle([vx - half_w, vy - half_h, vx + half_w, vy + half_h], fill=_lerp(wall, (0, 0, 0), 0.5))
+    d.polygon([(0, h), (w, h), (vx + half_w, vy + half_h), (vx - half_w, vy + half_h)], fill=(30, 32, 40) if night else (110, 108, 104))  # wet ground
+    for i in range(10):  # puddle streaks of lamp light
+        y = int(vy + half_h + (h - vy - half_h) * (i + 1) / 11)
+        span = int((vx - 0) * 0.04 * (i + 1))
+        d.line([(vx - span, y), (vx + span, y)], fill=(90, 84, 64), width=max(2, int(1 + i * 0.6)))
+    lamp = (vx, vy - int(half_h * 0.2))
+    d.rectangle([lamp[0] - 3, lamp[1], lamp[0] + 3, vy + half_h], fill=(20, 20, 24))
+    lights.append((lamp, int(h * 0.30), (255, 200, 120)))
+    # bins and a pipe in the foreground right
+    d.rounded_rectangle([int(w * 0.80), int(h * 0.66), int(w * 0.93), int(h * 0.92)], 8, fill=(26, 40, 34))
+    d.rectangle([int(w * 0.80), int(h * 0.64), int(w * 0.93), int(h * 0.67)], fill=(18, 28, 24))
+    d.rounded_rectangle([int(w * 0.07), int(h * 0.70), int(w * 0.15), int(h * 0.92)], 6, fill=(40, 34, 30))
+    info: dict = {}
+    if "far_silhouette" in props:  # a tall figure standing still at the far end
+        def silhouette(dd):
+            fx, fy = vx, vy + half_h
+            fh = int(h * 0.30)
+            sil = (6, 6, 9)
+            dd.ellipse([fx - fh * 0.11, fy - fh, fx + fh * 0.11, fy - fh * 0.78], fill=sil)
+            dd.rounded_rectangle([fx - fh * 0.16, fy - fh * 0.80, fx + fh * 0.16, fy - fh * 0.28], int(fh * 0.06), fill=sil)
+            dd.rectangle([fx - fh * 0.11, fy - fh * 0.30, fx + fh * 0.11, fy], fill=sil)
+            dd.line([(fx - fh * 0.16, fy - fh * 0.74), (fx - fh * 0.24, fy - fh * 0.40)], fill=sil, width=max(3, int(fh * 0.07)))
+            dd.line([(fx + fh * 0.16, fy - fh * 0.74), (fx + fh * 0.24, fy - fh * 0.40)], fill=sil, width=max(3, int(fh * 0.07)))
+        info["post"] = [silhouette]
+    return img, ground, lights, [], info
 
 
 def _steam(img: Image.Image, origin, s: float, rng: random.Random) -> Image.Image:
@@ -620,18 +700,28 @@ def illustrate_scene(
     font_path: str | Path | None = None,
     reference_palette: tuple = (),
     subject_out: dict | None = None,
+    props: tuple = (),
 ) -> Image.Image:
     """Draw one scene. `characters` = list of dicts from `character_colors`."""
+    if font_path is None:  # signs carry Thai text: find a font ourselves (best effort)
+        try:
+            font_path = find_thai_font()
+        except PipelineError:
+            font_path = None
     ss = 2  # supersample for smooth edges
     w, h = size[0] * ss, size[1] * ss
     rng = random.Random(int(hashlib.md5(f"{seed}{setting}".encode()).hexdigest(), 16) % (2**32))
     s = h / 720 * 1.3 * (1.45 if setting == "food_stall" else 1.0)
-    img, ground, lights, seat, fg, info = _scene_background(setting, (w, h), mood, rng, s, font_path, tuple(reference_palette))
+    img, ground, lights, seat, fg, info = _scene_background(
+        setting, (w, h), mood, rng, s, font_path, tuple(reference_palette),
+        cook_present=any("apron" in c.get("items", ()) for c in (characters or [])), props=tuple(props),
+    )
 
     figs = characters or []
     n = len(figs)
     face = expression_for(mood)
     cook_placed = False
+    customers = 0
     subject_x = None
     for i, col in enumerate(figs):
         d = ImageDraw.Draw(img)
@@ -642,10 +732,16 @@ def illustrate_scene(
                 subject_x = info["cook_x"] / w
                 _draw_character(d, info["cook_x"], ground, s, col, expression=face,
                                 hands={"L": info["spatula_hand"], "R": info["handle_end"]})
-            else:  # customer on the right
-                _draw_character(d, int(w * (0.665 - 0.0 * i)), ground, s, col, expression=face)
+            else:  # customers stand to the right of the counter, side by side
+                cx = int(w * (0.64 + 0.125 * customers))
+                customers += 1
+                pos = _draw_character(d, cx, ground, s, col, expression=face)
+                if "headlamp" in col.get("items", ()):
+                    lights.append(((pos["head"][0], pos["head"][1] - int(10 * s)), int(h * 0.2), (255, 246, 210)))
             continue
         x = int(w * (0.5 if n == 1 else 0.3 + 0.4 * i / max(1, n - 1)))
+        if setting == "alley":
+            x = int(w * (0.2 + 0.17 * i))
         if setting in ("room", "office"):
             x = int(w * (0.22 + 0.1 * i))
         gy = ground - 22 if seat == "sit" else (ground - 4 if seat == "boat" else ground)
@@ -654,8 +750,10 @@ def illustrate_scene(
             hands = {"L": (x - 4 * s, desk_top - 6), "R": (x + 38 * s, desk_top - 6)}
         if subject_x is None:
             subject_x = x / w
-        _draw_character(d, x, gy, s * (1.1 if seat else 1.0), col, sitting=seat is not None,
-                        expression=face, hands=hands)
+        pos = _draw_character(d, x, gy, s * (1.1 if seat else (1.3 if setting == "alley" else 1.0)), col, sitting=seat is not None,
+                              expression=face, hands=hands)
+        if "headlamp" in col.get("items", ()):  # the lamp lights his face and the wall behind
+            lights.append(((pos["head"][0], pos["head"][1] - int(10 * s)), int(h * 0.22), (255, 246, 210)))
 
     if subject_out is not None:
         subject_out["x"] = subject_x if subject_x is not None else 0.5
@@ -666,8 +764,14 @@ def illustrate_scene(
     for center, radius, color in lights:
         if night or setting in ("island", "food_stall"):
             img = _glow(img, center, radius, color, 0.75)
+    d = ImageDraw.Draw(img)
+    for paint in info.get("post", ()):
+        paint(d)
     if setting == "food_stall":
-        img = _steam(img, info["steam"], s, rng)
+        if info.get("steam"):
+            img = _steam(img, info["steam"], s, rng)
+        if info.get("ledge_steam"):  # thin wisp over the plate set out at the back window
+            img = _steam(img, info["ledge_steam"], s * 0.35, rng)
 
     img = img.resize(size, Image.LANCZOS)
     if out_path is not None:

@@ -140,7 +140,9 @@ def lint_script(script: ScriptOutput, series: str = "reflection") -> LintReport:
     # 7. digits and risky words for the voice
     if re.search(r"\d", text_all):
         add("digits_in_narration", "low", "Digits in spoken text; write numbers as spoken Thai words so the voice reads them right.", [b.sequence for b in blocks if re.search(r"\d", b.text)][:6])
-    risky = [w for w in TTS_RISKY if w in text_all]
+    # Thai has no spaces, so test the left edge only: "ราว" is risky, but "คราวนี้" (a consonant
+    # precedes it) is a different word and is read correctly.
+    risky = [w for w in TTS_RISKY if re.search(r"(?<![\u0e01-\u0e2e])" + re.escape(w), text_all)]
     if risky:
         add("tts_risky_words", "low", "Words the TTS often mispronounces: " + ", ".join(risky) + ". Re-listen or reword.", penalty=min(6, 2 * len(risky)))
 

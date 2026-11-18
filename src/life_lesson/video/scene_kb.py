@@ -34,7 +34,7 @@ RECIPES: tuple[SceneRecipe, ...] = (
         keywords=("ร้านตามสั่ง", "ตามสั่ง", "กะเพรา", "กระเพรา", "ผัดกระเพรา", "ผัดกะเพรา", "เจ๊", "แม่ค้า",
                   "ร้านข้าว", "กระทะ", "ผัด", "wok", "street food", "stir fry", "food stall", "ร้านอาหาร", "ข้าวราดแกง"),
         props=("wok_flame", "steam", "menu_sign", "stools", "plate_kaprao", "fluorescent", "bottles"),
-        role_words=("เจ๊", "แม่ค้า", "พ่อค้า", "แม่ครัว", "พ่อครัว", "เชฟ", "cook", "vendor", "chef", "ป้า", "ลุง"),
+        role_words=("เจ๊", "แม่ค้า", "พ่อค้า", "แม่ครัว", "พ่อครัว", "เชฟ", "cook", "vendor", "chef"),
         wardrobe=("apron", "hairnet", "towel"), sleeve="short", worker_pose="stir",
         search_query="thai street food stall pad kaprao wok flame night",
     ),
@@ -58,6 +58,11 @@ RECIPES: tuple[SceneRecipe, ...] = (
         id="office_floor", setting="office",
         keywords=("ออฟฟิศ", "ที่ทำงาน", "ประชุม", "ลิฟต์", "ห้าง", "office", "elevator", "meeting"),
         role_words=("พนักงาน", "หัวหน้า", "staff"), wardrobe=("lanyard",), search_query="office night city window desk",
+    ),
+    SceneRecipe(
+        id="dead_end_alley", setting="alley",
+        keywords=("ซอยตัน", "ซอยเปลี่ยว", "ซอยมืด", "ตรอก", "ซอยลับ", "dead end", "alley"),
+        search_query="dark dead end alley night rain wet pavement",
     ),
     SceneRecipe(
         id="night_street", setting="street",
@@ -105,3 +110,18 @@ def retrieve_recipe(cue_text: str | None, explicit_setting: str | None = None) -
 def is_worker(recipe: SceneRecipe, *texts: str | None) -> bool:
     blob = " ".join(t or "" for t in texts).lower()
     return any(w.lower() in blob for w in recipe.role_words)
+
+
+def props_from_cue(cue_text: str | None) -> tuple[str, ...]:
+    """Story props named in a scene's cue (drawn by the illustrator)."""
+    text = cue_text or ""
+    props: list[str] = []
+    if any(k in text for k in ("ช่องหน้าต่าง", "จานผี", "จานที่ไม่มีคนสั่ง", "จานเซ่น")):
+        props.append("ledge_plate")
+    if "สองใบ" in text and "ledge_plate" in props:
+        props.append("second_plate")
+    if "ไข่ดาวหายไป" in text or "ครึ่งฟอง" in text:
+        props.append("half_eaten")
+    if "เงา" in text:
+        props.append("far_silhouette")
+    return tuple(props)

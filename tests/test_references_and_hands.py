@@ -144,3 +144,113 @@ def test_reference_palette_nudges_the_scene():
     plain = illustrate_scene((320, 180), **kw)
     tinted = illustrate_scene((320, 180), reference_palette=((200, 40, 40), (180, 60, 40)), **kw)
     assert plain.tobytes() != tinted.tobytes()
+
+
+# ---- story scenes: place changes, alley, props, wardrobe -----------------------
+
+def _story_script():
+    s = _script(list("abcdefgh"))
+    s.characters = [
+        type(s.characters[0])(name="ต้อม", role="ไรเดอร์", outfit="เสื้อกันฝนสีเหลือง", palette=["#f0c428"]),
+        type(s.characters[0])(name="เจ๊ปุ้ย", role="แม่ค้าร้านตามสั่ง", outfit="เสื้อโปโลสีชมพู"),
+        type(s.characters[0])(name="ลุงแมว", role="คนกวาดซอย", outfit="เสื้อสะท้อนแสงสีส้ม หมวก", signature_item="ไม้กวาดและไฟคาดหัว"),
+    ]
+    cues = ["ต้อม เจ๊ปุ้ย ร้านตามสั่ง", "ต้อม เจ๊ปุ้ย ร้านตามสั่ง", "ต้อมในซอยตัน มีเงายืนอยู่สุดซอย", "ต้อมในซอยตัน",
+            "ลุงแมวในซอยตัน ไฟคาดหัวสว่าง ต้อม", "เจ๊ปุ้ย ต้อม ร้านตามสั่ง", "ร้านตามสั่ง จานที่ช่องหน้าต่างหลังร้าน ต้อม", "ต้อม"]
+    places = ["food_stall", "food_stall", "alley", "alley", "alley", "food_stall", "food_stall", "food_stall"]
+    for b, c, pl in zip(s.script_blocks, cues, places):
+        b.visual_cue, b.setting, b.chapter_title = c, pl, "บทเดียว"  # ONE chapter, several places
+    return s
+
+
+def test_a_change_of_place_inside_one_chapter_starts_a_new_scene():
+    scenes = plan_scenes(_story_script(), [i * 10_000 for i in range(8)], 80_000)
+    assert [x.setting for x in scenes] == ["food_stall", "alley", "food_stall"]
+    assert len({x.title for x in scenes}) == 1 and scenes[0].end_ms == scenes[1].start_ms
+
+
+def test_alley_cues_resolve_to_the_alley_setting():
+    from life_lesson.video.scene_kb import retrieve_recipe
+
+    assert retrieve_recipe("ต้อมในซอยตันหลังร้าน").setting == "alley"
+    assert retrieve_recipe("เจ๊ร้านตามสั่งในซอยตัน").setting == "food_stall"  # the stall keyword wins
+
+
+def test_props_come_from_the_cue():
+    from life_lesson.video.scene_kb import props_from_cue
+
+    assert props_from_cue("จานที่ช่องหน้าต่างหลังร้าน") == ("ledge_plate",)
+    assert set(props_from_cue("ช่องหน้าต่างมีจานสองใบ")) >= {"ledge_plate", "second_plate"}
+    assert "far_silhouette" in props_from_cue("มีเงายืนอยู่สุดซอย") and "half_eaten" in props_from_cue("ไข่ดาวหายไปครึ่งฟอง")
+    assert props_from_cue("เฉยๆ") == ()
+
+
+def test_sweeper_is_not_given_the_cooks_wardrobe_and_gets_his_headlamp():
+    scenes = plan_scenes(_story_script(), [i * 10_000 for i in range(8)], 80_000)
+    alley = next(x for x in scenes if x.setting == "alley")
+    sweeper = next(l for l, n in zip(alley.looks, alley.character_names) if n == "ลุงแมว")
+    assert "apron" not in sweeper["items"] and "headlamp" in sweeper["items"] and "cap" in sweeper["items"]
+    assert "far_silhouette" in alley.props or "far_silhouette" in scenes[1].props
+
+
+def test_empty_stall_has_no_flame_and_the_far_silhouette_is_dark():
+    from life_lesson.generation.atmosphere import BlockMood
+
+    mood = BlockMood(light="dim", weather="clear")
+    cook = character_colors("เสื้อโปโลสีชมพู", [], "เจ๊", extra_items=("apron", "hairnet"), sleeve="short")
+    cust = character_colors("เสื้อสีฟ้า", [], "ต้อม")
+    with_cook = illustrate_scene((640, 360), setting="food_stall", mood=mood, characters=[cook, cust], seed="k")
+    no_cook = illustrate_scene((640, 360), setting="food_stall", mood=mood, characters=[cust], seed="k")
+
+    def orange(img):
+        return sum(1 for r, g, b in img.get_flattened_data() if r > 230 and 100 < g < 180 and b < 90)
+
+    assert orange(with_cook) > 150 and orange(no_cook) < orange(with_cook) * 0.2  # burner is off
+
+    img = illustrate_scene((640, 360), setting="alley", mood=BlockMood(light="dark"), characters=[cust],
+                           seed="a", props=("far_silhouette",))
+    # a near-black figure stands where the lamp glow is brightest (centre-right of the alley)
+    dark = sum(1 for x in range(330, 450) for y in range(110, 230) if sum(img.getpixel((x, y))) < 40)
+    assert dark > 600
+
+
+def test_ledge_plate_is_drawn_only_when_asked():
+    cust = character_colors("เสื้อสีฟ้า", [], "ต้อม")
+    kw = dict(setting="food_stall", mood=None, characters=[cust], seed="k")
+    a = illustrate_scene((640, 360), **kw)
+    b = illustrate_scene((640, 360), props=("ledge_plate",), **kw)
+    assert a.tobytes() != b.tobytes()
+
+
+def test_chapter_card_is_rendered_once_per_chapter_title(tmp_path, monkeypatch):
+    """Drive the real assembler with ffmpeg and the drawing stubbed out; count card renders."""
+    from life_lesson.video import scenes as sc
+
+    cards = []
+    monkeypatch.setattr(sc, "_run", lambda *a, **k: None)
+    monkeypatch.setattr(sc, "illustrate_scene", lambda *a, **k: Image.new("RGB", (4, 4)).save(k["out_path"]))
+    monkeypatch.setattr(sc, "render_chapter_card", lambda scene, size, out, **k: cards.append(scene.title))
+    scenes = [sc.Scene(0, 0, 5000, "ซอยตัน", None, None), sc.Scene(1, 5000, 9000, "ซอยตัน", None, None),
+              sc.Scene(2, 9000, 12000, "คนกวาดซอย", None, None)]
+    audio = tmp_path / "a.wav"
+    audio.write_bytes(b"x")
+    sc.assemble_scene_video(ffmpeg_binary="ffmpeg", scenes=scenes, background_dir=tmp_path, audio_path=audio,
+                            output_path=tmp_path / "o.mp4", width=64, height=36, visual_mode="illustrated")
+    assert cards == ["ซอยตัน", "คนกวาดซอย"]
+
+
+def test_menu_sign_text_is_drawn_even_when_no_font_is_passed():
+    from life_lesson.errors import PipelineError
+    from life_lesson.publish.fonts import find_thai_font
+
+    try:
+        find_thai_font()
+    except PipelineError:
+        import pytest
+
+        pytest.skip("no Thai font")
+    cust = character_colors("เสื้อสีฟ้า", [], "ต้อม")
+    img = illustrate_scene((960, 540), setting="food_stall", mood=None, characters=[cust], seed="k")  # no font_path
+    sign = img.crop((int(960 * 0.06), int(540 * 0.2), int(960 * 0.36), int(540 * 0.36)))
+    light = sum(1 for r, g, b in sign.get_flattened_data() if r > 230 and g > 220)  # cream lettering on the red board
+    assert light > 150
