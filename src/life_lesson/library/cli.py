@@ -7,6 +7,7 @@
   thumbnail   edit the cover: title / tag / subline / backdrop frame or image
   description rebuild title + description (chapters, facts, credits, channel link)
   short       cut a Short from a finished episode (30-55 s + "watch full" card)
+  export-legacy  copy into the owner's EPxx / Shorts library folders
   playlist    create | list | show | add | remove | rename | delete  (folders too)
 """
 
@@ -33,6 +34,9 @@ def _parser() -> argparse.ArgumentParser:
     de.add_argument("--keep-files", action="store_true"); de.add_argument("--with-shorts", action="store_true")
     th = sub.add_parser("thumbnail"); th.add_argument("ref"); th.add_argument("--title"); th.add_argument("--tag"); th.add_argument("--subline")
     th.add_argument("--frame-at", type=float); th.add_argument("--image", type=Path)
+    lg = sub.add_parser("export-legacy", help="put an episode/Short into the owner's existing library folders")
+    lg.add_argument("ref"); lg.add_argument("--videos-dir", type=Path, help="cartoon_storyboard/output/videos")
+    lg.add_argument("--shorts-dir", type=Path, help="experiments/shorts/output")
     ds = sub.add_parser("description"); ds.add_argument("ref"); ds.add_argument("--full-url")
     st = sub.add_parser("short"); st.add_argument("ref"); st.add_argument("--full-url"); st.add_argument("--nth", type=int, default=1, help="1 = best window, 2 = second best ...")
     st.add_argument("--layout", choices=["fit", "tall"], default="fit", help="fit = whole frame over blur; tall = crop centre to fill the screen")
@@ -132,6 +136,23 @@ def main(argv: list[str] | None = None) -> int:
             elif args.cmd == "thumbnail":
                 print(service.regenerate_thumbnail(settings, conn, args.ref, title=args.title, tag=args.tag,
                                                    subline=args.subline, frame_at=args.frame_at, base_image=args.image))
+            elif args.cmd == "export-legacy":
+                from life_lesson.library import legacy
+
+                row = repo.find_episode(conn, args.ref)
+                if row is None:
+                    print(f"no episode matches {args.ref!r}", file=sys.stderr)
+                    return 1
+                if row["kind"] == "short":
+                    if not args.shorts_dir:
+                        print("a Short needs --shorts-dir (experiments/shorts/output)", file=sys.stderr)
+                        return 2
+                    print(legacy.export_short(settings, conn, args.ref, shorts_dir=args.shorts_dir))
+                else:
+                    if not args.videos_dir:
+                        print("an episode needs --videos-dir (cartoon_storyboard/output/videos)", file=sys.stderr)
+                        return 2
+                    print(legacy.export_episode(settings, conn, args.ref, videos_dir=args.videos_dir))
             elif args.cmd == "description":
                 print(service.rebuild_description(settings, conn, args.ref, full_url=args.full_url))
             elif args.cmd == "short":
