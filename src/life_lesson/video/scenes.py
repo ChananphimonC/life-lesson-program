@@ -237,7 +237,9 @@ def _scene_command(
     )
     cmd += [
         "-filter_complex", ";".join(steps), "-map", "[v]", "-t", f"{dur:.3f}",
-        "-an", "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", str(out),
+        "-an", "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
+        # rain/noise layers are incompressible: cap the rate so long episodes stay uploadable
+        "-maxrate", "6M", "-bufsize", "12M", str(out),
     ]
     return cmd
 
