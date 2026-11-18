@@ -94,3 +94,39 @@ def test_real_ffmpeg_assembles_scenes(tmp_path):
     assert streams["video"]["width"] == 640 and streams["video"]["height"] == 360
     assert "audio" in streams
     assert abs(float(streams["video"]["duration"]) - 9.0) < 0.5
+
+
+def _mean_rgb(path, at=1.5):
+    out = subprocess.run(
+        ["ffmpeg", "-loglevel", "error", "-i", str(path), "-ss", str(at),
+         "-vf", "scale=1:1:flags=area,format=rgb24", "-frames:v", "1", "-f", "rawvideo", "-"],
+        capture_output=True, check=True).stdout
+    return tuple(out[:3])
+
+
+@needs_ffmpeg
+def test_rain_keeps_colours(tmp_path):
+    """Regression: blend->yuv420p once collapsed green and spiked red/blue."""
+    from life_lesson.generation.atmosphere import BlockMood
+
+    bg = tmp_path / "bg"; bg.mkdir()
+    subprocess.run(["ffmpeg", "-y", "-f", "lavfi", "-i", "color=c=0x202c3a:s=320x180:d=3",
+                    "-pix_fmt", "yuv420p", str(bg / "c.mp4")], check=True, capture_output=True)
+    audio = tmp_path / "a.wav"
+    with wave.open(str(audio), "wb") as w:
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(24000)
+        w.writeframes(b"\x00\x00" * 24000 * 4)
+
+    def render(name, mood):
+        return assemble_scene_video(
+            ffmpeg_binary="ffmpeg", scenes=[Scene(0, 0, 4000, None, None, None, mood)],
+            background_dir=bg, audio_path=audio, output_path=tmp_path / f"{name}.mp4",
+            width=320, height=180)
+
+    clear = _mean_rgb(render("clear", BlockMood(light="dim", weather="clear", color="cool", tension=2)))
+    rain = _mean_rgb(render("rain", BlockMood(light="dim", weather="rain", color="cool", tension=2)))
+    storm = _mean_rgb(render("storm", BlockMood(light="dim", weather="storm", color="cool", tension=2)))
+    for other in (rain, storm):
+        # rain adds light streaks but must not shift hue: green stays within reach of clear
+        assert all(abs(a - b) < 30 for a, b in zip(clear, other)), (clear, other)
+        assert other[2] >= other[1] >= other[0] - 5  # still a cool, blue-ish picture

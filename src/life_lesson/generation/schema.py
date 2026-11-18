@@ -12,6 +12,7 @@ from typing import Literal
 from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from life_lesson.errors import ScriptValidationError
+from life_lesson.generation.atmosphere import BlockMood
 
 Phase = Literal["hook", "exploration", "shift", "outro"]
 _REQUIRED_PHASES: tuple[Phase, ...] = ("hook", "exploration", "shift", "outro")
@@ -26,6 +27,7 @@ class ScriptBlock(BaseModel):
     chapter_title: str | None = None
     visual_cue: str | None = None
     time_label: str | None = None
+    mood: BlockMood | None = None
 
 
 class Fact(BaseModel):
@@ -46,6 +48,10 @@ class Character(BaseModel):
     outfit: str = Field(min_length=1)
     signature_item: str | None = None
     palette: list[str] = Field(default_factory=list)
+    # Story engine: what they want, what they fear, what is at stake.
+    want: str | None = None
+    fear: str | None = None
+    stakes: str | None = None
 
 
 class ScriptMetadata(BaseModel):

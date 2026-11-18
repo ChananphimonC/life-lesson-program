@@ -22,6 +22,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 from life_lesson.errors import VideoAssemblyError
+from life_lesson.generation.atmosphere import BlockMood, grade_filter, rain_chain, rain_opacity
 from life_lesson.generation.schema import ScriptOutput
 from life_lesson.publish.fonts import find_thai_font
 
@@ -41,6 +42,7 @@ class Scene:
     title: str | None
     time_label: str | None
     visual_cue: str | None
+    mood: BlockMood | None = None
 
     @property
     def duration_s(self) -> float:
@@ -60,11 +62,20 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
         if groups and (title is None or title == groups[-1]["title"]):
             continue
         groups.append(
-            {"start": start, "title": title, "time_label": block.time_label, "cue": block.visual_cue}
+            {"start": start, "title": title, "time_label": block.time_label,
+             "cue": block.visual_cue, "moods": []}
         )
     if not groups:
         return []
     groups[0]["start"] = 0
+    # attach every block's mood to the scene it falls in; the scene is graded
+    # by its most tense block (the moment the picture must carry).
+    gi = 0
+    for block, start in zip(script.script_blocks, block_starts_ms):
+        while gi + 1 < len(groups) and start >= groups[gi + 1]["start"]:
+            gi += 1
+        if block.mood is not None:
+            groups[gi]["moods"].append(block.mood)
 
     merged: list[dict] = [groups[0]]
     for g in groups[1:]:
@@ -75,7 +86,8 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
     scenes = []
     for i, g in enumerate(merged):
         end = merged[i + 1]["start"] if i + 1 < len(merged) else total_ms
-        scenes.append(Scene(i, g["start"], end, g["title"], g["time_label"], g["cue"]))
+        mood = max(g["moods"], key=lambda m: m.tension) if g["moods"] else None
+        scenes.append(Scene(i, g["start"], end, g["title"], g["time_label"], g["cue"], mood))
     return scenes
 
 
@@ -147,27 +159,39 @@ def _scene_command(
 ) -> list[str]:
     dur = scene.duration_s
     fade_out_at = max(0.0, dur - FADE_S)
-    base = (
-        f"[0:v]scale={width}:{height}:force_original_aspect_ratio=increase,"
-        f"crop={width}:{height},eq=brightness=-0.06:saturation=0.9,vignette=PI/5"
-    )
     cmd = [ffmpeg, "-y", "-stream_loop", "-1", "-i", str(clip)]
+    steps = [
+        f"[0:v]scale={width}:{height}:force_original_aspect_ratio=increase,"
+        f"crop={width}:{height},{grade_filter(scene.mood)}[g0]"
+    ]
+    label, next_input = "g0", 1
+
+    rain = rain_chain(width, height, scene.mood)
+    if rain is not None:
+        cmd += ["-f", "lavfi", "-i", rain]
+        # Keep the blend in planar GBR and convert back explicitly: letting ffmpeg
+        # negotiate blend -> yuv420p on its own picks a wrong colour conversion
+        # (green collapses, red/blue spike) -- see test_rain_keeps_colours.
+        steps.append(
+            f"[{label}]format=gbrp[a];"
+            f"[a][{next_input}:v]blend=all_mode=screen:all_opacity={rain_opacity(scene.mood)},format=gbrp[g1]"
+        )
+        label, next_input = "g1", next_input + 1
+
     if card is not None:
         cmd += ["-loop", "1", "-i", str(card)]
-        graph = (
-            f"{base}[bg];"
-            f"[1:v]format=rgba,fade=t=in:st=0.4:d=0.6:alpha=1,"
+        steps.append(
+            f"[{next_input}:v]format=rgba,fade=t=in:st=0.4:d=0.6:alpha=1,"
             f"fade=t=out:st={CARD_SECONDS - 0.6}:d=0.6:alpha=1[card];"
-            f"[bg][card]overlay=0:0:enable='lt(t,{CARD_SECONDS})':shortest=0,"
-            f"fade=t=in:st=0:d={FADE_S},fade=t=out:st={fade_out_at}:d={FADE_S},format=yuv420p[v]"
+            f"[{label}][card]overlay=0:0:enable='lt(t,{CARD_SECONDS})':shortest=0[g2]"
         )
-    else:
-        graph = (
-            f"{base},fade=t=in:st=0:d={FADE_S},"
-            f"fade=t=out:st={fade_out_at}:d={FADE_S},format=yuv420p[v]"
-        )
+        label = "g2"
+
+    steps.append(
+        f"[{label}]fade=t=in:st=0:d={FADE_S},fade=t=out:st={fade_out_at}:d={FADE_S},format=yuv420p[v]"
+    )
     cmd += [
-        "-filter_complex", graph, "-map", "[v]", "-t", f"{dur:.3f}",
+        "-filter_complex", ";".join(steps), "-map", "[v]", "-t", f"{dur:.3f}",
         "-an", "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", str(out),
     ]
     return cmd
