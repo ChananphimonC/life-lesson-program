@@ -105,6 +105,8 @@ def render_thumbnail(
         (spec["headline_line1"], WHITE, head_size),
         (spec["headline_line2"], YELLOW, head_size),
     ):
+        if not text:
+            continue
         font = _fit_font(d, text, font_file, start, max_w)
         # soft shadow for legibility at small sizes
         d.text((margin + 4, y + 5), text, font=font, fill=(0, 0, 0))

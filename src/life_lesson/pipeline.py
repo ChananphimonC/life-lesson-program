@@ -50,6 +50,7 @@ from life_lesson.tts.gemini_tts import GeminiTTSProvider
 from life_lesson.video.ffmpeg_assembler import assemble_video, extract_frame, pick_random_background
 from dataclasses import replace
 
+from life_lesson.video.illustrator import thumbnail_backdrop
 from life_lesson.video.references import blended_palette, search_references
 from life_lesson.video.scene_kb import RECIPES
 from life_lesson.video.scenes import (
@@ -358,10 +359,21 @@ def _write_publish_bundle(
 
     # Thumbnail PNG is best-effort: a missing Thai font must not sink an episode
     # whose video is already rendered; the JSON spec is always written.
+    frame = None
     try:
-        frame = extract_frame(settings.ffmpeg_binary, video_path, 1.5, out_dir / "frame.png")
-    except PipelineError as exc:
-        logger.warning("No frame for thumbnail backdrop: %s", exc)
+        if settings.visual_mode == "illustrated" and scenes:
+            hook = scenes[0]
+            frame = out_dir / "frame.png"
+            thumbnail_backdrop(
+                (spec.width, spec.height), setting=hook.setting, mood=hook.mood,
+                characters=[dict(look) for look in hook.looks],
+                seed=f"{hook.index}-{hook.title}", font_path=settings.thai_font_path,
+                reference_palette=hook.ref_palette,
+            ).save(frame)
+        else:  # after the 4 s chapter card has faded out
+            frame = extract_frame(settings.ffmpeg_binary, video_path, min(4.5, duration_ms / 2000), out_dir / "frame.png")
+    except (PipelineError, OSError) as exc:
+        logger.warning("No backdrop for the thumbnail: %s", exc)
         frame = None
     try:
         render_thumbnail(

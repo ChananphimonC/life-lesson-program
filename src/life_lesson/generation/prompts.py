@@ -13,7 +13,7 @@ from life_lesson.generation.formats import FormatSpec, get_format
 
 SCRIPT_PROMPT_NAME = "script_generation"
 SCRIPT_PROMPT_STAGE = "script"
-SCRIPT_PROMPT_VERSION = "script-v0.4.0"
+SCRIPT_PROMPT_VERSION = "script-v0.4.1"
 
 _CONTENT_CONSTRAINTS = """\
 This is a LIFE REFLECTION, not life advice or motivational content.
@@ -85,6 +85,9 @@ island|forest|night_sky|food_stall) and mention concrete props in visual_cue \
 in their "outfit" including accessories that fit the place and the job (apron, \
 hairnet, raincoat hood, backpack, lanyard, glasses) and whether sleeves are \
 short or long. Keep each person's base outfit identical across scenes.
+- TITLE: write "title" as two short Thai phrases separated by ONE space \
+(2-4 words each, e.g. "กะเพรา จานสุดท้าย"); they become the two thumbnail \
+lines, so never rely on a long unbroken string.
 - Never describe violence, injury, death or any crisis topic.\
 """
 

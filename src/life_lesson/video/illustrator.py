@@ -632,6 +632,7 @@ def illustrate_scene(
     recipe: SceneRecipe | None = None,
     font_path: str | Path | None = None,
     reference_palette: tuple = (),
+    subject_out: dict | None = None,
 ) -> Image.Image:
     """Draw one scene. `characters` = list of dicts from `character_colors`."""
     ss = 2  # supersample for smooth edges
@@ -644,12 +645,14 @@ def illustrate_scene(
     n = len(figs)
     face = expression_for(mood)
     cook_placed = False
+    subject_x = None
     for i, col in enumerate(figs):
         d = ImageDraw.Draw(img)
         hands = None
         if setting == "food_stall":
             if "apron" in col.get("items", ()) and not cook_placed:
                 cook_placed = True
+                subject_x = info["cook_x"] / w
                 _draw_character(d, info["cook_x"], ground, s, col, expression=face,
                                 hands={"L": info["spatula_hand"], "R": info["handle_end"]})
             else:  # customer on the right
@@ -662,9 +665,13 @@ def illustrate_scene(
         if seat == "sit":  # hands rest on the desk top
             desk_top = ground - 40
             hands = {"L": (x - 4 * s, desk_top - 6), "R": (x + 38 * s, desk_top - 6)}
+        if subject_x is None:
+            subject_x = x / w
         _draw_character(d, x, gy, s * (1.1 if seat else 1.0), col, sitting=seat is not None,
                         expression=face, hands=hands)
 
+    if subject_out is not None:
+        subject_out["x"] = subject_x if subject_x is not None else 0.5
     d = ImageDraw.Draw(img)
     for paint in fg:
         paint(d)
@@ -680,3 +687,15 @@ def illustrate_scene(
         out_path.parent.mkdir(parents=True, exist_ok=True)
         img.save(out_path)
     return img
+
+
+def thumbnail_backdrop(size: tuple[int, int], *, zoom: float = 1.45, subject_at: float = 0.70, **scene_kwargs) -> Image.Image:
+    """Clean cover art: the scene drawn without cards/fades, zoomed so the main
+    character lands on the right and the headline can sit on the left."""
+    info: dict = {}
+    full = illustrate_scene(size, subject_out=info, **scene_kwargs)
+    w, h = full.size
+    cw, ch = int(w / zoom), int(h / zoom)
+    x0 = int(max(0, min(w - cw, info["x"] * w - subject_at * cw)))
+    y0 = int((h - ch) * 0.65)
+    return full.crop((x0, y0, x0 + cw, y0 + ch)).resize(size, Image.LANCZOS)

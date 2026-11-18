@@ -115,12 +115,28 @@ def build_title(script: ScriptOutput, spec: FormatSpec) -> str:
 
 
 def _split_headline(title: str) -> tuple[str, str]:
+    """Two thumbnail lines without ever cutting a word.
+
+    Thai has no spaces, so slicing at a character index breaks words in half.
+    Split at a space if there is one; else at the word boundary nearest the
+    middle if PyThaiNLP is installed; else keep a single line (the renderer
+    shrinks it to fit).
+    """
+    title = title.strip()
     words = title.split()
     if len(words) >= 2:
         mid = (len(words) + 1) // 2
         return " ".join(words[:mid]), " ".join(words[mid:])
-    mid = (len(title) + 1) // 2
-    return title[:mid], title[mid:]
+    try:  # optional dependency: pip install pythainlp
+        from pythainlp.tokenize import word_tokenize
+
+        tokens = [t for t in word_tokenize(title, keep_whitespace=False) if t.strip()]
+        if len(tokens) >= 2:
+            best = min(range(1, len(tokens)), key=lambda i: abs(len("".join(tokens[:i])) - len("".join(tokens[i:]))))
+            return "".join(tokens[:best]), "".join(tokens[best:])
+    except Exception:  # noqa: BLE001 - not installed / data missing: fall through
+        pass
+    return title, ""
 
 
 def build_thumbnail_spec(script: ScriptOutput, spec: FormatSpec, duration_ms: int) -> dict:
