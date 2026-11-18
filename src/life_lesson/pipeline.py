@@ -52,6 +52,7 @@ from life_lesson.publish.credits import build_credits, channel_line
 from life_lesson.publish.metadata import build_thumbnail_spec, write_publish_bundle
 from life_lesson.publish.thumbnail import render_thumbnail
 from life_lesson.tts.base import TTSProvider
+from life_lesson.tts.cache import CachedTTS, VoiceBudgetExhausted
 from life_lesson.tts.gemini_tts import GeminiTTSProvider
 from life_lesson.video.ffmpeg_assembler import assemble_video, extract_frame, pick_random_background
 from dataclasses import replace
@@ -92,6 +93,7 @@ def run_pipeline(
     brief: str | None = None,
     punch_up: bool = True,
     authored_script: ScriptOutput | None = None,
+    voice_budget: int | None = None,
 ) -> PipelineResult:
     settings = settings or get_settings()
     spec = get_format(episode_format)
@@ -129,7 +131,7 @@ def run_pipeline(
                     return result("FAILED_REVIEW", error_message=msg)
 
             narration_path, block_starts_ms, duration_ms = _synthesize_audio(
-                conn, settings, episode_id, script, tts_provider
+                conn, settings, episode_id, script, tts_provider, voice_budget
             )
             scenes = plan_scenes(script, block_starts_ms, duration_ms)
             scenes, reference_credits = _gather_references(settings, scenes)
@@ -145,6 +147,10 @@ def run_pipeline(
                 publish_dir=str(publish_dir),
                 thumbnail_path=str(thumb) if thumb.exists() else None,
             )
+        except VoiceBudgetExhausted as exc:  # a pause, not a failure: cached blocks are kept
+            logger.warning("Voice paused for episode %s: %s", episode_id, exc)
+            repo.update_episode_state(conn, episode_id, "VOICE_PAUSED", error_message=str(exc))
+            return result("VOICE_PAUSED", error_message=str(exc))
         except PipelineError as exc:
             logger.error("Pipeline failed for episode %s: %s", episode_id, exc)
             repo.update_episode_state(conn, episode_id, "FAILED", error_message=str(exc))
@@ -289,15 +295,29 @@ def _synthesize_audio(
     episode_id: str,
     script: ScriptOutput,
     tts_provider: TTSProvider | None,
+    voice_budget: int | None = None,
 ) -> tuple[Path, list[int], int]:
-    provider = tts_provider or GeminiTTSProvider(settings)
+    inner = tts_provider or GeminiTTSProvider(settings)
+    provider = inner
+    if getattr(inner, "cacheable", True) and settings.cache_dir is not None:
+        provider = CachedTTS(
+            inner, settings.cache_dir / "tts", budget=voice_budget,
+            namespace=f"{type(inner).__name__}|{settings.gemini_tts_model}|{settings.gemini_tts_voice}",
+        )
 
     clips_with_pauses: list[tuple[bytes, int]] = []
     block_starts_ms: list[int] = []
     cursor_ms = 0
-    for block in script.script_blocks:
+    total = len(script.script_blocks)
+    for done, block in enumerate(script.script_blocks):
         text = styled_text(block.text, block.mood) if settings.tts_style_directives else block.text
-        wav_bytes = provider.synthesize(text)
+        try:
+            wav_bytes = provider.synthesize(text)
+        except VoiceBudgetExhausted as exc:
+            raise VoiceBudgetExhausted(
+                f"{done} of {total} blocks voiced ({getattr(provider, 'new_calls', 0)} new this run); {exc}. "
+                "Run the same command again later: voiced blocks are cached and cost nothing."
+            ) from exc
         pause = scaled_pause_ms(block.pause_after_ms, block.mood)
         clips_with_pauses.append((wav_bytes, pause))
         block_starts_ms.append(cursor_ms)

@@ -14,7 +14,7 @@ from life_lesson.generation.formats import FormatSpec, get_format
 
 SCRIPT_PROMPT_NAME = "script_generation"
 SCRIPT_PROMPT_STAGE = "script"
-SCRIPT_PROMPT_VERSION = "script-v0.5.1"
+SCRIPT_PROMPT_VERSION = "script-v0.5.2"
 
 _CONTENT_CONSTRAINTS = """\
 This is a LIFE REFLECTION, not life advice or motivational content.
@@ -210,6 +210,7 @@ matching exactly this structure:
   "topic_id": "{topic_id}",
   "title": "<short Thai title>",
   "summary": "<1-2 Thai sentences for the video description: the situation, no promises>",
+  "subline": "<cover teaser, at most 30 Thai characters, one clause, no spoilers>",
   "metadata": {{
     "mood": "<short mood description>",
     "estimated_duration_seconds": <int, within the target range>,

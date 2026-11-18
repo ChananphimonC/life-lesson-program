@@ -16,6 +16,8 @@ SAMPLE_RATE = 24_000
 
 
 class SilentTTSProvider:
+    cacheable = False  # silence must never be stored as if it were a real voice
+
     def synthesize(self, text: str) -> bytes:
         seconds = max(0.8, len(text) / CHARS_PER_SECOND)
         buf = io.BytesIO()

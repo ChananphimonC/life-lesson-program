@@ -374,3 +374,63 @@ def test_series_flows_to_prompt_critic_and_library(tmp_path, monkeypatch):
     assert "EXPLAINER" in prompts[0] and "เล่าจากครอบครัวของน้องปิ่น" in prompts[0]
     with repo.open_db(settings.db_path) as conn:
         assert repo.get_episode(conn, result.episode_id)["series"] == "knowledge"
+
+
+def _stub_media(monkeypatch, tmp_path):
+    monkeypatch.setattr(pipeline_module, "pick_random_background", lambda d: tmp_path / "f.mp4")
+    monkeypatch.setattr(pipeline_module, "assemble_video", _touch_video)
+    monkeypatch.setattr(pipeline_module, "assemble_scene_video", _touch_video)
+    monkeypatch.setattr(pipeline_module, "build_ambient_bed", lambda *a, **k: None)
+
+
+def test_voice_can_be_spread_over_two_days_without_paying_twice(tmp_path, monkeypatch):
+    import dataclasses
+
+    settings = dataclasses.replace(_settings(tmp_path), cache_dir=tmp_path / "cache")
+    monkeypatch.setattr(pipeline_module, "generate_script_text", lambda s, p: VALID_SCRIPT_JSON)  # 4 blocks
+    _stub_media(monkeypatch, tmp_path)
+    tts = FakeTTSProvider()
+
+    day1 = pipeline_module.run_pipeline("situation", settings=settings, tts_provider=tts, punch_up=False, voice_budget=3)
+    assert day1.state == "VOICE_PAUSED" and "3 of 4 blocks voiced" in day1.error_message
+    assert len(tts.texts) == 3 and day1.video_path is None
+    with repo.open_db(settings.db_path) as conn:
+        assert repo.get_episode(conn, day1.episode_id)["state"] == "VOICE_PAUSED"
+
+    day2 = pipeline_module.run_pipeline("situation", settings=settings, tts_provider=tts, punch_up=False, voice_budget=3)
+    assert day2.state == "DONE", day2.error_message
+    assert len(tts.texts) == 4                    # only the one missing block was synthesised
+
+
+def test_a_quota_error_mid_run_keeps_the_voiced_blocks(tmp_path, monkeypatch):
+    import dataclasses
+
+    from life_lesson.errors import TTSError
+
+    settings = dataclasses.replace(_settings(tmp_path), cache_dir=tmp_path / "cache")
+    monkeypatch.setattr(pipeline_module, "generate_script_text", lambda s, p: VALID_SCRIPT_JSON)
+    _stub_media(monkeypatch, tmp_path)
+
+    class QuotaAfterTwo(FakeTTSProvider):
+        def synthesize(self, text):
+            if len(self.texts) >= 2:
+                raise TTSError("429 RESOURCE_EXHAUSTED: daily quota")
+            return super().synthesize(text)
+
+    tts = QuotaAfterTwo()
+    r = pipeline_module.run_pipeline("situation", settings=settings, tts_provider=tts, punch_up=False)
+    assert r.state == "VOICE_PAUSED" and "2 of 4 blocks voiced" in r.error_message
+    r2 = pipeline_module.run_pipeline("situation", settings=settings, tts_provider=FakeTTSProvider(), punch_up=False)
+    assert r2.state == "DONE"
+
+
+def test_silent_preview_never_touches_the_voice_cache(tmp_path, monkeypatch):
+    import dataclasses
+
+    from life_lesson.tts.silent import SilentTTSProvider
+
+    settings = dataclasses.replace(_settings(tmp_path), cache_dir=tmp_path / "cache")
+    monkeypatch.setattr(pipeline_module, "generate_script_text", lambda s, p: VALID_SCRIPT_JSON)
+    _stub_media(monkeypatch, tmp_path)
+    r = pipeline_module.run_pipeline("situation", settings=settings, tts_provider=SilentTTSProvider(), punch_up=False)
+    assert r.state == "DONE" and not (tmp_path / "cache" / "tts").exists()

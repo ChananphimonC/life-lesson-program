@@ -73,6 +73,7 @@ class ScriptOutput(BaseModel):
     facts: list[Fact] = Field(default_factory=list)
     characters: list[Character] = Field(default_factory=list)
     summary: str | None = None
+    subline: str | None = None  # <=30 Thai chars teaser for the cover's single sub-line
 
     @field_validator("script_blocks")
     @classmethod

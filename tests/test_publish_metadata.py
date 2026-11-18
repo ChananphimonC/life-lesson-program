@@ -88,3 +88,18 @@ def test_bundle_written(tmp_path):
                                  [0, 20_000, 40_000, 60_000, 80_000], 100_000)
     assert all(p.exists() for p in paths.values())
     assert json.loads(paths["thumbnail"].read_text(encoding="utf-8"))["format"] == "long"
+
+
+def test_cover_subline_never_cuts_a_word_in_half():
+    from life_lesson.publish.metadata import _teaser
+
+    long = "ฝนตกก่อนเที่ยงคืน ไรเดอร์แบตเหลือเจ็ดเปอร์เซ็นต์แวะร้านตามสั่งสุดซอยตัน"
+    assert _teaser(long) == "ฝนตกก่อนเที่ยงคืน"                       # first clause, cut at the space
+    assert _teaser("สั้นๆ ไม่ต้องตัด") == "สั้นๆ ไม่ต้องตัด"
+    assert _teaser("ยาวมากไม่มีช่องว่างเลยแม้แต่น้อยและไม่ควรถูกหั่นกลางคำเด็ดขาด") == ""   # no safe cut -> no sub-line
+    assert _teaser(None) == ""
+
+
+def test_explicit_subline_wins_over_the_summary_teaser():
+    s = _script(list("abcde"), subline="ไรเดอร์แบตเหลือเจ็ดเปอร์เซ็นต์")
+    assert build_thumbnail_spec(s, get_format("standard"), 60_000)["subline"] == "ไรเดอร์แบตเหลือเจ็ดเปอร์เซ็นต์"

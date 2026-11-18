@@ -48,6 +48,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--brief", type=Path, default=None, help="Text/markdown file with premise, cast, beats and facts to build from.")
     parser.add_argument("--script", type=Path, default=None, help="Use this finished script (JSON) instead of generating one.")
+    parser.add_argument("--voice-budget", type=int, default=None, metavar="N", help="Voice at most N NEW blocks this run, then pause (cached blocks are free); rerun later to continue.")
     parser.add_argument("--silent", action="store_true", help="Preview without voice: silent audio timed to the text (no API quota).")
     parser.add_argument("--preview", action="store_true", help="Render at 1/3 size for a quick look.")
     parser.add_argument("--no-punchup", action="store_true", help="Skip the suspense script doctor.")
@@ -92,6 +93,7 @@ def main(argv: list[str] | None = None) -> int:
             critic=not args.no_critic, series=args.series,
             brief=args.brief.read_text(encoding="utf-8") if args.brief else None,
             punch_up=not args.no_punchup, authored_script=authored, tts_provider=tts,
+            voice_budget=args.voice_budget,
         )
     except PipelineError as exc:
         print(f"Pipeline failed before an episode record could be created: {exc}", file=sys.stderr)
@@ -105,9 +107,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"video: {result.video_path}")
     if result.publish_dir:
         print(f"publish: {result.publish_dir}")
-    if result.error_message:
+    if result.error_message and result.state != "VOICE_PAUSED":
         print(f"error: {result.error_message}", file=sys.stderr)
 
+    if result.state == "VOICE_PAUSED":
+        print(f"paused: {result.error_message}")
+        return 3
     return 0 if result.state == "DONE" else 1
 
 

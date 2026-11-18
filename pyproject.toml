@@ -4,7 +4,8 @@ version = "0.1.0"
 description = "AI-generated Thai life-reflection episodes -- MVP v0.1 pipeline"
 requires-python = ">=3.11"
 dependencies = [
-    "google-genai>=1.0.0",
+    # 3.x rejects the TTS speech_config shape (HTTP 400 "Unknown name speechConfig"); 2.24 is verified.
+    "google-genai>=1.0.0,<3",
     "pydantic>=2.0",
     "python-dotenv>=1.0",
     "pillow>=10.0",

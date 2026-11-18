@@ -139,6 +139,22 @@ def _split_headline(title: str) -> tuple[str, str]:
     return title, ""
 
 
+SUBLINE_MAX_CHARS = 30
+
+
+def _teaser(summary: str | None, max_chars: int = SUBLINE_MAX_CHARS) -> str:
+    """A one-line cover teaser from the summary, cut only at a space (never mid-word).
+
+    Thai has no spaces between words, so slicing at a character count breaks words
+    ("...ตามสั่ง" -> "...ตามสั"). Prefer the first clause; if none fits, show no sub-line.
+    """
+    first = (summary or "").split("\n")[0].strip()
+    if len(first) <= max_chars:
+        return first
+    cut = first.rfind(" ", 0, max_chars + 1)
+    return first[:cut].strip() if cut >= 8 else ""
+
+
 def build_thumbnail_spec(script: ScriptOutput, spec: FormatSpec, duration_ms: int) -> dict:
     line1, line2 = _split_headline(script.title.strip())
     first = script.script_blocks[0]
@@ -154,7 +170,7 @@ def build_thumbnail_spec(script: ScriptOutput, spec: FormatSpec, duration_ms: in
         "context_tag": first.time_label or first.chapter_title,
         "headline_line1": line1,
         "headline_line2": line2,
-        "subline": (script.summary or "").split("\n")[0][:60],
+        "subline": script.subline or _teaser(script.summary),
         "pill": pill,
         "character": (
             {"name": main.name, "outfit": main.outfit, "palette": main.palette}
