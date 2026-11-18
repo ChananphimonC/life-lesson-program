@@ -318,9 +318,9 @@ def test_standing_passenger_is_not_shorter_than_the_seated_ones():
     """Regression: seated figures (a desk pose) once towered over the close standing one."""
     img = _bus_frame()
     px = img.load()
-    blue = (127, 179, 224)  # her shirt colour: topmost shirt pixel ~ head height proxy
-    ys = [y for y in range(360) for x in range(0, 640, 2) if all(abs(a - b) < 14 for a, b in zip(px[x, y], blue))]
-    assert ys and min(ys) < 360 * 0.62  # her torso reaches up into the window band, like the seated passengers' heads
+    coral = (232, 87, 106)  # her blouse colour: topmost blouse pixel ~ head height proxy
+    ys = [y for y in range(360) for x in range(0, 640, 2) if all(abs(a - b) < 20 for a, b in zip(px[x, y], coral))]
+    assert ys and min(ys) < 360 * 0.62  # her blouse reaches up into the window band, like the seated passengers' heads
 
 
 def test_engine_sound_exists_and_is_audible():
@@ -338,3 +338,66 @@ def test_engine_sound_exists_and_is_audible():
         pytest.skip("no ffmpeg")
     r = subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-filter_complex", g, "-map", "[out]", "-t", "2", "-f", "null", "-"], capture_output=True)
     assert r.returncode == 0
+
+
+# ---- the heroine stands out: long hair, blouse, lashes ---------------------------
+
+def test_hair_and_gender_words_are_understood():
+    from life_lesson.video.illustrator import hair_from_text
+
+    assert hair_from_text("ผมยาวสีน้ำตาลเข้ม ปล่อยสยาย") == ((70, 44, 30), "long")
+    assert hair_from_text("ผมมวย สีเทา")[1] == "bun" and hair_from_text("หางม้า สีดำ")[1] == "ponytail"
+    assert hair_from_text(None) == (None, None)
+    f = character_colors("เสื้อ", [], "ก", hair="ผมยาว ดำ")
+    m = character_colors("เสื้อ", [], "ข", hair="ผมสั้น ดำ", gender="ชาย")
+    assert f["female"] and f["hair_style"] == "long" and not m["female"]
+    assert character_colors("เสื้อ", [], "ค", hair="ผมสั้น", gender="หญิง")["female"]
+
+
+def test_blouse_details_come_from_the_outfit_text():
+    assert {"collar", "bow"} <= items_from_text("เสื้อเบลาส์สีแดงอมชมพู คอปกขาวผูกโบว์")
+
+
+def _figure(hair, gender, outfit="เสื้อเบลาส์สีแดงอมชมพู คอปกขาวผูกโบว์"):
+    from PIL import Image as _I, ImageDraw as _D
+    from life_lesson.video.illustrator import _draw_character
+
+    img = _I.new("RGB", (400, 500), (250, 250, 250))
+    col = character_colors(outfit, ["#e8576a"], "ใบเฟิร์น", hair=hair, gender=gender)
+    _draw_character(_D.Draw(img), 200, 470, 2.0, col)
+    return img, col
+
+
+def _count(img, rgb, box):
+    px = img.crop(box).get_flattened_data()
+    return sum(1 for p in px if all(abs(a - b) < 10 for a, b in zip(p, rgb)))
+
+
+def test_long_hair_hangs_past_the_shoulders_unlike_short_hair():
+    long_img, col = _figure("ผมยาวสีน้ำตาลเข้ม", "หญิง")
+    short_img, _ = _figure("ผมสั้น สีน้ำตาลเข้ม", "หญิง")
+    below_shoulder = (130, 215, 270, 300)    # beside the torso, under the head
+    assert _count(long_img, col["hair"], below_shoulder) > 400 > _count(short_img, col["hair"], below_shoulder) + 0
+
+
+def test_women_get_lashes_and_blush_men_do_not():
+    f, _ = _figure("ผมยาว", "หญิง")
+    m, _ = _figure("ผมสั้น", "ชาย")
+    blush = (238, 160, 150)
+    face = (150, 90, 250, 200)
+    assert _count(f, blush, face) > 30 and _count(m, blush, face) == 0
+
+
+def test_the_heroine_is_bigger_than_the_other_passengers_and_wears_a_vivid_colour():
+    s = _bus_script()
+    hero = s.characters[0]
+    assert hero.hair and hero.gender == "หญิง" and "คอปก" in hero.outfit
+    looks = [character_colors(c.outfit, c.palette, c.name, hair=c.hair, gender=c.gender,
+                              extra_items=("seated",) if "นั่ง" in c.role else ()) for c in s.characters[:2]]
+    from life_lesson.generation.atmosphere import BlockMood
+
+    img = illustrate_scene((640, 360), setting="bus", mood=BlockMood(light="golden", tension=2), characters=looks, seed="h")
+    px = img.load()
+    coral = [(x, y) for x in range(640) for y in range(360) if all(abs(a - b) < 26 for a, b in zip(px[x, y], (232, 87, 106)))]
+    assert len(coral) > 1500                                   # her blouse is plainly visible
+    assert min(y for _, y in coral) < 200                      # reaches high into the frame: she is a big foreground figure

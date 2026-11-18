@@ -50,6 +50,8 @@ class Character(BaseModel):
     outfit: str = Field(min_length=1)
     signature_item: str | None = None
     palette: list[str] = Field(default_factory=list)
+    hair: str | None = None      # e.g. "ผมยาวสีน้ำตาลเข้ม ปล่อยสยาย" (style + colour words)
+    gender: str | None = None    # "หญิง" / "ชาย" (drives lashes and default hair)
     # Story engine: what they want, what they fear, what is at stake.
     want: str | None = None
     fear: str | None = None

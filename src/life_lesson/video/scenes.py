@@ -117,6 +117,7 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
                 + (lamp if "ไฟคาดหัว" in f"{c.signature_item} {c.outfit}" else ())
                 + (("seated",) if "นั่ง" in (c.role or "") else ()),
                 sleeve=recipe.sleeve if is_worker(recipe, c.role, c.name, c.outfit) else None,
+                hair=c.hair, gender=c.gender,
             )
             for c in present
         )
