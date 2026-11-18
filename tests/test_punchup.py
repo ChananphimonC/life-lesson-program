@@ -73,3 +73,56 @@ def test_reflection_prompt_keeps_the_no_advice_rule_other_series_do_not():
     r = build_punchup_prompt(flat, lint_script(flat), SPEC, "reflection")
     k = build_punchup_prompt(flat, lint_script(flat, "knowledge"), SPEC, "knowledge")
     assert "no advice" in r and "no advice" not in k
+
+
+# ---- the reader-judge (pairwise, order-swapped) -------------------------------
+
+def _judge_always(winner_when_new_is_b, winner_when_new_is_a):
+    """Fake judge: answers by which position the NEW script occupies."""
+    def judge(prompt):
+        new_is_b = prompt.index("[1] " + GOOD[0]) > prompt.index("VERSION B:")  # GOOD[0] opens the new script
+        return json.dumps({"winner": winner_when_new_is_b if new_is_b else winner_when_new_is_a})
+    return judge
+
+
+def test_judge_must_prefer_the_rewrite_in_both_orders():
+    flat = _script(FLAT, tensions=[3] * 8)
+    better = _script(GOOD, tensions=[3, 3, 4, 4, 5, 5, 4, 3])
+    out = run_punchup(flat, SPEC, call_llm=_llm_returning(better), judge=_judge_always("B", "A"), threshold=101, max_rounds=1)
+    assert out.improved and out.script is not flat and "old-first=B" in out.rounds[0].note
+
+    # position bias: judge always says "A" -> rewrite rejected even though mechanics improved
+    biased = run_punchup(flat, SPEC, call_llm=_llm_returning(better), judge=lambda p: '{"winner": "A"}', threshold=101, max_rounds=1)
+    assert biased.script is flat and not biased.rounds[0].accepted
+
+    # the judge says the old one is better
+    reject = run_punchup(flat, SPEC, call_llm=_llm_returning(better), judge=_judge_always("A", "B"), threshold=101, max_rounds=1)
+    assert reject.script is flat
+
+
+def test_garbage_judge_output_counts_as_tie_and_rejects():
+    flat = _script(FLAT, tensions=[3] * 8)
+    better = _script(GOOD, tensions=[3, 3, 4, 4, 5, 5, 4, 3])
+    out = run_punchup(flat, SPEC, call_llm=_llm_returning(better), judge=lambda p: "I think B", threshold=101, max_rounds=1)
+    assert out.script is flat
+
+
+def test_a_mechanically_worse_rewrite_is_rejected_even_if_the_judge_likes_it():
+    flat = _script(GOOD, tensions=[3, 3, 4, 4, 5, 5, 4, 3])
+    worse = _script(["สวัสดีค่ะ ทั้งนี้ ข้อแรก เจ๊ยิ้ม ราคา 50 บาท"] * 8, tensions=[3] * 8)
+    out = run_punchup(flat, SPEC, call_llm=_llm_returning(worse), judge=lambda p: '{"winner": "B"}', threshold=101, max_rounds=1)
+    assert out.script is flat
+
+
+def test_soft_signals_do_not_block_a_better_rewrite_without_a_judge_score_can_still_win():
+    # objective hygiene equal, total score decides when no judge exists
+    flat = _script(FLAT, tensions=[3] * 8)
+    better = _script(GOOD, tensions=[3, 3, 4, 4, 5, 5, 4, 3])
+    assert run_punchup(flat, SPEC, call_llm=_llm_returning(better), threshold=101, max_rounds=1).improved
+
+
+def test_soft_findings_are_marked_and_halved():
+    r = lint_script(_script(["ร้านตามสั่งอยู่ปากซอยขายกะเพรา"] * 8))
+    soft = [f for f in r.findings if f.soft]
+    assert soft and all(f.code in {"weak_hook", "flat_chapter_ends", "few_open_loops", "monotone_rhythm"} for f in soft)
+    assert r.objective_penalty <= 100 - r.score

@@ -52,6 +52,43 @@ def build_punchup_prompt(script: ScriptOutput, report: LintReport, spec: FormatS
     )
 
 
+def build_compare_prompt(a: ScriptOutput, b: ScriptOutput, series: str) -> str:
+    def text(x: ScriptOutput) -> str:
+        return "\n".join(f"[{blk.sequence}] {blk.text}" for blk in x.script_blocks)
+
+    return (
+        "You are a sharp Thai audience reader judging two versions (A and B) of the same narrated "
+        "story. Imagine hearing each once, with no pictures. Which version would you keep "
+        "listening to? Judge: the first 15 seconds (concrete, odd, a question you need answered), "
+        "escalation (does each chapter change something?), a reversal that feels earned, specific "
+        "detail over general, spoken-Thai naturalness (told, not read), and whether the voice avoids "
+        "describing what a picture would show. Ignore length unless one drags.\n"
+        + ("This is a reflection: judge curiosity and unresolved feeling, not danger.\n" if series == "reflection" else "")
+        + '\nRespond with ONLY JSON: {"winner": "A" or "B" or "tie", "first_drop_off_block_A": <int or null>, '
+        '"first_drop_off_block_B": <int or null>, "reason": "<one sentence>"}\n\n'
+        f"VERSION A:\n{text(a)}\n\nVERSION B:\n{text(b)}"
+    )
+
+
+def _verdict(raw: str) -> str:
+    import json
+
+    try:
+        data = json.loads(raw.strip().strip("`").removeprefix("json").strip())
+        w = str(data.get("winner", "tie")).strip().upper()
+        return w if w in ("A", "B") else "tie"
+    except (ValueError, AttributeError):
+        return "tie"
+
+
+def judge_prefers_new(old: ScriptOutput, new: ScriptOutput, judge: Callable[[str], str], series: str) -> tuple[bool, str]:
+    """Ask the reader-judge twice with the order swapped (LLM judges favour position A);
+    the rewrite must win BOTH times."""
+    first = _verdict(judge(build_compare_prompt(old, new, series)))   # new is B
+    second = _verdict(judge(build_compare_prompt(new, old, series)))  # new is A
+    return (first == "B" and second == "A"), f"judge: old-first={first}, new-first={second}"
+
+
 @dataclass
 class PunchupRound:
     round: int
@@ -82,6 +119,7 @@ def run_punchup(
     threshold: int = DEFAULT_THRESHOLD,
     max_rounds: int = MAX_ROUNDS,
     on_round: Callable[[PunchupRound, LintReport], None] | None = None,
+    judge: Callable[[str], str] | None = None,
 ) -> PunchupOutcome:
     first = lint_script(script, series)
     current, report, rounds = script, first, []
@@ -100,8 +138,16 @@ def run_punchup(
         revised.metadata.format = current.metadata.format
         revised.metadata.prompt_version = current.metadata.prompt_version
         new_report = lint_script(revised, series)
-        accepted = new_report.score > report.score
-        rounds.append(PunchupRound(n, report.score, new_report.score, accepted, new_report.summary()[:300]))
+        # never accept a rewrite that adds mechanical problems...
+        accepted = new_report.objective_penalty <= report.objective_penalty
+        note = new_report.summary()[:240]
+        if accepted and judge is not None:
+            # ...and let the reader-judge, not keyword heuristics, decide "more gripping"
+            accepted, verdict = judge_prefers_new(current, revised, judge, series)
+            note = f"{verdict}; {note}"[:300]
+        elif accepted:
+            accepted = new_report.score > report.score  # no judge available: fall back to the linter
+        rounds.append(PunchupRound(n, report.score, new_report.score, accepted, note))
         if on_round:
             on_round(rounds[-1], new_report)
         if not accepted:

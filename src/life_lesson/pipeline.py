@@ -214,6 +214,7 @@ def _punch_up(
         script, spec,
         call_llm=lambda prompt: generate_script_text(settings, prompt),
         series=series, threshold=settings.punchup_threshold, on_round=on_round,
+        judge=lambda prompt: generate_critic_text(settings, prompt),
     )
     logger.info(
         "Script doctor for episode %s: %d -> %d (%d round(s))",

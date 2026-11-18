@@ -28,6 +28,13 @@ SUMMARY_ENDINGS = ("สรุป", "บทเรียน", "ข้อคิด"
 SEVERITY_PENALTY = {"high": 15, "med": 8, "low": 3}
 
 
+# Findings a keyword/regex check can establish reliably. Everything else is a
+# SOFT signal (a rough proxy for "feels gripping"): shown to the rewriter as a
+# hint and counted at half weight, but never allowed to decide whether a
+# rewrite is better -- only the pairwise reader judge or a human can do that.
+SOFT_CODES = {"weak_hook", "flat_chapter_ends", "few_open_loops", "monotone_rhythm", "early_peak", "peak_at_end"}
+
+
 @dataclass
 class Finding:
     code: str
@@ -35,6 +42,10 @@ class Finding:
     message: str
     blocks: list[int] = field(default_factory=list)
     penalty: int = 0
+
+    @property
+    def soft(self) -> bool:
+        return self.code in SOFT_CODES
 
 
 @dataclass
@@ -47,9 +58,14 @@ class LintReport:
     def high(self) -> list[Finding]:
         return [f for f in self.findings if f.severity == "high"]
 
+    @property
+    def objective_penalty(self) -> int:
+        """Penalty from mechanically verifiable problems only."""
+        return sum(f.penalty for f in self.findings if not f.soft)
+
     def summary(self) -> str:
         lines = [f"score {self.score}/100"]
-        lines += [f"- [{f.severity}] {f.code}: {f.message}" + (f" (blocks {f.blocks})" if f.blocks else "") for f in self.findings]
+        lines += [f"- [{f.severity}{"/soft" if f.soft else ""}] {f.code}: {f.message}" + (f" (blocks {f.blocks})" if f.blocks else "") for f in self.findings]
         return "\n".join(lines)
 
 
@@ -81,7 +97,7 @@ def lint_script(script: ScriptOutput, series: str = "reflection") -> LintReport:
     if _has(opening, GREETINGS):
         add("greeting_opening", "high", "Opens with a greeting/introduction. Start inside a concrete moment with something unresolved.", [blocks[0].sequence])
     elif not _has(opening, HOOK_MARKERS):
-        add("weak_hook", "high", "The first sentences set no question or tension. Open mid-moment and plant one unanswered question in the first 15 seconds.", [blocks[0].sequence])
+        add("weak_hook", "med", "The first sentences set no question or tension. Open mid-moment and plant one unanswered question in the first 15 seconds.", [blocks[0].sequence])
 
     # 2. chapter-end hooks: every chapter except the last should end leaning forward
     chapters = _chapters(script)
@@ -160,6 +176,9 @@ def lint_script(script: ScriptOutput, series: str = "reflection") -> LintReport:
     if series == "reflection" and _has(blocks[-1].text[-160:], SUMMARY_ENDINGS):
         add("summarising_ending", "med", "The ending sums up or teaches. A reflection should stay open.", [blocks[-1].sequence])
 
+    for f in findings:
+        if f.soft:
+            f.penalty = (f.penalty + 1) // 2  # soft signals count at half weight
     score = max(0, 100 - sum(f.penalty for f in findings))
     stats["findings"] = len(findings)
     return LintReport(score, findings, stats)

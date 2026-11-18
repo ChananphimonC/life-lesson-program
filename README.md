@@ -49,6 +49,10 @@ Every episode also gets: a sensitive-topic screen, a 7-category Critic with up t
 cards), a synthesised ambient sound bed, -16 LUFS mastering, and a thumbnail PNG.
 Use `--no-critic` only for debugging.
 
+Series and story briefs: `--series reflection|knowledge|story` and `--brief FILE` (see
+[`docs/SCRIPT_DOCTOR.md`](docs/SCRIPT_DOCTOR.md) and `stories/*/BRIEF.md`). Every script also goes
+through the suspense linter + punch-up rewrite (`--no-punchup` to skip).
+
 This creates a topic + episode row in the SQLite database (`data/life_lesson.db`
 by default), generates and validates a script via Gemini, synthesizes audio
 per script block via Gemini TTS, concatenates it with pause gaps, and
