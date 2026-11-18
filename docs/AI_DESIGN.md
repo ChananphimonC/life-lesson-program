@@ -18,6 +18,8 @@ The prompt forces the LLM to structure the 3-5 minute script into 4 distinct pha
 4. **The Outro (Open Reflection):** Leave a lingering thought. Fade out. (e.g., "บางที... เราอาจไม่จำเป็นต้องหาคำตอบให้ทุกเรื่องในคืนนี้ก็ได้") No summary, no lesson, no call to action.
 
 ## 3. Writing Style & Pacing
+See STYLE_GUIDE.md for the full craft rules (second-person scenes, motif, character sheet, facts-vs-fiction, formats). Prompt version `script-v0.2.0` implements them; JSON gains optional `chapter_title`, `visual_cue`, `time_label`, `facts`, `characters`, `summary`, `metadata.format/motif`.
+
 - Language: Natural, conversational Thai (ภาษาพูด ไม่ใช่ภาษาเขียนเรียงความ).
 - Pacing: The LLM must output pacing markers like `[PAUSE_SHORT]`, `[PAUSE_LONG]` between thoughts. Marker support is validated per TTS provider during the TTS benchmark (see ROADMAP.md) before the pipeline depends on it; if a chosen provider cannot honor pause markers, pacing falls back to post-processing silence insertion at the same marker positions during audio assembly.
 

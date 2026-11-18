@@ -28,6 +28,13 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--theme", default=None, help="Optional broad theme label for this topic."
     )
+    parser.add_argument(
+        "--format",
+        choices=["short", "standard", "long"],
+        default="standard",
+        help="short = YouTube Short (9:16, <=55s); standard = 3-5 min; "
+        "long = 15-40 min multi-chapter story.",
+    )
     return parser
 
 
@@ -37,7 +44,9 @@ def main(argv: list[str] | None = None) -> int:
     configure_logging(settings.log_level)
 
     try:
-        result = run_pipeline(args.topic, args.theme, settings=settings)
+        result = run_pipeline(
+            args.topic, args.theme, settings=settings, episode_format=args.format
+        )
     except PipelineError as exc:
         print(f"Pipeline failed before an episode record could be created: {exc}", file=sys.stderr)
         return 1
@@ -48,6 +57,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"audio: {result.audio_path}")
     if result.video_path:
         print(f"video: {result.video_path}")
+    if result.publish_dir:
+        print(f"publish: {result.publish_dir}")
     if result.error_message:
         print(f"error: {result.error_message}", file=sys.stderr)
 

@@ -55,7 +55,7 @@ def test_pipeline_success_path(tmp_path, monkeypatch):
         lambda background_dir: tmp_path / "backgrounds" / "fake.mp4",
     )
 
-    def fake_assemble_video(*, ffmpeg_binary, background_video, audio_path, output_path):
+    def fake_assemble_video(*, ffmpeg_binary, background_video, audio_path, output_path, **_):
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_bytes(b"fake mp4 bytes")
         return output_path
@@ -123,3 +123,76 @@ def test_pipeline_records_failure_when_no_background_video(tmp_path, monkeypatch
 
     assert result.state == "FAILED"
     assert "background" in result.error_message.lower()
+
+
+def _script_json(n_blocks, chapter=True):
+    phases = ["hook", "exploration", "shift", "outro"]
+    return json.dumps(
+        {
+            "topic_id": "any",
+            "title": "ชั้นห้า เสียงเคาะ",
+            "summary": "คืนหนึ่งในตึกเก่า",
+            "metadata": {"mood": "calm", "estimated_duration_seconds": 40},
+            "script_blocks": [
+                {
+                    "sequence": i + 1,
+                    "phase": phases[min(i * 4 // n_blocks, 3)],
+                    "text": "ข้อความ",
+                    "pause_after_ms": 100,
+                    "chapter_title": f"บท {i // 3 + 1}" if chapter else None,
+                    "visual_cue": "ภาพ",
+                }
+                for i in range(n_blocks)
+            ],
+        }
+    )
+
+
+def _run(tmp_path, monkeypatch, script_json, fmt):
+    settings = _settings(tmp_path)
+    calls = {}
+    monkeypatch.setattr(
+        pipeline_module, "generate_script_text", lambda s, p: (calls.setdefault("prompt", p), script_json)[1]
+    )
+    monkeypatch.setattr(
+        pipeline_module, "pick_random_background", lambda d: tmp_path / "fake.mp4"
+    )
+
+    def fake_assemble(*, output_path, width, height, **_):
+        calls["size"] = (width, height)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_bytes(b"x")
+        return output_path
+
+    monkeypatch.setattr(pipeline_module, "assemble_video", fake_assemble)
+    result = pipeline_module.run_pipeline(
+        "situation", settings=settings, tts_provider=FakeTTSProvider(), episode_format=fmt
+    )
+    return result, calls
+
+
+def test_short_format_renders_vertical_and_writes_publish_bundle(tmp_path, monkeypatch):
+    result, calls = _run(tmp_path, monkeypatch, _script_json(4, chapter=False), "short")
+    assert result.state == "DONE", result.error_message
+    assert calls["size"] == (1080, 1920)
+    assert "YouTube Short" in calls["prompt"]
+    assert (result.publish_dir / "description.txt").exists()
+    assert (result.publish_dir / "thumbnail.json").exists()
+    assert "#Shorts" in (result.publish_dir / "description.txt").read_text(encoding="utf-8")
+
+
+def test_long_format_has_chapters_in_description(tmp_path, monkeypatch):
+    # FakeTTS clips are 50ms, so make chapters long enough via pauses.
+    raw = json.loads(_script_json(12))
+    for b in raw["script_blocks"]:
+        b["pause_after_ms"] = 6000
+    result, calls = _run(tmp_path, monkeypatch, json.dumps(raw), "long")
+    assert result.state == "DONE", result.error_message
+    assert calls["size"] == (1920, 1080)
+    desc = (result.publish_dir / "description.txt").read_text(encoding="utf-8")
+    assert "0:00 บท 1" in desc and "สร้างด้วย AI" in desc
+
+
+def test_format_violation_fails_episode(tmp_path, monkeypatch):
+    result, _ = _run(tmp_path, monkeypatch, _script_json(4, chapter=False), "long")
+    assert result.state == "FAILED"

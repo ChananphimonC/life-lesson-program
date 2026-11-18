@@ -40,15 +40,17 @@ def assemble_video(
     background_video: Path,
     audio_path: Path,
     output_path: Path,
+    width: int = _TARGET_WIDTH,
+    height: int = _TARGET_HEIGHT,
 ) -> Path:
     """Loop `background_video` to match `audio_path`'s length, mux the audio
-    in, and write a 16:9 H.264/AAC MP4 to `output_path`.
+    in, and write a H.264 (16:9 by default, 9:16 for Shorts)/AAC MP4 to `output_path`.
     """
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     scale_filter = (
-        f"scale={_TARGET_WIDTH}:{_TARGET_HEIGHT}:force_original_aspect_ratio=increase,"
-        f"crop={_TARGET_WIDTH}:{_TARGET_HEIGHT}"
+        f"scale={width}:{height}:force_original_aspect_ratio=increase,"
+        f"crop={width}:{height}"
     )
     command = [
         ffmpeg_binary,

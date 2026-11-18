@@ -16,7 +16,7 @@ import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
 
-from life_lesson.audio.wav_utils import concatenate_with_silence
+from life_lesson.audio.wav_utils import concatenate_with_silence, wav_duration_ms
 from life_lesson.config import Settings, get_settings
 from life_lesson.db import repository as repo
 from life_lesson.errors import PipelineError
@@ -27,7 +27,9 @@ from life_lesson.generation.prompts import (
     SCRIPT_PROMPT_VERSION,
     build_script_prompt,
 )
-from life_lesson.generation.schema import ScriptOutput, validate_script_json
+from life_lesson.generation.formats import FormatSpec, get_format
+from life_lesson.generation.schema import ScriptOutput, check_format, validate_script_json
+from life_lesson.publish.metadata import write_publish_bundle
 from life_lesson.tts.base import TTSProvider
 from life_lesson.tts.gemini_tts import GeminiTTSProvider
 from life_lesson.video.ffmpeg_assembler import assemble_video, pick_random_background
@@ -42,6 +44,7 @@ class PipelineResult:
     state: str
     audio_path: Path | None = None
     video_path: Path | None = None
+    publish_dir: Path | None = None
     error_message: str | None = None
 
 
@@ -51,8 +54,10 @@ def run_pipeline(
     *,
     settings: Settings | None = None,
     tts_provider: TTSProvider | None = None,
+    episode_format: str | None = None,
 ) -> PipelineResult:
     settings = settings or get_settings()
+    spec = get_format(episode_format)
 
     with repo.open_db(settings.db_path) as conn:
         topic_id = repo.create_topic(conn, topic_text, theme)
@@ -61,12 +66,15 @@ def run_pipeline(
 
         try:
             script = _generate_and_persist_script(
-                conn, settings, episode_id, topic_id, topic_text, theme
+                conn, settings, episode_id, topic_id, topic_text, theme, spec
             )
-            audio_path = _synthesize_audio(
+            audio_path, block_starts_ms, duration_ms = _synthesize_audio(
                 conn, settings, episode_id, script, tts_provider
             )
-            video_path = _assemble_video(conn, settings, episode_id, audio_path)
+            video_path = _assemble_video(conn, settings, episode_id, audio_path, spec)
+            publish_dir = _write_publish_bundle(
+                settings, episode_id, script, spec, block_starts_ms, duration_ms
+            )
         except PipelineError as exc:
             logger.error("Pipeline failed for episode %s: %s", episode_id, exc)
             repo.update_episode_state(
@@ -86,6 +94,7 @@ def run_pipeline(
             state="DONE",
             audio_path=audio_path,
             video_path=video_path,
+            publish_dir=publish_dir,
         )
 
 
@@ -96,10 +105,11 @@ def _generate_and_persist_script(
     topic_id: str,
     topic_text: str,
     theme: str | None,
+    spec: FormatSpec,
 ) -> ScriptOutput:
     repo.update_episode_state(conn, episode_id, "TOPIC")
 
-    prompt = build_script_prompt(topic_id, topic_text, theme)
+    prompt = build_script_prompt(topic_id, topic_text, theme, spec.name)
     prompt_version_id = repo.register_prompt_version(
         conn, SCRIPT_PROMPT_NAME, SCRIPT_PROMPT_STAGE, SCRIPT_PROMPT_VERSION, prompt
     )
@@ -111,6 +121,9 @@ def _generate_and_persist_script(
 
     try:
         script = validate_script_json(raw_text)
+        check_format(script, spec)
+        script.metadata.format = spec.name
+        script.metadata.prompt_version = SCRIPT_PROMPT_VERSION
     except PipelineError as exc:
         repo.log_generation_attempt(
             conn, episode_id, "script_validation", 1, "failed", error_message=str(exc)
@@ -132,13 +145,17 @@ def _synthesize_audio(
     episode_id: str,
     script: ScriptOutput,
     tts_provider: TTSProvider | None,
-) -> Path:
+) -> tuple[Path, list[int], int]:
     provider = tts_provider or GeminiTTSProvider(settings)
 
     clips_with_pauses: list[tuple[bytes, int]] = []
+    block_starts_ms: list[int] = []
+    cursor_ms = 0
     for block in script.script_blocks:
         wav_bytes = provider.synthesize(block.text)
         clips_with_pauses.append((wav_bytes, block.pause_after_ms))
+        block_starts_ms.append(cursor_ms)
+        cursor_ms += wav_duration_ms(wav_bytes) + block.pause_after_ms
 
     output_path = settings.audio_output_dir / f"{episode_id}.wav"
     concatenate_with_silence(clips_with_pauses, output_path)
@@ -146,7 +163,27 @@ def _synthesize_audio(
     repo.log_generation_attempt(conn, episode_id, "tts", 1, "success")
     repo.update_episode_state(conn, episode_id, "AUDIO", audio_path=str(output_path))
     logger.info("Audio synthesized for episode %s: %s", episode_id, output_path)
-    return output_path
+    return output_path, block_starts_ms, cursor_ms
+
+
+def _write_publish_bundle(
+    settings: Settings,
+    episode_id: str,
+    script: ScriptOutput,
+    spec: FormatSpec,
+    block_starts_ms: list[int],
+    duration_ms: int,
+) -> Path:
+    credits = [
+        f"เสียงบรรยาย: {settings.gemini_tts_model} (voice: {settings.gemini_tts_voice})",
+        "วิดีโอพื้นหลัง/ดนตรี: ระบุแหล่งที่มาและใบอนุญาตก่อนเผยแพร่",
+    ]
+    out_dir = settings.output_dir / "publish" / episode_id
+    write_publish_bundle(
+        out_dir, script, spec, block_starts_ms, duration_ms, credits=credits
+    )
+    logger.info("Publish bundle written for episode %s: %s", episode_id, out_dir)
+    return out_dir
 
 
 def _assemble_video(
@@ -154,6 +191,7 @@ def _assemble_video(
     settings: Settings,
     episode_id: str,
     audio_path: Path,
+    spec: FormatSpec,
 ) -> Path:
     background_video = pick_random_background(settings.background_video_dir)
     output_path = settings.video_output_dir / f"{episode_id}.mp4"
@@ -163,6 +201,8 @@ def _assemble_video(
         background_video=background_video,
         audio_path=audio_path,
         output_path=output_path,
+        width=spec.width,
+        height=spec.height,
     )
 
     repo.log_generation_attempt(conn, episode_id, "video", 1, "success")

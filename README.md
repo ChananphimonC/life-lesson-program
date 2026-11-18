@@ -30,6 +30,19 @@ You also need:
 python -m life_lesson.cli "Seeing friends buy houses while you are still renting"
 ```
 
+Choose a format with `--format`:
+
+```bash
+python -m life_lesson.cli "..." --format short      # YouTube Short, 9:16, <=55s
+python -m life_lesson.cli "..." --format standard   # 3-5 min (default)
+python -m life_lesson.cli "..." --format long       # 15-40 min, chaptered story
+```
+
+Besides the MP4, each run writes a publish bundle to
+`output/publish/<episode_id>/` (`title.txt`, `description.txt` with chapters /
+real facts / credits, `thumbnail.json`, `review_checklist.md`). Channel craft
+rules live in [`docs/STYLE_GUIDE.md`](docs/STYLE_GUIDE.md).
+
 This creates a topic + episode row in the SQLite database (`data/life_lesson.db`
 by default), generates and validates a script via Gemini, synthesizes audio
 per script block via Gemini TTS, concatenates it with pause gaps, and

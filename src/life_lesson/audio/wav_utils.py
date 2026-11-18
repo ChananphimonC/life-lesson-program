@@ -69,3 +69,9 @@ def _silence_frames(params: wave._wave_params, duration_ms: int) -> bytes:
     num_frames = int(params.framerate * duration_ms / 1000)
     frame_size = params.nchannels * params.sampwidth
     return b"\x00" * (num_frames * frame_size)
+
+
+def wav_duration_ms(wav_bytes: bytes) -> int:
+    """Length of a WAV clip in milliseconds."""
+    with _wave_reader(wav_bytes) as reader:
+        return int(reader.getnframes() * 1000 / reader.getframerate())

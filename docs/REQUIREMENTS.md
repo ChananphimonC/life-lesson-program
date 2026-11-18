@@ -26,9 +26,9 @@
 - **Simplicity:** No microservices, message queues, or distributed infrastructure for MVP — a single Python process/backend driven by the Streamlit dashboard is sufficient at 1 episode/day cadence (see ARCHITECTURE.md §"MVP Simplicity Principle").
 
 ## 3. MVP Scope Constraints (v0.1 - v0.5)
-- **Duration:** 3-5 minutes per video.
+- **Duration / format:** `short` (9:16, 30-55s), `standard` (3-5 min, default) and `long` (15-40 min, chaptered). See STYLE_GUIDE.md §4.
 - **Cadence:** 1 episode per day.
-- **Format:** 16:9 long-form video for YouTube. No Shorts optimization.
+- **Format:** 16:9 for standard/long; 9:16 for Shorts (added in v0.1.x at the owner's request).
 - **Visuals:** Pre-curated folder of stock looping videos (no AI video generation).
 - **Persistence:** SQLite from v0.1 (see §1). No PostgreSQL/pgvector in MVP scope.
 - **Originality scope:** Critic-level rejection of quotes/attributed/derivative content is in scope for MVP (AI_DESIGN.md §5.B). Cross-episode embedding similarity search (5.A) and any external corpus-matching system are explicitly **not** in MVP scope.

@@ -1,7 +1,7 @@
 # Product Specification: Life Lesson Program
 
 ## 1. Product Vision
-An AI-assisted content generation system that creates original, 3-5 minute Thai "life reflection" audio-visual episodes. It provides a calm, non-judgmental space for listeners to process their daily experiences, acting as a mirror for their thoughts rather than a guide telling them what to do.
+An AI-assisted content generation system that creates original Thai "life reflection" audio-visual episodes in three formats: Shorts (9:16, 30-55s), standard (3-5 min) and long-form chaptered stories (15-40 min). Craft and voice rules: see STYLE_GUIDE.md. It provides a calm, non-judgmental space for listeners to process their daily experiences, acting as a mirror for their thoughts rather than a guide telling them what to do.
 
 ## 2. Target Audience
 - Thai-speaking Millennials and Gen Z (18–40 years old).
