@@ -47,7 +47,7 @@
   - Automated YouTube API integration (Draft upload & Schedule) — replaces manual upload.
   - Introduce PostgreSQL + `pgvector` for cross-episode semantic similarity search (own-catalog repetition, AI_DESIGN.md §5.A), alongside or migrating from SQLite depending on operational needs at that point.
   - Expansion to 10-15 minute episodes based on viewer retention data.
-  - Revisit Shorts/vertical format if warranted by audience data.
+  - Use Shorts as teasers for long-form episodes; tune formats using audience retention data.
 
 ## Explicitly Deferred (not MVP, not yet scheduled)
 - External plagiarism/corpus-matching system against religious texts, books, or the wider internet (AI_DESIGN.md §5.B remains Critic-level only).

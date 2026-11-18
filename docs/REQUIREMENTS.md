@@ -15,7 +15,7 @@
 - **Sensitive-topic filtering:** Screen generated topics before scripting, and re-check during the Critic pass, for self-harm, suicide, severe mental-health crisis, abuse, and medical/clinical-claim content (see PRODUCT.md §5, AI_DESIGN.md §6). Flagged topics are rejected and regenerated rather than "softened."
 - **Audio Processing:** Connect to a TTS API and interpret pause markers (or fall back to post-processing silence insertion where a provider doesn't support markers natively) to generate paced audio.
 - **Subtitle Generation:** Generate `.srt`/`.vtt` primarily via forced alignment of the known script text against the TTS audio. Fall back to Whisper/faster-whisper transcription only when forced alignment is unavailable for a given provider/output.
-- **Video Assembly:** Use FFmpeg to stitch a static/looping background video, the TTS audio, and subtitle files into an MP4, targeting **16:9 long-form** (YouTube standard). Shorts/vertical format is explicitly out of scope for MVP.
+- **Video Assembly:** Use FFmpeg to stitch a static/looping background video, the TTS audio, and subtitle files into an MP4, targeting **16:9** for standard/long episodes and **9:16** for Shorts.
 
 ## 2. Non-Functional Requirements
 - **Modularity (right-sized):** LLM Provider and TTS Provider access should go through a thin wrapper/function boundary so a provider swap doesn't require touching core pipeline logic — but do **not** build a heavy plugin/interface abstraction layer before the TTS benchmark (§ below, AI_DESIGN.md §8) has established what actually varies between providers. Abstraction should follow evidence from the benchmark, not precede it.
