@@ -13,7 +13,7 @@ from life_lesson.generation.formats import FormatSpec, get_format
 
 SCRIPT_PROMPT_NAME = "script_generation"
 SCRIPT_PROMPT_STAGE = "script"
-SCRIPT_PROMPT_VERSION = "script-v0.2.0"
+SCRIPT_PROMPT_VERSION = "script-v0.3.0"
 
 _CONTENT_CONSTRAINTS = """\
 This is a LIFE REFLECTION, not life advice or motivational content.
@@ -68,6 +68,17 @@ never on a moral.
 signature item and list them in "characters" (name, role, age_range, outfit, \
 signature_item, palette). Keep the outfit identical in every visual_cue. Never \
 base a character on a real person.
+- ATMOSPHERE: give EVERY block a "mood" so picture, sound and voice agree. \
+Use only these values: light (bright|dim|dark|golden|neon|flicker), weather \
+(clear|rain|storm|fog|wind), color (warm|cool|teal|amber|mono|green), voice \
+(calm|hushed|warm|wistful|tense|urgent), sounds (any of rain|thunder|wind|\
+waves|room_tone|heartbeat|clock|silence), tension (integer 1-5). \
+Shape a TENSION CURVE: start low or with one sharp image, climb across the \
+exploration, peak at the start of the shift, then let it fall (not to 1) in \
+the outro so the ending stays open. Change light/weather at turning points; \
+let weather mirror the feeling without naming it (rain when plans fall \
+apart, fog when nobody is sure, a flickering lamp when money is short). \
+Match voice to tension (hushed for secrets, tense/urgent only at peaks).
 - Never describe violence, injury, death or any crisis topic.\
 """
 
@@ -114,7 +125,7 @@ matching exactly this structure:
     "motif": "<the recurring object/sound>"
   }},
   "characters": [
-    {{"name": "<invented name>", "role": "<role>", "age_range": "<e.g. 20s>", "outfit": "<one fixed outfit>", "signature_item": "<one item>", "palette": ["<2-3 colors>"]}}
+    {{"name": "<invented name>", "role": "<role>", "age_range": "<e.g. 20s>", "outfit": "<one fixed outfit>", "signature_item": "<one item>", "palette": ["<2-3 colors>"], "want": "<what they want, ordinary and specific>", "fear": "<what they fear losing>", "stakes": "<what happens if they fail, non-violent>"}}
   ],
   "facts": [
     {{"claim": "<real-world fact used>", "source_hint": "<type of source>", "confidence": "high|medium|low"}}
@@ -126,12 +137,13 @@ matching exactly this structure:
       "chapter_title": "<short Thai chapter title>",
       "time_label": "<in-story time such as 23:47, or null>",
       "visual_cue": "<what the viewer sees, one sentence>",
+      "mood": {{"light": "dim", "weather": "clear", "color": "cool", "voice": "calm", "sounds": ["room_tone"], "tension": 2}},
       "text": "<Thai text>",
       "pause_after_ms": <int>
     }},
-    {{"sequence": 2, "phase": "exploration", "chapter_title": "...", "time_label": null, "visual_cue": "...", "text": "<Thai text>", "pause_after_ms": <int>}},
-    {{"sequence": 3, "phase": "shift", "chapter_title": "...", "time_label": null, "visual_cue": "...", "text": "<Thai text>", "pause_after_ms": <int>}},
-    {{"sequence": 4, "phase": "outro", "chapter_title": "...", "time_label": null, "visual_cue": "...", "text": "<Thai text>", "pause_after_ms": <int>}}
+    {{"sequence": 2, "phase": "exploration", "chapter_title": "...", "time_label": null, "visual_cue": "...", "mood": {{...}}, "text": "<Thai text>", "pause_after_ms": <int>}},
+    {{"sequence": 3, "phase": "shift", "chapter_title": "...", "time_label": null, "visual_cue": "...", "mood": {{...}}, "text": "<Thai text>", "pause_after_ms": <int>}},
+    {{"sequence": 4, "phase": "outro", "chapter_title": "...", "time_label": null, "visual_cue": "...", "mood": {{...}}, "text": "<Thai text>", "pause_after_ms": <int>}}
   ]
 }}
 

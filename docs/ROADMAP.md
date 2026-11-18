@@ -26,6 +26,11 @@
   - Implement the sensitive-topic pre-filter at topic generation (self-harm, suicide, severe mental-health crisis, abuse, medical/clinical claims) plus the corresponding Critic category as a second check.
   - Enforce JSON output parsing, including `phase` and `prompt_version` fields.
 
+## Status note (pulled forward)
+The Critic + sensitive-topic filter (v0.3 scope), mood/atmosphere-driven narration, scene video,
+ambient sound, mastering and thumbnail rendering were implemented early at the owner's request.
+Still open from the original plan: TTS provider benchmark (v0.2), subtitles (v0.4), dashboard (v0.5).
+
 ## MVP v0.4: Accessibility & Subtitles
 - **Goal:** Add captions without introducing transcription drift.
 - **Features:**

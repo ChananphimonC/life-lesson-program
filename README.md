@@ -43,6 +43,12 @@ Besides the MP4, each run writes a publish bundle to
 real facts / credits, `thumbnail.json`, `review_checklist.md`). Channel craft
 rules live in [`docs/STYLE_GUIDE.md`](docs/STYLE_GUIDE.md).
 
+Every episode also gets: a sensitive-topic screen, a 7-category Critic with up to
+3 rewrites (otherwise state `FAILED_REVIEW` for a human), mood-directed narration
+(voice delivery + pacing), per-chapter scenes (colour grade, rain/storm/fog, chapter
+cards), a synthesised ambient sound bed, -16 LUFS mastering, and a thumbnail PNG.
+Use `--no-critic` only for debugging.
+
 This creates a topic + episode row in the SQLite database (`data/life_lesson.db`
 by default), generates and validates a script via Gemini, synthesizes audio
 per script block via Gemini TTS, concatenates it with pause gaps, and

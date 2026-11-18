@@ -61,3 +61,17 @@ def test_prompt_asks_for_character_sheet_and_story_craft():
     prompt = build_script_prompt("t", "x")
     assert '"characters"' in prompt and "outfit" in prompt
     assert "STORY CRAFT" in prompt
+
+
+def test_prompt_demands_mood_per_block_and_tension_curve():
+    p = build_script_prompt("t", "x", episode_format="long")
+    assert "ATMOSPHERE" in p and "TENSION CURVE" in p
+    for value in ("storm", "hushed", "heartbeat", "flicker"):
+        assert value in p
+    assert '"mood"' in p and '"want"' in p
+
+
+def test_example_json_in_prompt_is_not_broken_by_formatting():
+    # .format() with unescaped braces would raise; every format must build
+    for fmt in ("short", "standard", "long"):
+        build_script_prompt("t", "x", episode_format=fmt)

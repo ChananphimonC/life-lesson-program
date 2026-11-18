@@ -35,6 +35,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="short = YouTube Short (9:16, <=55s); standard = 3-5 min; "
         "long = 15-40 min multi-chapter story.",
     )
+    parser.add_argument(
+        "--no-critic",
+        action="store_true",
+        help="Skip the Critic pass (debugging only; episodes still need human review).",
+    )
     return parser
 
 
@@ -45,7 +50,8 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         result = run_pipeline(
-            args.topic, args.theme, settings=settings, episode_format=args.format
+            args.topic, args.theme, settings=settings, episode_format=args.format,
+            critic=not args.no_critic,
         )
     except PipelineError as exc:
         print(f"Pipeline failed before an episode record could be created: {exc}", file=sys.stderr)
