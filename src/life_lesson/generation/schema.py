@@ -22,6 +22,18 @@ class ScriptBlock(BaseModel):
     phase: Phase
     text: str = Field(min_length=1)
     pause_after_ms: int = Field(ge=0)
+    # Style-guide fields (STYLE_GUIDE.md §4-5); optional so v0.1 scripts stay valid.
+    chapter_title: str | None = None
+    visual_cue: str | None = None
+    time_label: str | None = None
+
+
+class Fact(BaseModel):
+    """A real-world fact the scene leans on, kept separate from invented story."""
+
+    claim: str = Field(min_length=1)
+    source_hint: str | None = None
+    confidence: Literal["high", "medium", "low"] = "medium"
 
 
 class ScriptMetadata(BaseModel):
@@ -29,6 +41,8 @@ class ScriptMetadata(BaseModel):
     estimated_duration_seconds: int = Field(gt=0)
     prompt_version: str | None = None
     critic_attempt: int = 1
+    format: str = "standard"
+    motif: str | None = None
 
 
 class ScriptOutput(BaseModel):
@@ -36,6 +50,8 @@ class ScriptOutput(BaseModel):
     title: str = Field(min_length=1)
     metadata: ScriptMetadata
     script_blocks: list[ScriptBlock] = Field(min_length=1)
+    facts: list[Fact] = Field(default_factory=list)
+    summary: str | None = None
 
     @field_validator("script_blocks")
     @classmethod
@@ -83,3 +99,30 @@ def _strip_markdown_fence(text: str) -> str:
             lines = lines[:-1]
         stripped = "\n".join(lines).strip()
     return stripped
+
+
+def check_format(script: ScriptOutput, spec) -> None:
+    """Enforce format-specific structure (STYLE_GUIDE.md §4).
+
+    Raises `ScriptValidationError` -- same reject-don't-repair rule as
+    `validate_script_json`.
+    """
+    blocks = script.script_blocks
+    if not spec.min_blocks <= len(blocks) <= spec.max_blocks:
+        raise ScriptValidationError(
+            f"{spec.name} script needs {spec.min_blocks}-{spec.max_blocks} blocks, "
+            f"got {len(blocks)}"
+        )
+    if spec.max_chars is not None:
+        total = sum(len(b.text) for b in blocks)
+        if total > spec.max_chars:
+            raise ScriptValidationError(
+                f"{spec.name} script is too long to read in {spec.max_seconds}s: "
+                f"{total} chars (max {spec.max_chars})"
+            )
+    if spec.needs_chapter_titles:
+        missing = [b.sequence for b in blocks if not b.chapter_title]
+        if missing:
+            raise ScriptValidationError(
+                f"{spec.name} script blocks missing chapter_title: {missing[:5]}"
+            )

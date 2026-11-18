@@ -9,9 +9,11 @@ time, not a substitute for the Critic's later verification pass.
 
 from __future__ import annotations
 
+from life_lesson.generation.formats import FormatSpec, get_format
+
 SCRIPT_PROMPT_NAME = "script_generation"
 SCRIPT_PROMPT_STAGE = "script"
-SCRIPT_PROMPT_VERSION = "script-v0.1.0"
+SCRIPT_PROMPT_VERSION = "script-v0.2.0"
 
 _CONTENT_CONSTRAINTS = """\
 This is a LIFE REFLECTION, not life advice or motivational content.
@@ -40,6 +42,55 @@ action.
 - Be written in natural, spoken, conversational Thai (ภาษาพูด).\
 """
 
+_STYLE_RULES = """\
+STYLE (see docs/STYLE_GUIDE.md):
+- Narrate in second person, present tense ("คุณนั่งอยู่ตรงนั้น..."): place the \
+listener inside the scene. This is a way of telling, never a way of instructing.
+- Show before you explain: concrete things the listener can SEE and HEAR \
+(a clock reading 23:47, a cold cup of tea) come before any feeling is named.
+- Use specific, everyday numbers (times, prices, distances, counts). Never \
+invent statistics or cite studies you cannot name.
+- Short spoken sentences. One longer sentence per chapter at most, for breath.
+- Choose ONE small recurring motif (an object or a sound). Let it appear at \
+least 3 times and return in the outro WITHOUT explaining what it means.
+- Open with the moment of most tension or quiet (a cold open), not a greeting \
+and not an introduction.
+- Every block of narration must pass this test: said to a friend, it feels \
+like comfort, not like a suggestion. The ending stays open.
+- Separate real from invented: put real-world facts you rely on in "facts" \
+(claim, source_hint as a TYPE of source, confidence). Characters, events and \
+places you invent are fiction and must not appear in "facts".
+- Never describe violence, injury, death or any crisis topic.\
+"""
+
+
+def _format_rules(spec: FormatSpec) -> str:
+    base = (
+        f"FORMAT: {spec.name} ({spec.label_th}). Target spoken length "
+        f"{spec.min_seconds}-{spec.max_seconds} seconds; "
+        f"{spec.min_blocks}-{spec.max_blocks} script blocks. "
+    )
+    if spec.name == "short":
+        return base + (
+            "This is a YouTube Short (vertical). The FIRST sentence must be a "
+            "concrete image or situation within 2 seconds -- no greeting, no "
+            "channel intro. Keep the whole script under "
+            f"{spec.max_chars} Thai characters. The final line should be able "
+            "to loop back into the first line, or stay as an image -- no call "
+            "to action. Still include all four phases."
+        )
+    if spec.name == "long":
+        return base + (
+            "This is a long-form episode told as continuous scenes. Give EVERY "
+            "block a short Thai chapter_title (blocks that belong to the same "
+            "scene share the same chapter_title). Start with a cold open "
+            "(phase hook), then scenes (exploration), then one or two blocks "
+            "that change how the situation is SEEN (shift), then an outro that "
+            "returns to the motif. Each scene is one place and one time."
+        )
+    return base + "Standard single episode."
+
+
 _JSON_INSTRUCTIONS = """\
 Respond with ONLY a single JSON object (no markdown fences, no commentary) \
 matching exactly this structure:
@@ -47,52 +98,55 @@ matching exactly this structure:
 {{
   "topic_id": "{topic_id}",
   "title": "<short Thai title>",
+  "summary": "<1-2 Thai sentences for the video description: the situation, no promises>",
   "metadata": {{
     "mood": "<short mood description>",
-    "estimated_duration_seconds": <int, target 180-300>
+    "estimated_duration_seconds": <int, within the target range>,
+    "format": "{format_name}",
+    "motif": "<the recurring object/sound>"
   }},
+  "facts": [
+    {{"claim": "<real-world fact used>", "source_hint": "<type of source>", "confidence": "high|medium|low"}}
+  ],
   "script_blocks": [
     {{
       "sequence": 1,
       "phase": "hook",
-      "text": "<Thai text>",
-      "pause_after_ms": <int, e.g. 1000-2500>
-    }},
-    {{
-      "sequence": 2,
-      "phase": "exploration",
+      "chapter_title": "<short Thai chapter title>",
+      "time_label": "<in-story time such as 23:47, or null>",
+      "visual_cue": "<what the viewer sees, one sentence>",
       "text": "<Thai text>",
       "pause_after_ms": <int>
     }},
-    {{
-      "sequence": 3,
-      "phase": "shift",
-      "text": "<Thai text>",
-      "pause_after_ms": <int>
-    }},
-    {{
-      "sequence": 4,
-      "phase": "outro",
-      "text": "<Thai text>",
-      "pause_after_ms": <int>
-    }}
+    {{"sequence": 2, "phase": "exploration", "chapter_title": "...", "time_label": null, "visual_cue": "...", "text": "<Thai text>", "pause_after_ms": <int>}},
+    {{"sequence": 3, "phase": "shift", "chapter_title": "...", "time_label": null, "visual_cue": "...", "text": "<Thai text>", "pause_after_ms": <int>}},
+    {{"sequence": 4, "phase": "outro", "chapter_title": "...", "time_label": null, "visual_cue": "...", "text": "<Thai text>", "pause_after_ms": <int>}}
   ]
 }}
 
 The four phases (hook, exploration, shift, outro) must each appear at least \
 once, in that order, matching AI_DESIGN.md's 4-phase script structure. You \
-may split a phase into more than one block if needed (e.g. two "exploration" \
-blocks back to back), but never skip a phase.\
+may split a phase into more than one block, but never skip a phase. \
+Pauses: ~300-600 ms between sentences, 1000-1800 ms between thoughts, \
+2000-3500 ms at the end of a chapter.\
 """
 
 
-def build_script_prompt(topic_id: str, topic_text: str, theme: str | None = None) -> str:
+def build_script_prompt(
+    topic_id: str,
+    topic_text: str,
+    theme: str | None = None,
+    episode_format: str | None = None,
+) -> str:
+    spec = get_format(episode_format)
     theme_line = f"Broad theme: {theme}\n" if theme else ""
     return (
         f"{_CONTENT_CONSTRAINTS}\n\n"
+        f"{_STYLE_RULES}\n\n"
+        f"{_format_rules(spec)}\n\n"
         f"{theme_line}"
         f"Specific situation to reflect on: {topic_text}\n\n"
-        f"Write a 3-5 minute Thai life-reflection script about this situation, "
+        f"Write a Thai life-reflection script about this situation, "
         f"following the 4-phase structure (hook, exploration, shift, outro).\n\n"
-        f"{_JSON_INSTRUCTIONS.format(topic_id=topic_id)}"
+        f"{_JSON_INSTRUCTIONS.format(topic_id=topic_id, format_name=spec.name)}"
     )
