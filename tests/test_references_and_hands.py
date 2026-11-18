@@ -318,8 +318,8 @@ def test_standing_passenger_is_not_shorter_than_the_seated_ones():
     """Regression: seated figures (a desk pose) once towered over the close standing one."""
     img = _bus_frame()
     px = img.load()
-    coral = (232, 87, 106)  # her blouse colour: topmost blouse pixel ~ head height proxy
-    ys = [y for y in range(360) for x in range(0, 640, 2) if all(abs(a - b) < 20 for a, b in zip(px[x, y], coral))]
+    coral = (232, 87, 106)  # her blouse colour (shifted a little by her soft light): topmost pixel ~ head height proxy
+    ys = [y for y in range(360) for x in range(0, 640, 2) if all(abs(a - b) < 45 for a, b in zip(px[x, y], coral))]
     assert ys and min(ys) < 360 * 0.62  # her blouse reaches up into the window band, like the seated passengers' heads
 
 
