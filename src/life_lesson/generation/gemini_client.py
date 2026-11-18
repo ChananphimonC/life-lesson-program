@@ -28,6 +28,15 @@ def _client(settings: Settings) -> genai.Client:
 
 
 def generate_script_text(settings: Settings, prompt: str) -> str:
+    return _generate_json(settings, prompt, temperature=0.9)
+
+
+def generate_critic_text(settings: Settings, prompt: str) -> str:
+    """Critic / rewrite pass: low temperature for consistent judgement."""
+    return _generate_json(settings, prompt, temperature=0.2)
+
+
+def _generate_json(settings: Settings, prompt: str, *, temperature: float) -> str:
     """Call Gemini to generate the raw script JSON text for a prompt.
 
     Returns the raw text response. Does NOT validate or parse it -- that is
@@ -41,7 +50,7 @@ def generate_script_text(settings: Settings, prompt: str) -> str:
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
-                temperature=0.9,
+                temperature=temperature,
             ),
         )
     except Exception as exc:  # noqa: BLE001 - external API call, surface as our error type

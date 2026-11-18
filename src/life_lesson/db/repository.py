@@ -58,6 +58,11 @@ def create_topic(conn: sqlite3.Connection, text: str, theme: str | None = None) 
     return topic_id
 
 
+def set_topic_status(conn: sqlite3.Connection, topic_id: str, status: str) -> None:
+    conn.execute("UPDATE topics SET status = ? WHERE id = ?", (status, topic_id))
+    conn.commit()
+
+
 # -- episodes ----------------------------------------------------------------
 
 def create_episode(conn: sqlite3.Connection, topic_id: str) -> str:

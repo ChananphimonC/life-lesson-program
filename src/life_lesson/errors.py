@@ -29,3 +29,8 @@ class VideoAssemblyError(PipelineError):
 
 class ConfigurationError(PipelineError):
     """Raised when required configuration (e.g. an API key) is missing."""
+
+
+class SensitiveTopicError(PipelineError):
+    """Raised when a topic touches self-harm, crisis, abuse or clinical claims
+    (PRODUCT.md §5). The topic is rejected, never softened."""
