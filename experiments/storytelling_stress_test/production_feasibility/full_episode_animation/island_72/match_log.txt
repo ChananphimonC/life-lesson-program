@@ -1,0 +1,17 @@
+chunk 1: F0 median 109 Hz (std 33), speech rms 0.132, 184.7s
+chunk 2: F0 median 121 Hz (std 43), speech rms 0.140, 154.1s
+chunk 3: F0 median 134 Hz (std 48), speech rms 0.123, 162.4s
+chunk 4: F0 median 113 Hz (std 35), speech rms 0.144, 169.0s
+chunk 5: F0 median 115 Hz (std 66), speech rms 0.157, 144.9s
+chunk 6: F0 median 133 Hz (std 67), speech rms 0.162, 160.2s
+target F0 118.02232854864434
+chunk 1: pitch shifted by 1.082
+chunk 1: now F0 118 Hz, speech rms 0.142 (gain 1.06)
+chunk 2: now F0 121 Hz, speech rms 0.142 (gain 1.01)
+chunk 3: pitch shifted by 0.880
+chunk 3: now F0 119 Hz, speech rms 0.141 (gain 1.15)
+chunk 4: pitch shifted by 1.047
+chunk 4: now F0 118 Hz, speech rms 0.142 (gain 0.99)
+chunk 5: now F0 115 Hz, speech rms 0.143 (gain 0.91)
+chunk 6: pitch shifted by 0.890
+chunk 6: now F0 119 Hz, speech rms 0.143 (gain 0.88)

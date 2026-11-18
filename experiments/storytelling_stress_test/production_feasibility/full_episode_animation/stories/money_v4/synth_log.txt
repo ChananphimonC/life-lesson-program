@@ -1,0 +1,9 @@
+Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
+chunk 1: gemini scenes [1] 38.8s (15.1 chars/s)
+chunk 2: gemini scenes [2] 33.2s (12.6 chars/s)
+chunk 3: gemini scenes [3] 30.8s (12.1 chars/s)
+chunk 4: gemini scenes [4] 48.5s (12.7 chars/s)
+chunk 5: gemini scenes [5] 47.0s (11.6 chars/s)
+chunk 6: gemini scenes [6] 50.5s (11.9 chars/s)
+chunk 7: gemini scenes [7] 45.2s (11.8 chars/s)
+chunk 8: gemini scenes [8] 47.9s (13.1 chars/s)

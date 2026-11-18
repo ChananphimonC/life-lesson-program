@@ -1,0 +1,37 @@
+[
+ {
+  "scene": 1,
+  "engine": "gemini",
+  "file": "line01-0102b66c42.gemini.wav"
+ },
+ {
+  "scene": 2,
+  "engine": "gemini",
+  "file": "line02-6b037d20bd.gemini.wav"
+ },
+ {
+  "scene": 3,
+  "engine": "gemini",
+  "file": "line03-9a77be79a8.gemini.wav"
+ },
+ {
+  "scene": 4,
+  "engine": "gemini",
+  "file": "line04-9888891af6.gemini.wav"
+ },
+ {
+  "scene": 5,
+  "engine": "gemini",
+  "file": "line05-d94faf1c0f.gemini.wav"
+ },
+ {
+  "scene": 6,
+  "engine": "gemini",
+  "file": "line06-d5ce4db8ee.gemini.wav"
+ },
+ {
+  "scene": 7,
+  "engine": "gemini",
+  "file": "line07-d184ace12e.gemini.wav"
+ }
+]

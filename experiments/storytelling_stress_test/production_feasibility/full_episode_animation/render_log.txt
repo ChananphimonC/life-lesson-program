@@ -1,0 +1,9 @@
+s0 1032 frames 355 s
+s1 984 frames 661 s
+s2 696 frames 816 s
+s3 2280 frames 1135 s
+s4a 1248 frames 1294 s
+s4b 624 frames 1350 s
+s4c 2016 frames 1579 s
+s5 1104 frames 1789 s
+s6 1728 frames 1997 s

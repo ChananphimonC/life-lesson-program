@@ -1,0 +1,72 @@
+{
+  "id": "mom",
+  "name": "แม่",
+  "role": "mother",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "แม่ของน้องปิ่น ผมสั้นลอนนุ่ม",
+    "ใส่เดรสสบายๆ"
+  ],
+  "draw": {
+    "kind": "person",
+    "style": "cute",
+    "gender": "female",
+    "skin": "#F6D8C2",
+    "cheek": "#EFA39C",
+    "hair": "#4A3226",
+    "hair_style": "bob",
+    "outfit_kind": "dress",
+    "scale_mul": 1.06,
+    "lashes": true,
+    "no_clip": true,
+    "chibi": 0.9
+  },
+  "outfits": {
+    "default": {
+      "top": "#F2C56B",
+      "accent": "#FFF6DC",
+      "bottom": "#F2C56B",
+      "shoe": "#8A5A44",
+      "arms": "down"
+    },
+    "pregnant": {
+      "top": "#F2C56B",
+      "accent": "#FFF6DC",
+      "bottom": "#F2C56B",
+      "shoe": "#8A5A44",
+      "arms": "down",
+      "belly": true
+    },
+    "eat": {
+      "top": "#F2C56B",
+      "accent": "#FFF6DC",
+      "bottom": "#F2C56B",
+      "shoe": "#8A5A44",
+      "arms": "eat",
+      "belly": true
+    },
+    "hips": {
+      "top": "#F2C56B",
+      "accent": "#FFF6DC",
+      "bottom": "#F2C56B",
+      "shoe": "#8A5A44",
+      "arms": "hips",
+      "belly": true
+    },
+    "cup": {
+      "top": "#F2C56B",
+      "accent": "#FFF6DC",
+      "bottom": "#F2C56B",
+      "shoe": "#8A5A44",
+      "arms": "hold",
+      "prop": "cup",
+      "belly": true
+    }
+  },
+  "voice": {
+    "gemini": "Callirrhoe",
+    "edge": "th-TH-PremwadeeNeural"
+  },
+  "subtitle_color": "#FFE9A8"
+}

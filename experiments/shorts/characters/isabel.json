@@ -1,0 +1,34 @@
+{
+  "id": "isabel",
+  "name": "อิซาเบล (ลูกสาว)",
+  "role": "historical-figure-generic",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "ตัวการ์ตูนทั่วไปแทนบุคคลในประวัติศาสตร์ ไม่ได้ลอกหน้าคนจริง",
+    "ผมมวย",
+    "ชุดยุค 1940"
+  ],
+  "draw": {
+    "kind": "person",
+    "skin": "#F4CFAA",
+    "cheek": "#EE948E",
+    "hair": "#4A3226",
+    "hair_style": "bun"
+  },
+  "outfits": {
+    "default": {
+      "top": "#5C7CA8",
+      "accent": "#F0E6D6",
+      "top_style": "shirt",
+      "bottom": "#36465E",
+      "skirt": true,
+      "arms": "raise"
+    }
+  },
+  "voice": {
+    "gemini": "Leda",
+    "edge": "th-TH-PremwadeeNeural"
+  },
+  "subtitle_color": "#C8DCF4"
+}

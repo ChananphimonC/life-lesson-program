@@ -1,0 +1,6 @@
+file 'gs_dog_day_1.mp4'
+file 'gs_dog_day_2.mp4'
+file 'gs_dog_day_3.mp4'
+file 'gs_dog_day_4.mp4'
+file 'gs_dog_day_5.mp4'
+file 'gs_dog_day_6.mp4'

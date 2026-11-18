@@ -1,0 +1,15 @@
+{
+  "id": "mosquito_m",
+  "name": "ยุงน้อย",
+  "role": "mosquito",
+  "gender": "mascot",
+  "age": "n/a",
+  "fixed": ["หัวกลมหน้าตาชัด", "ปากเข็มยาว (งวง)", "ปีกใส 2 ข้าง", "หนวด 2 เส้น", "ท้องมีลายขวางและขายาวบาง"],
+  "draw": {"kind": "mosquito", "skin": "#D9CFC4", "cheek": "#EFA39A"},
+  "outfits": {
+    "default": {"body": "#5E5664", "stripe": "#E6E3EA", "wing": "#CFE7F6", "belly": null},
+    "full": {"body": "#5E5664", "stripe": "#E6E3EA", "wing": "#CFE7F6", "belly": "#C7364B"}
+  },
+  "voice": {"gemini": "Puck", "edge": "th-TH-NiwatNeural", "edge_rate": "+14%", "edge_pitch": "+55Hz"},
+  "subtitle_color": "#A8EE8B"
+}

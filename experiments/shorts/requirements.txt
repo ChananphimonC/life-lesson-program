@@ -1,0 +1,2 @@
+# Extra dependency for the Shorts pipeline (free, no API key): the TTS fallback used when Gemini's daily quota is gone.
+edge-tts>=7.0

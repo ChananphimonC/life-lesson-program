@@ -1,0 +1,35 @@
+{
+  "id": "uncle_b",
+  "name": "ลุงอีกคน",
+  "role": "shopper",
+  "gender": "male",
+  "age": "adult",
+  "fixed": [
+    "แว่นตา",
+    "เสื้อโปโล",
+    "เหตุผลจัด"
+  ],
+  "draw": {
+    "kind": "person",
+    "skin": "#E2B089",
+    "cheek": "#D98A80",
+    "hair": "#6E6A70",
+    "hair_style": "short",
+    "glasses": true
+  },
+  "outfits": {
+    "default": {
+      "top": "#4F86C6",
+      "top_style": "polo",
+      "bottom": "#3E4656",
+      "arms": "hips"
+    }
+  },
+  "voice": {
+    "gemini": "Fenrir",
+    "edge": "th-TH-NiwatNeural",
+    "edge_pitch": "-14Hz",
+    "edge_rate": "-2%"
+  },
+  "subtitle_color": "#9FD8FF"
+}

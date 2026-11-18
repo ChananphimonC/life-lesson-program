@@ -1,0 +1,18 @@
+19:38:11 RUN marks
+19:40:37 1 {'ลำโพงพูดว่': (8.0, 8.01), 'ข้างล่างมี': (18.0, 17.82), 'รถตอบเสียง': (31.2, 31.08), 'รถแบบนี้ไม': (45.3, 45.05), 'บริษัทเวย์': (47.7, 47.6), 'ต้นกับลุงโ': (100.1, 100.1)}
+2 {'ต้นตะโกนใส': (5.4, 5.65), 'ในครัว': (11.1, 11.12), 'แล้วหุ่นยน': (18.0, 17.81), 'กินเสร็จ': (30.7, 30.71), 'แต่เวทมนตร': (42.1, 42.13), 'ส่วนระบบเด': (55.4, 54.79)}
+3 {'ลุงอธิบายร': (11.1, 11.42), 'ศูนย์รับสา': (27.6, 27.21), 'การ์ทเนอร์': (30.9, 30.74), 'แต่นั่นคือ': (38.8, 38.78), 'คลาร์นา': (42.1, 41.81), 'แต่พอสองพั': (48.7, 48.44)}
+4 {'ลุงโชคนับน': (18.9, 19.09), 'แต่อย่าเพิ': (24.3, 24.83), 'ส่วนไอเอ็ม': (28.8, 28.81), 'แต่ต้นบอกว': (33.3, 34.32), 'ลุงถามว่า ': (37.1, 37.05), 'กลุ่มเสี่ย': (44.4, 44.43)}
+  gemini text: transient error, retry 1/3 in 2s (140/200 used)
+  gemini text: transient error, retry 2/3 in 4s (141/200 used)
+  gemini text: transient error, retry 3/3 in 8s (142/200 used)
+5 {'แต่ข้อมูลใ': (12.4, 12.79), 'ธนาคารเลยเ': (17.5, 17.3), 'สิ่งที่ทำใ': (22.8, 22.69), 'ตัวเลขที่ร': (27.2, 27.04), 'ต้นสรุปว่า': (37.7, 37.56)}
+  gemini text: transient error, retry 1/3 in 2s (144/200 used)
+  gemini text: transient error, retry 2/3 in 4s (145/200 used)
+6 {'หุ่นยนต์ยิ': (15.0, 14.96), 'ส่วนต้นฝึก': (27.8, 27.9), 'ซึ่งตรงกับ': (38.3, 37.8), 'ตกเย็น': (44.4, 44.19), 'ทั้งสามทาง': (53.6, 53.69), 'แต่รายงานเ': (57.7, 57.61)}
+7 {'โลกที่มีแต': (10.9, 10.9), 'ลุงโชคส่งว': (18.9, 18.66), 'แต่ต้นมองห': (31.1, 30.87)}
+Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
+
+20:09:28 render 1731 s; rw1 1684 frames 272 s | rw2 1583 frames 492 s | rw3 1450 frames 765 s | rw4 1214 frames 1008 s | rw5 1158 frames 1253 s | rw6 1580 frames 1494 s | rw7 976 frames 1730 s | 
+20:10:46 assemble: wrote C:\life-lesson generator\life-lesson-program\experiments\storytelling_stress_test\production_feasibility\full_episode_animation\robot_world\renders\robot_world_episode.mp4 401.9 s | 
+20:10:46 DONE

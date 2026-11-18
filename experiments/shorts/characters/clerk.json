@@ -1,0 +1,37 @@
+{
+  "id": "clerk",
+  "name": "พนักงานร้าน",
+  "role": "clerk",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "หมวกแก๊ป",
+    "เสื้อกั๊กสีเขียวน้ำทะเล (ไม่มีโลโก้แบรนด์)",
+    "หน้าตาย"
+  ],
+  "draw": {
+    "kind": "person",
+    "skin": "#F1C7A0",
+    "cheek": "#EE928E",
+    "hair": "#2E2224",
+    "hair_style": "short"
+  },
+  "outfits": {
+    "default": {
+      "top": "#EDEDED",
+      "accent": "#3FA79A",
+      "top_style": "vest",
+      "bottom": "#3E4656",
+      "hat": "cap",
+      "hat_color": "#3FA79A",
+      "arms": "down"
+    }
+  },
+  "voice": {
+    "gemini": "Despina",
+    "edge": "th-TH-PremwadeeNeural",
+    "edge_pitch": "+0Hz",
+    "edge_rate": "-2%"
+  },
+  "subtitle_color": "#7FE0D0"
+}

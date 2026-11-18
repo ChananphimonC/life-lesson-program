@@ -1,0 +1,5 @@
+2026-11-06 18:27:18 render 1017 s; rt1 1462 frames 99 s | rt2 1439 frames 274 s | rt3 1188 frames 372 s | rt4 1087 frames 477 s | rt5 3233 frames 789 s | rt6 1094 frames 895 s | rt7 953 frames 1017 s | 
+2026-11-06 18:27:40 assemble: wrote C:\life-lesson generator\life-lesson-program\experiments\storytelling_stress_test\production_feasibility\full_episode_animation\red_thread\renders\red_thread_episode.mp4 435.7 s | 
+2026-11-06 18:27:57 qa done  8409, |   8410, |   8411, |   8412, |   8413, |   8414, |   8415, |   8552, |   8719, |   8789, |   9029, |   9326, |   9496, |   9497, |   9498, |   9499, |   9500, |   9501, |   9502, |   9646, |   9648, |   9867, |   10174 |  ] | } | sheets done | 
+2026-11-06 18:27:59 library: filed: EP10 - ด้ายแดง ที่ไม่มีใครมองเห็น -> รู้หรือไม่ | 
+2026-11-06 18:27:59 DONE

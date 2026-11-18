@@ -1,0 +1,23 @@
+{
+  "id": "narrator",
+  "name": "ผู้ประกาศข่าว",
+  "role": "narrator",
+  "gender": "male",
+  "age": "adult",
+  "fixed": [
+    "เสียงบรรยายแบบสารคดี/ข่าว จริงจัง"
+  ],
+  "draw": {
+    "kind": "none"
+  },
+  "outfits": {
+    "default": {}
+  },
+  "voice": {
+    "gemini": "Charon",
+    "edge": "th-TH-NiwatNeural",
+    "edge_pitch": "-14Hz",
+    "edge_rate": "-6%"
+  },
+  "subtitle_color": "#FFFFFF"
+}

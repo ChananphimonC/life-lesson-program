@@ -1,0 +1,53 @@
+{
+  "id": "rider",
+  "name": "ไรเดอร์",
+  "role": "rider",
+  "gender": "male",
+  "age": "adult",
+  "fixed": [
+    "หมวกแก๊ปสีม่วงเข้ม",
+    "กล่องส่งอาหารสีเหลืองมัสตาร์ด (ไม่ใช้สี/โลโก้แบรนด์จริง)",
+    "พายเรือมาส่ง"
+  ],
+  "draw": {
+    "kind": "person",
+    "skin": "#E7B88E",
+    "cheek": "#E3897F",
+    "hair": "#2B2224",
+    "hair_style": "short"
+  },
+  "outfits": {
+    "boat": {
+      "top": "#6A5C9C",
+      "accent": "#FFFFFF",
+      "top_style": "polo",
+      "bottom": "#3E4656",
+      "hat": "cap",
+      "hat_color": "#4A3F7A",
+      "boat": true,
+      "boat_color": "#6C8EA6",
+      "backpack": "#E5B23C",
+      "arms": "hold"
+    },
+    "boat_fish": {
+      "top": "#6A5C9C",
+      "accent": "#FFFFFF",
+      "top_style": "polo",
+      "bottom": "#3E4656",
+      "hat": "cap",
+      "hat_color": "#4A3F7A",
+      "boat": true,
+      "boat_color": "#6C8EA6",
+      "backpack": "#E5B23C",
+      "arms": "fish_up",
+      "prop": "fish"
+    }
+  },
+  "voice": {
+    "gemini": "Umbriel",
+    "edge": "th-TH-NiwatNeural",
+    "edge_pitch": "+8Hz",
+    "edge_rate": "+4%"
+  },
+  "subtitle_color": "#FFD36B"
+}

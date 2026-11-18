@@ -1,0 +1,54 @@
+n | layers | thickness(mm) | Gallivan L(m) | ModelA L(m) | A/G
+ 1 |      2 |       0.2 |      0.000 |      0.000 | 0.50
+ 2 |      4 |       0.4 |      0.001 |      0.001 | 0.75
+ 3 |      8 |       0.8 |      0.004 |      0.004 | 1.00
+ 4 |     16 |       1.6 |      0.016 |      0.019 | 1.20
+ 5 |     32 |       3.2 |      0.058 |      0.078 | 1.33
+ 6 |     64 |       6.4 |      0.224 |      0.317 | 1.41
+ 7 |    128 |      12.8 |      0.878 |      1.277 | 1.45
+ 8 |    256 |      25.6 |      3.471 |      5.127 | 1.48
+ 9 |    512 |      51.2 |     13.806 |     20.549 | 1.49
+10 |   1024 |     102.4 |     55.064 |     82.275 | 1.49
+11 |   2048 |     204.8 |    219.935 |    329.259 | 1.50
+12 |   4096 |     409.6 |    879.096 |   1317.358 | 1.50
+
+ratio L(n+1)/L(n):
+  1->2: Gallivan 4.000  ModelA 6.000  loops-of-one-fold (A) 4.0
+  2->3: Gallivan 3.500  ModelA 4.667  loops-of-one-fold (A) 4.0
+  3->4: Gallivan 3.571  ModelA 4.286  loops-of-one-fold (A) 4.0
+  4->5: Gallivan 3.720  ModelA 4.133  loops-of-one-fold (A) 4.0
+  5->6: Gallivan 3.839  ModelA 4.065  loops-of-one-fold (A) 4.0
+  6->7: Gallivan 3.913  ModelA 4.032  loops-of-one-fold (A) 4.0
+  7->8: Gallivan 3.955  ModelA 4.016  loops-of-one-fold (A) 4.0
+  8->9: Gallivan 3.977  ModelA 4.008  loops-of-one-fold (A) 4.0
+  9->10: Gallivan 3.988  ModelA 4.004  loops-of-one-fold (A) 4.0
+  10->11: Gallivan 3.994  ModelA 4.002  loops-of-one-fold (A) 4.0
+  11->12: Gallivan 3.997  ModelA 4.001  loops-of-one-fold (A) 4.0
+
+Roll feasibility (t = 0.1 mm):
+  roll  60 m, 10 folds: Gallivan needs    55.1 m (OK), ModelA needs    82.3 m (NO)
+  roll  60 m, 11 folds: Gallivan needs   219.9 m (NO), ModelA needs   329.3 m (NO)
+  roll 100 m, 10 folds: Gallivan needs    55.1 m (OK), ModelA needs    82.3 m (OK)
+  roll 100 m, 11 folds: Gallivan needs   219.9 m (NO), ModelA needs   329.3 m (NO)
+
+Thickness windows (mm): 10 folds fit if t <= x ; 11 folds fail if t > y
+  L= 60 m: Gallivan x=0.109 y=0.0273 | ModelA x=0.073 y=0.0182
+  L=100 m: Gallivan x=0.182 y=0.0455 | ModelA x=0.122 y=0.0304
+  => on a 100 m roll 'fold 10 works, fold 11 fails' needs t in about 0.045 to 0.122 mm (valid under both models)
+  thin kite tissue (0.04 mm): fold 11 needs 88.0 m (Gallivan) / 131.7 m (ModelA) -> would NOT fail on a 100 m roll
+
+Block after 10 folds, 100 m x 0.30 m strip, t = 0.1 mm:
+  Gallivan: leftover straight length per layer 4.4 cm; thickness 10.2 cm; width 30 cm; rounded end adds ~half thickness 5.1 cm -> plan length ~ 9.5 cm
+  ModelA: leftover straight length per layer 1.7 cm; thickness 10.2 cm; width 30 cm; rounded end adds ~half thickness 5.1 cm -> plan length ~ 6.9 cm
+  naive 100/2^10 (the 9.8 cm in the v2 notes) = 9.8 cm; ignores material used by the loops
+
+42 folds, minimum strip length:
+  Gallivan: 1.013e+21 m = 107,052 light-years
+  ModelA: 1.519e+21 m = 160,578 light-years
+
+loops of fold 11 / loops of fold 10 = 4.0 (exact in Model A)
+
+Bowls: [1, 2, 4, 8, 16, 32, 64, 128] sum 255 remainder 155 | a 9th doubling pile would be 256
+Weight of 100 m x 0.30 m at 80 g/m2: 2.4 kg (assumes 80 gsm ~ 0.1 mm office paper)
+Human check proposal: strip of 4 taped A4 sheets ~1.19 m x 3 cm; Gallivan needs 0.878 m for 7 folds and 3.47 m for 8 folds (t=0.1 mm)
+wrote folding_geometry.png

@@ -1,0 +1,6 @@
+rw1 1197 frames 157 s
+rw2 1185 frames 306 s
+rw3 1320 frames 565 s
+rw4 1390 frames 838 s
+rw5 1145 frames 994 s
+rw6 1530 frames 1206 s

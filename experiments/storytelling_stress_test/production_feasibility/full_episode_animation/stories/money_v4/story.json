@@ -1,0 +1,5281 @@
+{
+ "id": "know_money_v4",
+ "title": "เงินล้านใน 2 ปี ทำได้จริงไหม (แบบไม่โดนหลอก)",
+ "aspect": "16:9",
+ "playlist": "knowledge",
+ "subtitles": false,
+ "version": 1,
+ "chunks": [
+  [
+   1
+  ],
+  [
+   2
+  ],
+  [
+   3
+  ],
+  [
+   4
+  ],
+  [
+   5
+  ],
+  [
+   6
+  ],
+  [
+   7
+  ],
+  [
+   8
+  ]
+ ],
+ "style": "Thai dialogue, natural spoken delivery with real emotion",
+ "voices": {
+  "Tang": "Umbriel",
+  "Jin": "Zephyr",
+  "Nun": "Gacrux",
+  "Coach": "Orus"
+ },
+ "note": "ตัวละครและเรื่องราวเป็นเรื่องสมมติเพื่อความบันเทิง ไม่ใช่คำแนะนำการลงทุน ตัวเลขดอกเบี้ย/หนี้ครัวเรือนอ้างอิงข่าวปี 2569 ตามแหล่งใน sources",
+ "scenes": [
+  {
+   "name": "1 broke",
+   "direction": "Read this as a natural, funny Thai conversation between two best friends at a cafe, with real emotion and everyday speech rhythm, never like reading aloud. Tang is a broke 24-year-old guy: tired, self-pitying, dry humor. Jin is his bubbly best friend, a young woman: fast, confident, easily excited. Pronounce every Thai word clearly.",
+   "lines": [
+    {
+     "speaker": "Jin",
+     "text": "เฮ้ย ตังค์ เงินเดือนเพิ่งออกเมื่อวานไม่ใช่เหรอ วันนี้เลี้ยงข้าวหน่อยดิ",
+     "say": "เฮ้ย ตังค์ เงินเดือนเพิ่งออกเมื่อวานไม่ใช่เหรอ วันนี้เลี้ยงข้าวหน่อยดิ"
+    },
+    {
+     "speaker": "Tang",
+     "text": "เลี้ยงไม่ได้ ฉันเพิ่งเปิดแอปธนาคาร เหลือสามร้อยแปดสิบเจ็ดบาท",
+     "say": "เลี้ยงไม่ได้ ฉันเพิ่งเปิดแอปธนาคาร เหลือสามร้อยแปดสิบเจ็ดบาท"
+    },
+    {
+     "speaker": "Jin",
+     "text": "หา! เมื่อวานเพิ่งออกนะ หายไปไหนหมดอะ",
+     "say": "หา! เมื่อวานเพิ่งออกนะ หายไปไหนหมดอะ"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ฉันนั่งไล่ดูเมื่อเช้า ค่าห้อง ค่าผ่อนมือถือ ค่าเน็ต แล้วก็ชานมที่ฉันไม่รู้ว่าซื้อตอนไหน",
+     "say": "ฉันนั่งไล่ดูเมื่อเช้า ค่าห้อง ค่าผ่อนมือถือ ค่าเน็ต แล้วก็ชานมที่ฉันไม่รู้ว่าซื้อตอนไหน"
+    },
+    {
+     "speaker": "Jin",
+     "text": "ชานมวันละแก้ว ก็เดือนละพันแปดแล้วนะ",
+     "say": "ชานมวันละแก้ว ก็เดือนละพันแปดแล้วนะ"
+    },
+    {
+     "speaker": "Tang",
+     "text": "อย่าคิดเลขต่อหน้าฉัน ฉันเศร้าอยู่",
+     "say": "อย่าคิดเลขต่อหน้าฉัน ฉันเศร้าอยู่"
+    },
+    {
+     "speaker": "Jin",
+     "text": "งั้นทำไงอะ จะจนไปตลอดเลยเหรอ",
+     "say": "งั้นทำไงอะ จะจนไปตลอดเลยเหรอ"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ไม่ ฉันตัดสินใจแล้ว ฉันจะมีเงินล้านภายในสองปี",
+     "say": "ไม่ ฉันตัดสินใจแล้ว ฉันจะมีเงินล้านภายในสองปี"
+    },
+    {
+     "speaker": "Jin",
+     "text": "เออ! ตรงกับที่ฉันเจอพอดี เสาร์นี้มีสัมมนา ล้านแรกสามสิบวัน เข้าฟรีด้วย",
+     "say": "เออ! ตรงกับที่ฉันเจอพอดี เสาร์นี้มีสัมมนา ล้านแรกสามสิบวัน เข้าฟรีด้วย"
+    },
+    {
+     "speaker": "Tang",
+     "text": "สามสิบวันเนี่ยนะ แล้วเธอรู้ได้ไงว่ามันได้จริง",
+     "say": "สามสิบวันเนี่ยนะ แล้วเธอรู้ได้ไงว่ามันได้จริง"
+    },
+    {
+     "speaker": "Jin",
+     "text": "ฉันศึกษามาแล้วนะ คลิปสี่สิบห้าวินาที ดูไปสามรอบ",
+     "say": "ฉันศึกษามาแล้วนะ คลิปสี่สิบห้าวินาที ดูไปสามรอบ"
+    },
+    {
+     "speaker": "Tang",
+     "text": "...ฟรีใช่ไหม ไปก็ได้",
+     "say": "...ฟรีใช่ไหม ไปก็ได้"
+    }
+   ],
+   "stage": [
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "eager",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "เงินเดือนออกเมื่อวาน",
+       "x": 640,
+       "y": 120,
+       "size": 60,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "sfx": "pop"
+    },
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gape",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "387 บาท",
+       "x": 640,
+       "y": 130,
+       "size": 110,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.3
+      }
+     ],
+     "at": "เลี้ยงไม่ได้ ฉ",
+     "sfx": "sigh"
+    },
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gape",
+       "pose": "SHRUG",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "หา! เมื่อวานเพ"
+    },
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "SHRUG",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "think",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "ฉันนั่งไล่ดูเม"
+    },
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "aha",
+       "pose": "POINT_UP",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ชานมวันละแก้ว = 1,800 / เดือน",
+       "x": 640,
+       "y": 120,
+       "size": 54,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ชานมวันละแก้ว "
+    },
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "laugh",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "อย่าคิดเลขต่อห",
+     "sfx": "laugh"
+    },
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "งั้นทำไงอะ จะจ"
+    },
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "eager",
+       "pose": "POINT_UP",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gape",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "เงินล้านใน 2 ปี",
+       "x": 640,
+       "y": 120,
+       "size": 90,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ไม่ ฉันตัดสินใ",
+     "sfx": "ding"
+    },
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "gape",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "shout",
+       "pose": "ARMS_UP",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ล้านแรก 30 วัน  เข้าฟรี",
+       "x": 640,
+       "y": 120,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "เออ! ตรงกับที่",
+     "sfx": "cheer"
+    },
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "think",
+       "pose": "THINK",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "eager",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "สามสิบวันเนี่ย"
+    },
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "smug",
+       "pose": "POINT_UP",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "คลิป 45 วินาที ดู 3 รอบ",
+       "x": 640,
+       "y": 120,
+       "size": 62,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ฉันศึกษามาแล้ว",
+     "sfx": "pop"
+    },
+    {
+     "bg": "cafe",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "CROSS",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "laugh",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "...ฟรีใช่ไหม ไ"
+    }
+   ]
+  },
+  {
+   "name": "2 seminar",
+   "direction": "A loud, over-the-top get-rich-quick seminar. Coach is a hyped, smooth-talking man shouting like a TV host, dodging every question. Tang is a tired, polite, skeptical young man asking short questions. Natural comedic timing, clear Thai pronunciation.",
+   "lines": [
+    {
+     "speaker": "Coach",
+     "text": "สวัสดีครับพี่น้อง! ใครอยากรวยยกมือขึ้น!",
+     "say": "สวัสดีครับพี่น้อง! ใครอยากรวยยกมือขึ้น!"
+    },
+    {
+     "speaker": "Coach",
+     "text": "ล้านแรกสามสิบวัน ผลตอบแทนการันตี! แล้วถ้าชวนเพื่อนมาอีกคน ได้ค่าแนะนำด้วย!",
+     "say": "ล้านแรกสามสิบวัน ผลตอบแทนการันตี! แล้วถ้าชวนเพื่อนมาอีกคน ได้ค่าแนะนำด้วย!"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ขอถามหน่อยครับพี่",
+     "say": "ขอถามหน่อยครับพี่"
+    },
+    {
+     "speaker": "Coach",
+     "text": "ถามได้เลยน้องชาย พี่เปิดกว้าง",
+     "say": "ถามได้เลยน้องชาย พี่เปิดกว้าง"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ถ้าผลตอบแทนการันตีขนาดนี้ ทำไมพี่ไม่ลงทุนเองคนเดียวเลยล่ะครับ",
+     "say": "ถ้าผลตอบแทนการันตีขนาดนี้ ทำไมพี่ไม่ลงทุนเองคนเดียวเลยล่ะครับ"
+    },
+    {
+     "speaker": "Coach",
+     "text": "ฮ่า ๆ ๆ เพราะพี่อยากแบ่งปันโอกาสให้ทุกคนไงครับ",
+     "say": "ฮ่า ๆ ๆ เพราะพี่อยากแบ่งปันโอกาสให้ทุกคนไงครับ"
+    },
+    {
+     "speaker": "Tang",
+     "text": "อ๋อ แล้วพี่แบ่งกำไรให้พวกผมด้วยไหมครับ",
+     "say": "อ๋อ แล้วพี่แบ่งกำไรให้พวกผมด้วยไหมครับ"
+    },
+    {
+     "speaker": "Coach",
+     "text": "...ทุกท่านครับ! วันนี้โอนวันนี้ ลดครึ่งราคา!",
+     "say": "...ทุกท่านครับ! วันนี้โอนวันนี้ ลดครึ่งราคา!"
+    },
+    {
+     "speaker": "Tang",
+     "text": "พี่ครับ ผมถามเรื่องกำไร",
+     "say": "พี่ครับ ผมถามเรื่องกำไร"
+    },
+    {
+     "speaker": "Coach",
+     "text": "โอนวันนี้ลดครึ่งราคาครับ! ทุกท่านปรบมือ!",
+     "say": "โอนวันนี้ลดครึ่งราคาครับ! ทุกท่านปรบมือ!"
+    }
+   ],
+   "stage": [
+    {
+     "bg": "conference",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "coach",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "shout",
+       "pose": "ARMS_UP",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "spotlight",
+       "x": 950,
+       "y": 0,
+       "s": 1.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "board",
+       "x": 640,
+       "y": 340,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "สัมมนาฟรี!",
+       "x": 640,
+       "y": 110,
+       "size": 90,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "sfx": "cheer"
+    },
+    {
+     "bg": "conference",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "coach",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "shout",
+       "pose": "ARMS_UP",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "spotlight",
+       "x": 950,
+       "y": 0,
+       "s": 1.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "board",
+       "x": 640,
+       "y": 340,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ล้านแรก 30 วัน",
+       "x": 640,
+       "y": 100,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.1
+      },
+      {
+       "text": "ผลตอบแทนการันตี",
+       "x": 640,
+       "y": 180,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.4
+      },
+      {
+       "text": "ชวนเพื่อน = ได้ค่าแนะนำ",
+       "x": 640,
+       "y": 260,
+       "size": 54,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.65
+      }
+     ],
+     "at": "ล้านแรกสามสิบว",
+     "sfx": "pop"
+    },
+    {
+     "bg": "conference",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "neutral",
+       "pose": "POINT_UP",
+       "talk": true
+      },
+      {
+       "who": "coach",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "smug",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "spotlight",
+       "x": 950,
+       "y": 0,
+       "s": 1.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "board",
+       "x": 640,
+       "y": 340,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "ขอถามหน่อยครับ"
+    },
+    {
+     "bg": "conference",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "coach",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "smug",
+       "pose": "SPREAD",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "spotlight",
+       "x": 950,
+       "y": 0,
+       "s": 1.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "board",
+       "x": 640,
+       "y": 340,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "ถามได้เลยน้องช"
+    },
+    {
+     "bg": "conference",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "think",
+       "pose": "POINT_UP",
+       "talk": true
+      },
+      {
+       "who": "coach",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "smug",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "spotlight",
+       "x": 950,
+       "y": 0,
+       "s": 1.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "board",
+       "x": 640,
+       "y": 340,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ทำไมพี่ไม่ลงทุนเองคนเดียว?",
+       "x": 640,
+       "y": 110,
+       "size": 56,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ถ้าผลตอบแทนการ"
+    },
+    {
+     "bg": "conference",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "coach",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "laugh",
+       "pose": "SHRUG",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "spotlight",
+       "x": 950,
+       "y": 0,
+       "s": 1.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "board",
+       "x": 640,
+       "y": 340,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "ฮ่า ๆ ๆ เพราะพ",
+     "sfx": "laugh"
+    },
+    {
+     "bg": "conference",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "smug",
+       "pose": "CROSS",
+       "talk": true
+      },
+      {
+       "who": "coach",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "spotlight",
+       "x": 950,
+       "y": 0,
+       "s": 1.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "board",
+       "x": 640,
+       "y": 340,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "แบ่งกำไรให้ด้วยไหม?",
+       "x": 640,
+       "y": 110,
+       "size": 60,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "อ๋อ แล้วพี่แบ่"
+    },
+    {
+     "bg": "conference",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "coach",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "shout",
+       "pose": "ARMS_UP",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "spotlight",
+       "x": 950,
+       "y": 0,
+       "s": 1.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "board",
+       "x": 640,
+       "y": 340,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "โอนวันนี้ ลดครึ่งราคา!",
+       "x": 640,
+       "y": 110,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "...ทุกท่านครับ",
+     "sfx": "gasp"
+    },
+    {
+     "bg": "conference",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "POINT_FWD",
+       "talk": true
+      },
+      {
+       "who": "coach",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "shout",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "spotlight",
+       "x": 950,
+       "y": 0,
+       "s": 1.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "board",
+       "x": 640,
+       "y": 340,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "พี่ครับ ผมถามเ"
+    },
+    {
+     "bg": "conference",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "coach",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "shout",
+       "pose": "CHEER",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "spotlight",
+       "x": 950,
+       "y": 0,
+       "s": 1.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "board",
+       "x": 640,
+       "y": 340,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "โอนวันนี้ลดครึ",
+     "sfx": "cheer"
+    }
+   ]
+  },
+  {
+   "name": "3 red flags",
+   "direction": "Two friends walking out of a seminar, on the street. Tang is calm, counting things dryly, a bit alarmed. Jin is a bubbly young woman who believed everything and is getting defensive, then sheepish. Natural, quick, funny, clear Thai pronunciation.",
+   "lines": [
+    {
+     "speaker": "Tang",
+     "text": "จิน เมื่อกี้พี่เขาพูดคำว่า การันตี ไปสิบสองรอบ",
+     "say": "จิน เมื่อกี้พี่เขาพูดคำว่า การันตี ไปสิบสองรอบ"
+    },
+    {
+     "speaker": "Jin",
+     "text": "ก็ดีสิ แปลว่าชัวร์",
+     "say": "ก็ดีสิ แปลว่าชัวร์"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ฉันนับธงแดงได้สามผืน การันตีผลตอบแทน ได้เร็วเกินจริง แล้วยังให้ชวนเพื่อน",
+     "say": "ฉันนับธงแดงได้สามผืน การันตีผลตอบแทน ได้เร็วเกินจริง แล้วยังให้ชวนเพื่อน"
+    },
+    {
+     "speaker": "Jin",
+     "text": "แต่ฉันจองคอร์สไปแล้วนะ สามหมื่นบาท",
+     "say": "แต่ฉันจองคอร์สไปแล้วนะ สามหมื่นบาท"
+    },
+    {
+     "speaker": "Tang",
+     "text": "หา! แล้วทำไมเพิ่งบอก",
+     "say": "หา! แล้วทำไมเพิ่งบอก"
+    },
+    {
+     "speaker": "Jin",
+     "text": "ก็เขาบอกว่าถ้าบอกคนอื่นก่อนโอน โชคจะไม่มา",
+     "say": "ก็เขาบอกว่าถ้าบอกคนอื่นก่อนโอน โชคจะไม่มา"
+    },
+    {
+     "speaker": "Tang",
+     "text": "...นั่นธงแดงผืนที่สี่",
+     "say": "...นั่นธงแดงผืนที่สี่"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ก่อนโอนอะไร เช็กใบอนุญาตกับ ก.ล.ต. ก่อนนะ หรือโทรหนึ่งสองศูนย์เจ็ด",
+     "say": "ก่อนโอนอะไร เช็กใบอนุญาตกับ ก.ล.ต. ก่อนนะ หรือโทรหนึ่งสองศูนย์เจ็ด"
+    },
+    {
+     "speaker": "Jin",
+     "text": "ก็ได้ แต่ถ้าสัมมนาจริง ฉันจะไม่คุยกับเธอสามวัน",
+     "say": "ก็ได้ แต่ถ้าสัมมนาจริง ฉันจะไม่คุยกับเธอสามวัน"
+    }
+   ],
+   "stage": [
+    {
+     "bg": "street",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "POINT_UP",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "eager",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [],
+     "ov": [
+      {
+       "text": "'การันตี' 12 รอบ",
+       "x": 640,
+       "y": 120,
+       "size": 70,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ]
+    },
+    {
+     "bg": "street",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "smug",
+       "pose": "SHRUG",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [],
+     "at": "ก็ดีสิ แปลว่าช"
+    },
+    {
+     "bg": "street",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "shout",
+       "pose": "POINT_FWD",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gape",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "flag",
+       "x": 560,
+       "y": 620,
+       "s": 1.8,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "flag",
+       "x": 680,
+       "y": 620,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "flag",
+       "x": 800,
+       "y": 620,
+       "s": 1.8,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ธงแดง x 3",
+       "x": 640,
+       "y": 120,
+       "size": 100,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ฉันนับธงแดงได้",
+     "sfx": "ding"
+    },
+    {
+     "bg": "street",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "plead",
+       "pose": "HEADS",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [
+      {
+       "text": "จองแล้ว 30,000 บาท",
+       "x": 640,
+       "y": 120,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "แต่ฉันจองคอร์ส"
+    },
+    {
+     "bg": "street",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "gape",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [],
+     "ov": [],
+     "at": "หา! แล้วทำไมเพ",
+     "sfx": "gasp"
+    },
+    {
+     "bg": "street",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "plead",
+       "pose": "SHRUG",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [],
+     "at": "ก็เขาบอกว่าถ้า"
+    },
+    {
+     "bg": "street",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "CROSS",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "flag",
+       "x": 520,
+       "y": 620,
+       "s": 1.8,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "flag",
+       "x": 640,
+       "y": 620,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "flag",
+       "x": 760,
+       "y": 620,
+       "s": 1.8,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "flag",
+       "x": 880,
+       "y": 620,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ธงแดง x 4",
+       "x": 640,
+       "y": 120,
+       "size": 100,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "...นั่นธงแดงผื",
+     "sfx": "laugh"
+    },
+    {
+     "bg": "street",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "aha",
+       "pose": "POINT_UP",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "shield",
+       "x": 640,
+       "y": 600,
+       "s": 1.8,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "เช็กใบอนุญาต ก.ล.ต.",
+       "x": 640,
+       "y": 110,
+       "size": 60,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      },
+      {
+       "text": "สายด่วน 1207",
+       "x": 640,
+       "y": 190,
+       "size": 70,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.5
+      }
+     ],
+     "at": "ก่อนโอนอะไร เช",
+     "sfx": "chime"
+    },
+    {
+     "bg": "street",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "smug",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "plead",
+       "pose": "CROSS",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [],
+     "at": "ก็ได้ แต่ถ้าสั",
+     "sfx": "laugh"
+    }
+   ]
+  },
+  {
+   "name": "4 napkin",
+   "direction": "A dry, deadpan older cousin who works at a bank (Nun) and her broke young cousin (Tang) eating at a pork-and-garlic rice shop. Nun speaks in short flat sentences with almost no emotion, a quiet dry sense of humor. Tang is tired and anxious. Natural conversation, clear Thai pronunciation, numbers spoken clearly.",
+   "lines": [
+    {
+     "speaker": "Tang",
+     "text": "พี่นุ่นครับ ผมมีปัญหาเรื่องเงิน",
+     "say": "พี่นุ่นครับ ผมมีปัญหาเรื่องเงิน"
+    },
+    {
+     "speaker": "Nun",
+     "text": "พี่ก็มี ต้องมานั่งกินข้าวกับแกนี่แหละ",
+     "say": "พี่ก็มี ต้องมานั่งกินข้าวกับแกนี่แหละ"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ร้านเดิมนะครับ ข้าวหมูกระเทียมหน้าธนาคาร",
+     "say": "ร้านเดิมนะครับ ข้าวหมูกระเทียมหน้าธนาคาร"
+    },
+    {
+     "speaker": "Nun",
+     "text": "ใครเลี้ยง",
+     "say": "ใครเลี้ยง"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ผมมีสามร้อยแปดสิบเจ็ดบาทครับ",
+     "say": "ผมมีสามร้อยแปดสิบเจ็ดบาทครับ"
+    },
+    {
+     "speaker": "Nun",
+     "text": "พอ หนึ่งล้านบาท หารยี่สิบสี่เดือน เท่ากับสี่หมื่นหนึ่งพันหกร้อยหกสิบเจ็ดบาทต่อเดือน",
+     "say": "พอ หนึ่งล้านบาท หารยี่สิบสี่เดือน เท่ากับสี่หมื่นหนึ่งพันหกร้อยหกสิบเจ็ดบาทต่อเดือน"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ผมเงินเดือนสองหมื่น ต่อให้ไม่กินไม่ใช้ ก็ได้แค่ครึ่งเดียว",
+     "say": "ผมเงินเดือนสองหมื่น ต่อให้ไม่กินไม่ใช้ ก็ได้แค่ครึ่งเดียว"
+    },
+    {
+     "speaker": "Nun",
+     "text": "อืม",
+     "say": "อืม"
+    },
+    {
+     "speaker": "Tang",
+     "text": "งั้นให้ดอกเบี้ยช่วยได้ไหมครับ",
+     "say": "งั้นให้ดอกเบี้ยช่วยได้ไหมครับ"
+    },
+    {
+     "speaker": "Nun",
+     "text": "พันธบัตรออมทรัพย์ตอนนี้ดอกเบี้ยประมาณหนึ่งจุดแปดต่อปี ถ้าแกเก็บเดือนละหนึ่งหมื่นทุกเดือน สองปี ดอกเบี้ยรวมได้ประมาณสี่พันสามร้อยบาท",
+     "say": "พันธบัตรออมทรัพย์ตอนนี้ดอกเบี้ยประมาณหนึ่งจุดแปดต่อปี ถ้าแกเก็บเดือนละหนึ่งหมื่นทุกเดือน สองปี ดอกเบี้ยรวมได้ประมาณสี่พันสามร้อยบาท"
+    },
+    {
+     "speaker": "Tang",
+     "text": "สี่พันกว่าบาท ในสองปี",
+     "say": "สี่พันกว่าบาท ในสองปี"
+    },
+    {
+     "speaker": "Nun",
+     "text": "ชานมไข่มุกประมาณเจ็ดสิบแก้ว",
+     "say": "ชานมไข่มุกประมาณเจ็ดสิบแก้ว"
+    },
+    {
+     "speaker": "Tang",
+     "text": "...ผมสั่งเดือนละสามสิบแก้วอยู่แล้วครับ",
+     "say": "...ผมสั่งเดือนละสามสิบแก้วอยู่แล้วครับ"
+    },
+    {
+     "speaker": "Nun",
+     "text": "ล้านแรกไม่ได้มาจากดอกเบี้ย มันมาจากการเก็บให้ได้เยอะ กับหาให้ได้เพิ่ม",
+     "say": "ล้านแรกไม่ได้มาจากดอกเบี้ย มันมาจากการเก็บให้ได้เยอะ กับหาให้ได้เพิ่ม"
+    }
+   ],
+   "stage": [
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "SHRUG",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ปัญหาเรื่องเงิน",
+       "x": 640,
+       "y": 120,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ]
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "gape",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gloat",
+       "pose": "CROSS",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "พี่ก็มี ต้องมา",
+     "sfx": "laugh"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "neutral",
+       "pose": "REST",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "ร้านเดิมนะครับ"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ใครเลี้ยง?",
+       "x": 640,
+       "y": 120,
+       "size": 80,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ใครเลี้ยง"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "387 บาท",
+       "x": 640,
+       "y": 120,
+       "size": 100,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ผมมีสามร้อยแปด"
+    },
+    {
+     "bg": "calc",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "WRITE_A",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [
+      {
+       "text": "1,000,000 ÷ 24 เดือน",
+       "x": 800,
+       "y": 190,
+       "size": 62,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.15
+      },
+      {
+       "text": "= 41,667 บาท / เดือน",
+       "x": 800,
+       "y": 300,
+       "size": 76,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.5
+      }
+     ],
+     "at": "พอ หนึ่งล้านบา",
+     "sfx": "ding"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "เงินเดือน 20,000  ได้แค่ครึ่งเดียว",
+       "x": 640,
+       "y": 120,
+       "size": 56,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ผมเงินเดือนสอง"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "eager",
+       "pose": "POINT_UP",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "งั้นให้ดอกเบี้"
+    },
+    {
+     "bg": "calc",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "gape",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_UP",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [
+      {
+       "text": "พันธบัตร ≈ 1.8% / ปี",
+       "x": 800,
+       "y": 150,
+       "size": 56,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.1
+      },
+      {
+       "text": "เก็บเดือนละ 10,000 นาน 2 ปี",
+       "x": 800,
+       "y": 240,
+       "size": 52,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.35
+      },
+      {
+       "text": "ดอกเบี้ยรวม ≈ 4,300 บาท",
+       "x": 800,
+       "y": 340,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.65
+      }
+     ],
+     "at": "พันธบัตรออมทรั",
+     "sfx": "chime"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "gape",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "สี่พันกว่าบาท "
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gloat",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 640,
+       "y": 660,
+       "s": 1.5,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "tea",
+       "x": 740,
+       "y": 660,
+       "s": 1.5,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ชานมไข่มุก ≈ 70 แก้ว",
+       "x": 640,
+       "y": 120,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ชานมไข่มุกประม",
+     "sfx": "laugh"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "SHRUG",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gloat",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "...ผมสั่งเดือน"
+    },
+    {
+     "bg": "calc",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "aha",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_UP",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [
+      {
+       "text": "เก็บให้ได้เยอะ",
+       "x": 800,
+       "y": 200,
+       "size": 76,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.1
+      },
+      {
+       "text": "+ หาให้ได้เพิ่ม",
+       "x": 800,
+       "y": 310,
+       "size": 76,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.5
+      }
+     ],
+     "at": "ล้านแรกไม่ได้ม",
+     "sfx": "chime"
+    }
+   ]
+  },
+  {
+   "name": "5 leaks",
+   "direction": "Nun (dry, deadpan, older cousin working at a bank, short flat sentences) reviews the spending of Tang (tired, embarrassed, a little defensive but honest) over a rice dish. Quiet dry humor, natural pacing, clear Thai pronunciation.",
+   "lines": [
+    {
+     "speaker": "Nun",
+     "text": "เปิดรายจ่ายเดือนที่แล้วมาดู",
+     "say": "เปิดรายจ่ายเดือนที่แล้วมาดู"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ชานมวันละแก้ว สั่งข้าวมากินแทบทุกวัน แล้วก็ผ่อนมือถือเครื่องใหม่ ศูนย์เปอร์เซ็นต์สิบเดือน",
+     "say": "ชานมวันละแก้ว สั่งข้าวมากินแทบทุกวัน แล้วก็ผ่อนมือถือเครื่องใหม่ ศูนย์เปอร์เซ็นต์สิบเดือน"
+    },
+    {
+     "speaker": "Nun",
+     "text": "ผ่อนเดือนละเท่าไหร่",
+     "say": "ผ่อนเดือนละเท่าไหร่"
+    },
+    {
+     "speaker": "Tang",
+     "text": "สามพันครับ แต่ไม่มีดอกเบี้ยนะพี่",
+     "say": "สามพันครับ แต่ไม่มีดอกเบี้ยนะพี่"
+    },
+    {
+     "speaker": "Nun",
+     "text": "ไม่มีดอกเบี้ย แต่ต้องจ่ายสามพันทุกเดือนเหมือนกัน",
+     "say": "ไม่มีดอกเบี้ย แต่ต้องจ่ายสามพันทุกเดือนเหมือนกัน"
+    },
+    {
+     "speaker": "Tang",
+     "text": "...ผมไม่เคยคิดแบบนี้เลย",
+     "say": "...ผมไม่เคยคิดแบบนี้เลย"
+    },
+    {
+     "speaker": "Nun",
+     "text": "ไม่เป็นไร พี่เขียนกฎให้ สามข้อ หนึ่ง ลบแอปช้อปปิ้ง สอง ของที่อยากได้ ให้รอสามวัน ถ้าสามวันแล้วยังอยากได้ค่อยซื้อ ถ้าสามวันแล้วยังไม่มีเงิน ก็จบ สาม เงินเดือนออกวันไหน โอนเก็บก่อนวันนั้นเลย",
+     "say": "ไม่เป็นไร พี่เขียนกฎให้ สามข้อ หนึ่ง ลบแอปช้อปปิ้ง สอง ของที่อยากได้ ให้รอสามวัน ถ้าสามวันแล้วยังอยากได้ค่อยซื้อ ถ้าสามวันแล้วยังไม่มีเงิน ก็จบ สาม เงินเดือนออกวันไหน โอนเก็บก่อนวันนั้นเลย"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ลบแอปเลยเหรอครับ ตอนนี้เลย",
+     "say": "ลบแอปเลยเหรอครับ ตอนนี้เลย"
+    },
+    {
+     "speaker": "Nun",
+     "text": "ตอนนี้",
+     "say": "ตอนนี้"
+    },
+    {
+     "speaker": "Tang",
+     "text": "...แอปมันถามว่า จะทิ้งโปรสิบเอ็ดสิบเอ็ดจริงเหรอคะ",
+     "say": "...แอปมันถามว่า จะทิ้งโปรสิบเอ็ดสิบเอ็ดจริงเหรอคะ"
+    },
+    {
+     "speaker": "Nun",
+     "text": "กดตกลง",
+     "say": "กดตกลง"
+    },
+    {
+     "speaker": "Tang",
+     "text": "กดแล้วครับ ...มือสั่น",
+     "say": "กดแล้วครับ ...มือสั่น"
+    }
+   ],
+   "stage": [
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": []
+    },
+    {
+     "bg": "mall",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "tea",
+       "x": 700,
+       "y": 660,
+       "s": 2.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "box",
+       "x": 900,
+       "y": 660,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "phone",
+       "x": 1080,
+       "y": 660,
+       "s": 1.2,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ผ่อน 0% 10 เดือน",
+       "x": 640,
+       "y": 120,
+       "size": 70,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.4
+      }
+     ],
+     "at": "ชานมวันละแก้ว "
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "ผ่อนเดือนละเท่"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "SHRUG",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "3,000 / เดือน  ไม่มีดอกเบี้ย",
+       "x": 640,
+       "y": 120,
+       "size": 56,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "สามพันครับ แต่"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gloat",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ไม่มีดอกเบี้ย  แต่ต้องจ่ายทุกเดือน",
+       "x": 640,
+       "y": 120,
+       "size": 54,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ไม่มีดอกเบี้ย ",
+     "sfx": "laugh"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "...ผมไม่เคยคิด"
+    },
+    {
+     "bg": "calc",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "WRITE_A",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [
+      {
+       "text": "1 ลบแอปช้อปปิ้ง",
+       "x": 800,
+       "y": 150,
+       "size": 62,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.1
+      },
+      {
+       "text": "2 ของที่อยากได้ รอ 3 วัน",
+       "x": 800,
+       "y": 250,
+       "size": 56,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.35
+      },
+      {
+       "text": "3 เงินเดือนออก โอนเก็บก่อน",
+       "x": 800,
+       "y": 350,
+       "size": 54,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.65
+      }
+     ],
+     "at": "ไม่เป็นไร พี่เ",
+     "sfx": "ding"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "POINT_UP",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "ลบแอปเลยเหรอคร"
+    },
+    {
+     "bg": "bedroom",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "phone",
+       "x": 900,
+       "y": 560,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {
+        "screen": [
+         250,
+         120,
+         90
+        ]
+       }
+      }
+     ],
+     "ov": [
+      {
+       "text": "จะทิ้งโปร 11.11 จริงเหรอคะ?",
+       "x": 640,
+       "y": 120,
+       "size": 56,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "...แอปมันถามว่",
+     "bgkw": {
+      "night": 0.6
+     }
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gloat",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "กดแล้วครับ ...",
+     "sfx": "thump"
+    }
+   ]
+  },
+  {
+   "name": "6 levels",
+   "direction": "At a table, Jin (a bubbly young woman who learns money rules from short videos, proud and quick-talking, then gets embarrassed) talks with Nun (dry, deadpan older cousin working at a bank, short flat sentences, quiet humor). Natural conversation, clear Thai pronunciation, numbers clearly.",
+   "lines": [
+    {
+     "speaker": "Jin",
+     "text": "เฮ้ย ฉันมีวิธีรวยใหม่! กฎห้าสิบสามสิบยี่สิบ ห้าสิบใช้จ่าย สามสิบของที่อยากได้ ยี่สิบเก็บ ทำตามนี้ก็รวยแล้ว",
+     "say": "เฮ้ย ฉันมีวิธีรวยใหม่! กฎห้าสิบสามสิบยี่สิบ ห้าสิบใช้จ่าย สามสิบของที่อยากได้ ยี่สิบเก็บ ทำตามนี้ก็รวยแล้ว"
+    },
+    {
+     "speaker": "Nun",
+     "text": "ยี่สิบเปอร์เซ็นต์ของสองหมื่น คือเดือนละสี่พัน สองปีได้เก้าหมื่นหกพัน",
+     "say": "ยี่สิบเปอร์เซ็นต์ของสองหมื่น คือเดือนละสี่พัน สองปีได้เก้าหมื่นหกพัน"
+    },
+    {
+     "speaker": "Jin",
+     "text": "ก็เกือบแสนแล้วนะ!",
+     "say": "ก็เกือบแสนแล้วนะ!"
+    },
+    {
+     "speaker": "Nun",
+     "text": "แล้วล้านล่ะ",
+     "say": "แล้วล้านล่ะ"
+    },
+    {
+     "speaker": "Jin",
+     "text": "เอ่อ... ก็ค่อย ๆ โตไง",
+     "say": "เอ่อ... ก็ค่อย ๆ โตไง"
+    },
+    {
+     "speaker": "Nun",
+     "text": "สูตรนี้ดีนะ แต่มันไม่ได้เสกเงินให้เพิ่ม เก็บเดือนละสี่พัน อีกสองปีก็ยังไม่ถึงล้าน",
+     "say": "สูตรนี้ดีนะ แต่มันไม่ได้เสกเงินให้เพิ่ม เก็บเดือนละสี่พัน อีกสองปีก็ยังไม่ถึงล้าน"
+    },
+    {
+     "speaker": "Nun",
+     "text": "ถามหน่อย เธอมีเงินสำรองฉุกเฉินหรือยัง",
+     "say": "ถามหน่อย เธอมีเงินสำรองฉุกเฉินหรือยัง"
+    },
+    {
+     "speaker": "Jin",
+     "text": "มีค่ะ!",
+     "say": "มีค่ะ!"
+    },
+    {
+     "speaker": "Nun",
+     "text": "เท่าไหร่",
+     "say": "เท่าไหร่"
+    },
+    {
+     "speaker": "Jin",
+     "text": "สองร้อยห้าสิบบาท",
+     "say": "สองร้อยห้าสิบบาท"
+    },
+    {
+     "speaker": "Nun",
+     "text": "นั่นเงินสำรอง หรือค่าข้าวพรุ่งนี้",
+     "say": "นั่นเงินสำรอง หรือค่าข้าวพรุ่งนี้"
+    },
+    {
+     "speaker": "Jin",
+     "text": "...ค่าข้าว",
+     "say": "...ค่าข้าว"
+    },
+    {
+     "speaker": "Nun",
+     "text": "เก็บเงินสำรองก่อน อย่างน้อยค่าใช้จ่ายสามเดือน เคลียร์หนี้ดอกแพงก่อน แล้วที่เหลือค่อยกระจายลงทุน",
+     "say": "เก็บเงินสำรองก่อน อย่างน้อยค่าใช้จ่ายสามเดือน เคลียร์หนี้ดอกแพงก่อน แล้วที่เหลือค่อยกระจายลงทุน"
+    },
+    {
+     "speaker": "Jin",
+     "text": "ถ้าฉันเอาทั้งหมดไปซื้อหุ้นที่เพื่อนแนะนำล่ะ",
+     "say": "ถ้าฉันเอาทั้งหมดไปซื้อหุ้นที่เพื่อนแนะนำล่ะ"
+    },
+    {
+     "speaker": "Nun",
+     "text": "ก็เตรียมได้เพื่อนใหม่",
+     "say": "ก็เตรียมได้เพื่อนใหม่"
+    },
+    {
+     "speaker": "Jin",
+     "text": "ใครอะ",
+     "say": "ใครอะ"
+    },
+    {
+     "speaker": "Nun",
+     "text": "เจ้าหนี้",
+     "say": "เจ้าหนี้"
+    }
+   ],
+   "stage": [
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "eager",
+       "pose": "POINT_UP",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "กฎ 50 / 30 / 20",
+       "x": 640,
+       "y": 120,
+       "size": 80,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "sfx": "pop"
+    },
+    {
+     "bg": "calc",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "aha",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "WRITE_A",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [
+      {
+       "text": "20% x 20,000 = 4,000",
+       "x": 800,
+       "y": 190,
+       "size": 62,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.1
+      },
+      {
+       "text": "x 24 เดือน = 96,000",
+       "x": 800,
+       "y": 300,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.45
+      }
+     ],
+     "at": "ยี่สิบเปอร์เซ็"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "shout",
+       "pose": "CHEER",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "ก็เกือบแสนแล้ว",
+     "sfx": "cheer"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "แล้วล้านล่ะ?",
+       "x": 640,
+       "y": 120,
+       "size": 100,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "แล้วล้านล่ะ",
+     "sfx": "gasp"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "SHRUG",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "เอ่อ... ก็ค่อย"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_UP",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "เก็บเดือนละ 4,000  อีก 2 ปีก็ยังไม่ถึงล้าน",
+       "x": 640,
+       "y": 120,
+       "size": 50,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "สูตรนี้ดีนะ แต"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "eager",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "เงินสำรองฉุกเฉิน?",
+       "x": 640,
+       "y": 120,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ถามหน่อย เธอมี"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "smug",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "CROSS",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "เท่าไหร่"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "SHRUG",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "250 บาท",
+       "x": 640,
+       "y": 120,
+       "size": 100,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "สองร้อยห้าสิบบ"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gloat",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "นั่นเงินสำรอง ",
+     "sfx": "laugh"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gloat",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "...ค่าข้าว"
+    },
+    {
+     "bg": "desk",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_UP",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "lock",
+       "x": 860,
+       "y": 620,
+       "s": 1.8,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "เงินสำรอง ≥ 3 เดือนก่อน",
+       "x": 640,
+       "y": 110,
+       "size": 56,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.1
+      },
+      {
+       "text": "เคลียร์หนี้ดอกแพง",
+       "x": 640,
+       "y": 190,
+       "size": 56,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.4
+      },
+      {
+       "text": "ที่เหลือค่อยกระจายลงทุน",
+       "x": 640,
+       "y": 270,
+       "size": 54,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.65
+      }
+     ],
+     "at": "เก็บเงินสำรองก",
+     "bgkw": {
+      "dusk": 0.3
+     }
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "POINT_UP",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "ถ้าฉันเอาทั้งห"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "gape",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gloat",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [],
+     "at": "ก็เตรียมได้เพื"
+    },
+    {
+     "bg": "grill",
+     "chars": [
+      {
+       "who": "jin",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "CROSS",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "steam",
+       "x": 640,
+       "y": 470,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "เจ้าหนี้",
+       "x": 640,
+       "y": 120,
+       "size": 110,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "เจ้าหนี้",
+     "sfx": "laugh"
+    }
+   ]
+  },
+  {
+   "name": "7 income",
+   "direction": "Nun (dry, deadpan older cousin at a bank, short flat sentences, quiet humor) pushes Tang (tired but now determined, a little proud, self-mocking) to earn more. Natural, a bit funny, real emotion in Tang's story about fixing a bad machine translation until 2 a.m. Clear Thai pronunciation.",
+   "lines": [
+    {
+     "speaker": "Nun",
+     "text": "ตังค์ เก็บเก่งอย่างเดียวไม่พอ เงินเดือนสองหมื่นไม่มีทางไปถึงล้านภายในสองปี ต้องหารายได้เพิ่ม",
+     "say": "ตังค์ เก็บเก่งอย่างเดียวไม่พอ เงินเดือนสองหมื่นไม่มีทางไปถึงล้านภายในสองปี ต้องหารายได้เพิ่ม"
+    },
+    {
+     "speaker": "Nun",
+     "text": "แกทำอะไรเป็นบ้าง ที่คนอื่นยอมจ่ายเงินให้",
+     "say": "แกทำอะไรเป็นบ้าง ที่คนอื่นยอมจ่ายเงินให้"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ผมแปลภาษาได้ ทำสไลด์เป็น แล้วก็ต้มมาม่าไม่ให้แฉะ",
+     "say": "ผมแปลภาษาได้ ทำสไลด์เป็น แล้วก็ต้มมาม่าไม่ให้แฉะ"
+    },
+    {
+     "speaker": "Nun",
+     "text": "เอาสองอย่างแรกก่อน",
+     "say": "เอาสองอย่างแรกก่อน"
+    },
+    {
+     "speaker": "Tang",
+     "text": "คืนนั้นผมรับงานแปลมาหนึ่งชิ้น ใช้เอไอช่วยร่าง แล้วนั่งตรวจทีละประโยค",
+     "say": "คืนนั้นผมรับงานแปลมาหนึ่งชิ้น ใช้เอไอช่วยร่าง แล้วนั่งตรวจทีละประโยค"
+    },
+    {
+     "speaker": "Tang",
+     "text": "เจอประโยคหนึ่ง เอไอแปลผิดจนความหมายกลับตาลปัตร ถ้าผมส่งไปแบบนั้น ลูกค้าคงไม่จ้างแปล คงจ้างทนายแทน",
+     "say": "เจอประโยคหนึ่ง เอไอแปลผิดจนความหมายกลับตาลปัตร ถ้าผมส่งไปแบบนั้น ลูกค้าคงไม่จ้างแปล คงจ้างทนายแทน"
+    },
+    {
+     "speaker": "Nun",
+     "text": "แล้วทำไง",
+     "say": "แล้วทำไง"
+    },
+    {
+     "speaker": "Tang",
+     "text": "นั่งแก้ทีละประโยคจนตีสอง ส่งตอนเช้า ลูกค้าจ่ายสามพันบาท",
+     "say": "นั่งแก้ทีละประโยคจนตีสอง ส่งตอนเช้า ลูกค้าจ่ายสามพันบาท"
+    },
+    {
+     "speaker": "Nun",
+     "text": "โอนเข้าบัญชีเก็บ ทั้งก้อน",
+     "say": "โอนเข้าบัญชีเก็บ ทั้งก้อน"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ผมอยากซื้อรองเท้านะพี่",
+     "say": "ผมอยากซื้อรองเท้านะพี่"
+    },
+    {
+     "speaker": "Nun",
+     "text": "อยากมีรองเท้า หรืออยากมีเงิน",
+     "say": "อยากมีรองเท้า หรืออยากมีเงิน"
+    },
+    {
+     "speaker": "Tang",
+     "text": "...อยากมีเงิน ตอนนี้",
+     "say": "...อยากมีเงิน ตอนนี้"
+    }
+   ],
+   "stage": [
+    {
+     "bg": "cowork",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_UP",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [
+      {
+       "text": "เก็บเก่งอย่างเดียวไม่พอ",
+       "x": 640,
+       "y": 120,
+       "size": 62,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ]
+    },
+    {
+     "bg": "cowork",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "think",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [],
+     "at": "แกทำอะไรเป็นบ้"
+    },
+    {
+     "bg": "cowork",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "think",
+       "pose": "THINK",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [],
+     "ov": [
+      {
+       "text": "แปลภาษา",
+       "x": 640,
+       "y": 110,
+       "size": 70,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      },
+      {
+       "text": "ทำสไลด์",
+       "x": 640,
+       "y": 190,
+       "size": 70,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.45
+      }
+     ],
+     "at": "ผมแปลภาษาได้ ท",
+     "sfx": "ding"
+    },
+    {
+     "bg": "cowork",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "laugh",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "CROSS",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [],
+     "at": "เอาสองอย่างแรก"
+    },
+    {
+     "bg": "desk",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "eager",
+       "pose": "WRITE_A",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "laptop",
+       "x": 700,
+       "y": 590,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "front",
+       "kw": {}
+      },
+      {
+       "k": "robot",
+       "x": 1000,
+       "y": 640,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "เอไอร่าง → ตังค์ตรวจทีละประโยค",
+       "x": 640,
+       "y": 110,
+       "size": 46,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "คืนนั้นผมรับงา",
+     "bgkw": {
+      "dusk": 1.0
+     }
+    },
+    {
+     "bg": "desk",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "HEADS",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "laptop",
+       "x": 700,
+       "y": 590,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "front",
+       "kw": {}
+      },
+      {
+       "k": "robot",
+       "x": 1000,
+       "y": 640,
+       "s": 1.6,
+       "at": 0.0,
+       "z": "back",
+       "kw": {
+        "mood": "worried"
+       }
+      }
+     ],
+     "ov": [
+      {
+       "text": "เอไอแปลผิด!",
+       "x": 640,
+       "y": 110,
+       "size": 90,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "เจอประโยคหนึ่ง",
+     "sfx": "gasp",
+     "bgkw": {
+      "dusk": 1.0
+     }
+    },
+    {
+     "bg": "cowork",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [],
+     "at": "แล้วทำไง"
+    },
+    {
+     "bg": "calc",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "happy",
+       "pose": "CHEER",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "bills",
+       "x": 900,
+       "y": 600,
+       "s": 2.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {
+        "n": 3
+       }
+      }
+     ],
+     "ov": [
+      {
+       "text": "ตี 2 ยังแก้งานอยู่",
+       "x": 640,
+       "y": 110,
+       "size": 56,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.1
+      },
+      {
+       "text": "+3,000 บาท",
+       "x": 640,
+       "y": 210,
+       "size": 100,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.5
+      }
+     ],
+     "at": "นั่งแก้ทีละประ",
+     "sfx": "chime"
+    },
+    {
+     "bg": "cowork",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "POINT_FWD",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [],
+     "at": "โอนเข้าบัญชีเก"
+    },
+    {
+     "bg": "cowork",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "plead",
+       "pose": "SHRUG",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "deadpan",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [],
+     "ov": [],
+     "at": "ผมอยากซื้อรองเ"
+    },
+    {
+     "bg": "cowork",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gloat",
+       "pose": "POINT_UP",
+       "talk": true
+      }
+     ],
+     "props": [],
+     "ov": [
+      {
+       "text": "อยากมีรองเท้า หรืออยากมีเงิน?",
+       "x": 640,
+       "y": 120,
+       "size": 54,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "อยากมีรองเท้า "
+    },
+    {
+     "bg": "desk",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "smug",
+       "pose": "POINT_FWD",
+       "talk": true
+      },
+      {
+       "who": "nun",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gloat",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "piggy",
+       "x": 860,
+       "y": 600,
+       "s": 1.8,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "อยากมีเงินมากกว่าอยากมีของ",
+       "x": 640,
+       "y": 120,
+       "size": 54,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "...อยากมีเงิน ",
+     "sfx": "pop",
+     "bgkw": {
+      "dusk": 0.8
+     }
+    }
+   ]
+  },
+  {
+   "name": "8 one year later",
+   "direction": "Tang (now calmer, quietly proud, dry humor, a little teasing) and his bubbly best friend Jin (a young woman who is still easily tempted, defensive then sheepish) talk over the phone and in person, one year later. Natural, warm, funny, clear Thai pronunciation. Tang ends by talking to the audience.",
+   "lines": [
+    {
+     "speaker": "Tang",
+     "text": "จิน ผ่านมาหนึ่งปีแล้ว ฉันเก็บได้สองแสนกว่า เงินสำรองครบ ผ่อนมือถือหมดแล้ว",
+     "say": "จิน ผ่านมาหนึ่งปีแล้ว ฉันเก็บได้สองแสนกว่า เงินสำรองครบ ผ่อนมือถือหมดแล้ว"
+    },
+    {
+     "speaker": "Jin",
+     "text": "แล้วล้านล่ะ",
+     "say": "แล้วล้านล่ะ"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ยังห่างอยู่ แต่ปีที่สองงานเสริมโตขึ้น รวมสองปีเก็บได้ห้าแสนกว่า ถ้าเก็บแบบนี้ต่อ ล้านแรกน่าจะมาในสามปีครึ่ง",
+     "say": "ยังห่างอยู่ แต่ปีที่สองงานเสริมโตขึ้น รวมสองปีเก็บได้ห้าแสนกว่า ถ้าเก็บแบบนี้ต่อ ล้านแรกน่าจะมาในสามปีครึ่ง"
+    },
+    {
+     "speaker": "Jin",
+     "text": "ช้าจัง! ฉันเจอสัมมนาใหม่ รวยในสิบห้าวัน ถูกกว่าเดิมครึ่งราคา",
+     "say": "ช้าจัง! ฉันเจอสัมมนาใหม่ รวยในสิบห้าวัน ถูกกว่าเดิมครึ่งราคา"
+    },
+    {
+     "speaker": "Tang",
+     "text": "จิน ใครรายได้สูงอยู่แล้ว หรือหารายได้เพิ่มได้เร็ว สองปีก็เป็นไปได้จริง แต่ถ้าใครบอกว่าไม่ต้องมีรายได้ ล้านใน สามสิบวัน นั่นแหละธงแดงสามผืนเดิม",
+     "say": "จิน ใครรายได้สูงอยู่แล้ว หรือหารายได้เพิ่มได้เร็ว สองปีก็เป็นไปได้จริง แต่ถ้าใครบอกว่าไม่ต้องมีรายได้ ล้านใน สามสิบวัน นั่นแหละธงแดงสามผืนเดิม"
+    },
+    {
+     "speaker": "Jin",
+     "text": "โอ๊ย ก็ได้ ฉันจะไม่โอน วันนี้",
+     "say": "โอ๊ย ก็ได้ ฉันจะไม่โอน วันนี้"
+    },
+    {
+     "speaker": "Tang",
+     "text": "วันนี้ก็ไม่ควรโอนนะ",
+     "say": "วันนี้ก็ไม่ควรโอนนะ"
+    },
+    {
+     "speaker": "Jin",
+     "text": "ก็ได้ ๆ",
+     "say": "ก็ได้ ๆ"
+    },
+    {
+     "speaker": "Tang",
+     "text": "เมื่อก่อนเหลือในบัญชีสามร้อย ตอนนี้เหลือสามพันสี่ร้อย อย่างน้อยตอนนี้เงินอยู่กับฉันเกินหนึ่งอาทิตย์",
+     "say": "เมื่อก่อนเหลือในบัญชีสามร้อย ตอนนี้เหลือสามพันสี่ร้อย อย่างน้อยตอนนี้เงินอยู่กับฉันเกินหนึ่งอาทิตย์"
+    },
+    {
+     "speaker": "Tang",
+     "text": "ใครอยู่จุดเริ่มต้นแบบฉัน บอกเป้าหมายเก็บเงินของคุณไว้ในคอมเมนต์ได้เลย",
+     "say": "ใครอยู่จุดเริ่มต้นแบบฉัน บอกเป้าหมายเก็บเงินของคุณไว้ในคอมเมนต์ได้เลย"
+    }
+   ],
+   "stage": [
+    {
+     "bg": "calc",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "happy",
+       "pose": "CHEER",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "eager",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "calendar",
+       "x": 900,
+       "y": 600,
+       "s": 1.8,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "1 ปีผ่านไป  เก็บได้ 200,000+",
+       "x": 640,
+       "y": 110,
+       "size": 60,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "sfx": "chime"
+    },
+    {
+     "bg": "bedroom",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "smug",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "plead",
+       "pose": "SHRUG",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "phone",
+       "x": 640,
+       "y": 560,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {
+        "screen": [
+         40,
+         190,
+         120
+        ]
+       }
+      }
+     ],
+     "ov": [
+      {
+       "text": "แล้วล้านล่ะ?",
+       "x": 640,
+       "y": 110,
+       "size": 90,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "แล้วล้านล่ะ"
+    },
+    {
+     "bg": "calc",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "aha",
+       "pose": "POINT_UP",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "chart",
+       "x": 900,
+       "y": 600,
+       "s": 2.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {
+        "kind": "up"
+       }
+      }
+     ],
+     "ov": [
+      {
+       "text": "2 ปี ≈ 500,000+",
+       "x": 640,
+       "y": 110,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.15
+      },
+      {
+       "text": "ถึงล้าน ≈ 3 ปีครึ่ง",
+       "x": 640,
+       "y": 200,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.5
+      }
+     ],
+     "at": "ยังห่างอยู่ แต",
+     "sfx": "chime"
+    },
+    {
+     "bg": "bedroom",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "yikes",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "shout",
+       "pose": "ARMS_UP",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "phone",
+       "x": 640,
+       "y": 560,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {
+        "screen": [
+         40,
+         190,
+         120
+        ]
+       }
+      }
+     ],
+     "ov": [
+      {
+       "text": "รวยใน 15 วัน  ครึ่งราคา!",
+       "x": 640,
+       "y": 110,
+       "size": 66,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "ช้าจัง! ฉันเจอ",
+     "sfx": "cheer"
+    },
+    {
+     "bg": "street",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "POINT_FWD",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "plead",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "flag",
+       "x": 560,
+       "y": 620,
+       "s": 1.8,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "flag",
+       "x": 680,
+       "y": 620,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      },
+      {
+       "k": "flag",
+       "x": 800,
+       "y": 620,
+       "s": 1.8,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "ธงแดง x 3",
+       "x": 640,
+       "y": 110,
+       "size": 100,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.4
+      }
+     ],
+     "at": "จิน ใครรายได้ส"
+    },
+    {
+     "bg": "bedroom",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "smug",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "plead",
+       "pose": "CROSS",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "phone",
+       "x": 640,
+       "y": 560,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {
+        "screen": [
+         40,
+         190,
+         120
+        ]
+       }
+      }
+     ],
+     "ov": [],
+     "at": "โอ๊ย ก็ได้ ฉัน"
+    },
+    {
+     "bg": "bedroom",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "deadpan",
+       "pose": "POINT_UP",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "worried",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "phone",
+       "x": 640,
+       "y": 560,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {
+        "screen": [
+         40,
+         190,
+         120
+        ]
+       }
+      }
+     ],
+     "ov": [],
+     "at": "วันนี้ก็ไม่ควร",
+     "sfx": "laugh"
+    },
+    {
+     "bg": "bedroom",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "laugh",
+       "pose": "REST",
+       "talk": false
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "worried",
+       "pose": "HEADS",
+       "talk": true
+      }
+     ],
+     "props": [
+      {
+       "k": "phone",
+       "x": 640,
+       "y": 560,
+       "s": 1.4,
+       "at": 0.0,
+       "z": "back",
+       "kw": {
+        "screen": [
+         40,
+         190,
+         120
+        ]
+       }
+      }
+     ],
+     "ov": [],
+     "at": "ก็ได้ ๆ"
+    },
+    {
+     "bg": "bedroom",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "laugh",
+       "pose": "CHEER",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "gloat",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "phone",
+       "x": 640,
+       "y": 560,
+       "s": 1.5,
+       "at": 0.0,
+       "z": "back",
+       "kw": {
+        "screen": [
+         40,
+         190,
+         120
+        ]
+       }
+      }
+     ],
+     "ov": [
+      {
+       "text": "3,400 บาท",
+       "x": 640,
+       "y": 120,
+       "size": 100,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      }
+     ],
+     "at": "เมื่อก่อนเหลือ",
+     "sfx": "ding",
+     "bgkw": {
+      "night": 0.7
+     }
+    },
+    {
+     "bg": "dream",
+     "chars": [
+      {
+       "who": "tang",
+       "x": 330,
+       "y": 700,
+       "k": 0.95,
+       "th": 30,
+       "flip": false,
+       "ex": "happy",
+       "pose": "POINT_FWD",
+       "talk": true
+      },
+      {
+       "who": "jin",
+       "x": 950,
+       "y": 700,
+       "k": 0.95,
+       "th": -30,
+       "flip": true,
+       "ex": "laugh",
+       "pose": "REST",
+       "talk": false
+      }
+     ],
+     "props": [
+      {
+       "k": "piggy",
+       "x": 640,
+       "y": 650,
+       "s": 2.0,
+       "at": 0.0,
+       "z": "back",
+       "kw": {}
+      }
+     ],
+     "ov": [
+      {
+       "text": "เป้าหมายเก็บเงินของคุณคือเท่าไหร่?",
+       "x": 640,
+       "y": 110,
+       "size": 56,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.2
+      },
+      {
+       "text": "เรื่องสมมติเพื่อความบันเทิง ไม่ใช่คำแนะนำการลงทุน",
+       "x": 640,
+       "y": 640,
+       "size": 40,
+       "col": [
+        255,
+        255,
+        255
+       ],
+       "at": 0.4
+      }
+     ],
+     "at": "ใครอยู่จุดเริ่",
+     "sfx": "cheer"
+    }
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "name": "พันธบัตรออมพลัส (ไทยพับลิก้า)",
+   "url": "https://thaipublica.org/2026/07/ministry-of-finance-launches-sale-of-om-plus-savings-bonds/",
+   "supports": "ดอกเบี้ยคงที่ 1.80% ต่อปีรุ่น 3 ปี และ 2.80% รุ่น 10 ปี (เริ่มขาย 31 ก.ค. 2569)"
+  },
+  {
+   "name": "หนี้ครัวเรือนไทย เฉลี่ยเกือบ 800,000 บาท (Nation Thailand)",
+   "url": "https://www.nationthailand.com/business/economy/40071155",
+   "supports": "ผลสำรวจ UTCC: หนี้เฉลี่ยต่อครัวเรือนเกือบ 800,000 บาท; หนี้ BNPL เพิ่ม (ผลค้นหาสรุป ตรวจตัวเลขกับต้นฉบับก่อนอ้าง)"
+  },
+  {
+   "name": "หนี้ครัวเรือน/BNPL ในคนอายุน้อย (SCB EIC, Thaipublica)",
+   "url": "https://thaipublica.org/2026/07/scb-eic-on-household-debt-q1-2026/",
+   "supports": "สัดส่วนหนี้ครัวเรือนต่อ GDP และความเสี่ยงที่ยังอยู่"
+  },
+  {
+   "name": "กฎ 50/30/20 และเงินสำรองฉุกเฉิน 3-6 เดือน (Mitihoon / Café Invest)",
+   "url": "https://www.innovestx.co.th/cafeinvest/th/articles/build-your-portfolio-20260818",
+   "supports": "แนวทางแบ่งรายได้และขนาดเงินสำรองฉุกเฉิน (แนวทางทั่วไป ไม่ใช่คำแนะนำเฉพาะบุคคล)"
+  },
+  {
+   "name": "ก.ล.ต. แนะนำข้อควรระวัง/สายด่วน 1207 (Thaipublica)",
+   "url": "https://thaipublica.org/2021/01/sec-cryptocurrency-14-01-2564/",
+   "supports": "ตรวจสอบใบอนุญาต และสายด่วน 1207 ของศูนย์บริการประชาชน ก.ล.ต."
+  },
+  {
+   "name": "ใช้ AI หารายได้ (บทความทั่วไป)",
+   "url": "https://clickup.com/th/blog/585511/how-to-make-money-with-ai",
+   "supports": "AI ช่วยเร่งงานของคนที่มีทักษะ; ตัวเลขรายได้จากผู้ขายคอร์สตรวจสอบยาก"
+  }
+ ],
+ "cover": {
+  "bg": "dream",
+  "chars": [
+   {
+    "who": "tang",
+    "x": 420,
+    "y": 720,
+    "k": 1.3,
+    "th": 30,
+    "flip": false,
+    "ex": "laugh",
+    "pose": "CHEER",
+    "talk": false
+   },
+   {
+    "who": "jin",
+    "x": 880,
+    "y": 720,
+    "k": 1.3,
+    "th": -30,
+    "flip": true,
+    "ex": "aha",
+    "pose": "ARMS_UP",
+    "talk": false
+   }
+  ],
+  "props": [
+   {
+    "k": "moneybag",
+    "x": 640,
+    "y": 690,
+    "s": 2.6,
+    "at": 0.0,
+    "z": "back",
+    "kw": {}
+   },
+   {
+    "k": "coins",
+    "x": 150,
+    "y": 700,
+    "s": 2.4,
+    "at": 0.0,
+    "z": "back",
+    "kw": {
+     "n": 7
+    }
+   },
+   {
+    "k": "piggy",
+    "x": 1130,
+    "y": 700,
+    "s": 2.0,
+    "at": 0.0,
+    "z": "back",
+    "kw": {}
+   }
+  ],
+  "text": "เงินล้านใน 2 ปี\nทำได้จริงไหม?"
+ },
+ "theme": "เงินและ AI",
+ "topic": "ตังค์อยากมีเงินล้านใน 2 ปี เกือบโดนสัมมนารวยเร็วหลอก แล้วพี่นุ่นสอนตัวเลขจริง (เรื่องสมมติเพื่อความบันเทิง ตัวละครพูดกันเอง ไม่มีผู้เล่า)"
+}

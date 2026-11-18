@@ -1,0 +1,23 @@
+{
+  "id": "app_voice",
+  "name": "แอปเดลิเวอรี",
+  "role": "app",
+  "gender": "female",
+  "age": "n/a",
+  "fixed": [
+    "เสียงระบบอัตโนมัติ สุภาพ เรียบ"
+  ],
+  "draw": {
+    "kind": "none"
+  },
+  "outfits": {
+    "default": {}
+  },
+  "voice": {
+    "gemini": "Sulafat",
+    "edge": "th-TH-PremwadeeNeural",
+    "edge_pitch": "+4Hz",
+    "edge_rate": "-4%"
+  },
+  "subtitle_color": "#C9D2FF"
+}

@@ -1,0 +1,43 @@
+{
+  "id": "pom_white",
+  "name": "สาคู",
+  "role": "dog",
+  "gender": "male",
+  "age": "adult",
+  "fixed": [
+    "ปอมเมอเรเนียนสีขาวล้วน",
+    "หมดอาลัยตายอยาก ถอนหายใจ",
+    "ทิ้งตัวนอน หันหลังให้โลก"
+  ],
+  "draw": {
+    "kind": "dog",
+    "breed": "pom",
+    "scale_mul": 0.62,
+    "coat": "#FBF8F3",
+    "light": "#FFFFFF",
+    "face_dy": 250
+  },
+  "outfits": {
+    "default": {
+      "brows": "sad"
+    },
+    "lying": {
+      "lying": true,
+      "eyes": "closed",
+      "brows": "sad",
+      "face_dy": 470
+    },
+    "back": {
+      "back": true,
+      "lying": true,
+      "face_dy": 470
+    }
+  },
+  "voice": {
+    "gemini": "Iapetus",
+    "edge": "th-TH-NiwatNeural",
+    "edge_pitch": "+14Hz",
+    "edge_rate": "-8%"
+  },
+  "subtitle_color": "#F4F4F4"
+}

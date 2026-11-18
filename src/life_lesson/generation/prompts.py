@@ -28,6 +28,9 @@ or "need to" do.
 problem.
 - Use generic motivational clichés (e.g. "never give up", "tomorrow is a new day").
 - Use manipulative, guilt-tripping, or preachy language.
+- Lean on the stock phrase "ความเงียบงัน" / "ท่ามกลางความเงียบงัน" (overused \
+across episodes). Vary the wording, or leave the phrase out; it should sound \
+like a real person talking, not a literary template.
 
 It MUST:
 - Observe a specific, grounded human experience without rushing to resolve it.

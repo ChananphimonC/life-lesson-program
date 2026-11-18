@@ -1,0 +1,46 @@
+{
+  "id": "katharine",
+  "name": "แคทารีน (แม่)",
+  "role": "historical-figure-generic",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "ตัวการ์ตูนทั่วไปแทนบุคคลในประวัติศาสตร์ ไม่ได้ลอกหน้าคนจริง",
+    "ผมดัดสีเทา",
+    "แว่นตา",
+    "ชุดยุค 1920"
+  ],
+  "draw": {
+    "kind": "person",
+    "skin": "#F1C8A2",
+    "cheek": "#E8948C",
+    "hair": "#9A9AA2",
+    "hair_style": "perm",
+    "glasses": true
+  },
+  "outfits": {
+    "default": {
+      "top": "#7A5C8C",
+      "accent": "#E8D8C0",
+      "top_style": "shirt",
+      "bottom": "#4C3C58",
+      "skirt": true,
+      "arms": "phone",
+      "prop": "book"
+    },
+    "book": {
+      "top": "#7A5C8C",
+      "accent": "#E8D8C0",
+      "top_style": "shirt",
+      "bottom": "#4C3C58",
+      "skirt": true,
+      "arms": "phone",
+      "prop": "book"
+    }
+  },
+  "voice": {
+    "gemini": "Kore",
+    "edge": "th-TH-PremwadeeNeural"
+  },
+  "subtitle_color": "#E0C8F0"
+}

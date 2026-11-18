@@ -1,0 +1,15 @@
+{
+  "id": "star_c",
+  "name": "ดารา",
+  "role": "star",
+  "gender": "female",
+  "age": "adult",
+  "fixed": ["ชุดราตรีวิบวับ", "ผมยาวจัดทรง", "มงกุฎ/ที่คาดผมประดับ", "ต่างหูทอง", "ท่าโบกมือแบบดารา"],
+  "draw": {"kind": "star", "skin": "#F5CFA9", "cheek": "#EE8F96"},
+  "outfits": {
+    "default": {"hair": "#5B1E3A", "gown": "#C2338F", "gown_light": "#E86CC0", "gold": "#F6C945", "shoe": "#7A1F4D"},
+    "blue_gown": {"hair": "#2E2438", "gown": "#2F6FC4", "gown_light": "#6FA6EC", "gold": "#F6C945", "shoe": "#1F3F7A"}
+  },
+  "voice": {"gemini": "Leda", "edge": "th-TH-PremwadeeNeural", "edge_rate": "+0%", "edge_pitch": "+25Hz"},
+  "subtitle_color": "#D9A6FF"
+}

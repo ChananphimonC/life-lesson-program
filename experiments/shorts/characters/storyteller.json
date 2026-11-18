@@ -1,0 +1,22 @@
+{
+  "id": "storyteller",
+  "name": "ผู้เล่าเรื่อง",
+  "role": "narrator",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "เสียงเล่าเรื่องอบอุ่น เป็นกันเอง ไม่ปรากฏตัวในภาพ"
+  ],
+  "draw": {
+    "kind": "none"
+  },
+  "outfits": {
+    "default": {}
+  },
+  "voice": {
+    "gemini": "Sulafat",
+    "edge": "th-TH-PremwadeeNeural",
+    "edge_rate": "-4%"
+  },
+  "subtitle_color": "#FFFFFF"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "pom_brown",
+  "name": "ลูกตาล",
+  "role": "dog",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "ปอมเมอเรเนียนสีน้ำตาล",
+    "ขนฟู แผงคอสีอ่อน",
+    "คุณหนูขี้เหวี่ยง ไม่อยากโดนน้ำ"
+  ],
+  "draw": {
+    "kind": "dog",
+    "breed": "pom",
+    "scale_mul": 0.62,
+    "coat": "#C27B43",
+    "light": "#F3D9B8",
+    "light_ruff": true,
+    "face_dy": 250
+  },
+  "outfits": {
+    "default": {
+      "brows": "angry"
+    },
+    "calm": {}
+  },
+  "voice": {
+    "gemini": "Aoede",
+    "edge": "th-TH-PremwadeeNeural",
+    "edge_pitch": "+28Hz",
+    "edge_rate": "+2%"
+  },
+  "subtitle_color": "#F0B47A"
+}

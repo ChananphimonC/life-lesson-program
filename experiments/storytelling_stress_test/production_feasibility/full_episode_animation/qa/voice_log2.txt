@@ -1,0 +1,94 @@
+s0      5.0 kaew  nat  4.06s win  4.6s speed 1.00 ends   9.10 (window ends   9.6)  กระดาษแผ่นนี้ พับครึ่งไปเรื่อย ๆ พับกี่ค
+s0     10.8 ton   nat  0.61s win  1.8s speed 1.00 ends  11.45 (window ends  12.6)  ถามเล่นป่ะ
+s0     13.0 kaew  nat  2.73s win  3.4s speed 1.00 ends  15.77 (window ends  16.4)  คนที่ทายห่างที่สุด ล้างจานงานวัดทั้งคืน
+s0     16.4 kaew  nat  2.61s win  2.8s speed 1.00 ends  19.05 (window ends  19.2)  คำตอบอยู่ในซอง ปิดผนึกตั้งแต่เมื่อวาน
+s0     20.0 uean  nat  2.16s win  3.0s speed 1.00 ends  22.20 (window ends  23.0)  ล้างจานทั้งงาน สี่ร้อยชามเลยนะยายแก้ว
+s0     23.0 kaew  nat  1.71s win  2.0s speed 1.00 ends  24.75 (window ends  25.0)  สี่ร้อยสิบ ป้าเอื้อนเล่นไหม
+s0     33.4 ton   nat  0.56s win  1.8s speed 1.00 ends  34.00 (window ends  35.2)  ล้านครั้ง!
+s0     35.4 uean  nat  0.73s win  1.4s speed 1.00 ends  36.17 (window ends  36.8)  ห้าร้อย
+s0     37.0 chok  nat  1.14s win  1.6s speed 1.00 ends  38.18 (window ends  38.6)  ผมขอไม่บอกก่อน
+s0     38.7 kaew  nat  0.80s win  1.1s speed 1.00 ends  39.54 (window ends  39.8)  ห้ามไม่บอก
+s0     40.2 chok  nat  0.40s win  2.2s speed 1.00 ends  40.64 (window ends  42.4)  แปดสิบ
+s1      0.6 ton   nat  1.95s win  2.4s speed 1.00 ends   2.59 (window ends   3.0)  ล้านครั้งก็เหมือนกัน ผมพับให้ดูเลย
+s1     17.6 ton   nat  0.89s win  2.2s speed 1.00 ends  18.53 (window ends  19.8)  เจ็ด ... ไม่ไหวแล้ว ...
+s1     19.9 uean  nat  1.62s win  2.5s speed 1.00 ends  21.56 (window ends  22.4)  เจ็ดครั้งก็ไม่ไหว ล้านครั้งเหรอ
+s1     22.5 ton   nat  2.21s win  3.1s speed 1.00 ends  24.75 (window ends  25.6)  งั้นพับไม่ได้ก็ไม่ต้องนับ! ยกเลิกเกม!
+s1     25.8 kaew  nat  3.32s win  3.8s speed 1.00 ends  29.16 (window ends  29.6)  ซองไม่ได้ถามว่าพับได้ไหม ซองถามว่า ถ้าพั
+s1     29.8 ton   nat  0.72s win  1.2s speed 1.00 ends  30.56 (window ends  31.0)  ไม่ยุติธรรม
+s1     31.1 kaew  nat  2.73s win  3.9s speed 1.00 ends  33.87 (window ends  35.0)  ยุติธรรมตรงที่ทุกคนทายโดยไม่รู้คำตอบ
+s1     35.4 chok  nat  2.79s win  5.2s speed 1.00 ends  38.23 (window ends  40.6)  เขาไม่ชอบถูกกด แต่ไม่ได้แปลว่าพับต่อไม่ไ
+s2      5.2 kaew  nat  1.34s win  2.0s speed 1.00 ends   6.58 (window ends   7.2)  แผ่นเดียวหนาเท่าไหร่
+s2      7.6 ton   nat  0.91s win  2.4s speed 1.00 ends   8.55 (window ends  10.0)  ศูนย์จุดหนึ่งมิล
+s2     10.4 kaew  nat  2.60s win  4.0s speed 1.00 ends  13.04 (window ends  14.4)  ทีนี้เอาก้อนที่พับหกครั้ง กับเจ็ดครั้ง ม
+s2     20.2 ton   nat  0.71s win  1.8s speed 1.00 ends  20.95 (window ends  22.0)  เท่าตัวพอดี
+s2     22.2 uean  nat  0.64s win  1.0s speed 1.00 ends  22.88 (window ends  23.2)  แล้วไง
+s2     23.4 ton   nat  1.91s win  3.2s speed 1.00 ends  25.35 (window ends  26.6)  พับเพิ่มครั้งเดียว มันหนาเพิ่มเท่าตัวเลย
+s2     26.8 chok  nat  1.37s win  2.0s speed 1.00 ends  28.21 (window ends  28.8)  เพราะมันซ้อนทับตัวเอง
+s3      0.5 kaew  nat  4.31s win  4.9s speed 1.00 ends   4.85 (window ends   5.4)  ทายเล่น ๆ ก่อนเปิดซอง ถ้าพับยี่สิบครั้ง 
+s3      5.8 chok  nat  3.25s win  4.6s speed 1.00 ends   9.09 (window ends  10.4)  ผมไม่เชื่อตัวเลข ผมเชื่อสายว่าว ใครรู้ ผ
+s3     10.6 ton   nat  1.52s win  2.0s speed 1.00 ends  12.16 (window ends  12.6)  ง่ายจะตาย คูณสอง ยี่สิบรอบ
+s3     19.6 ton   nat  1.04s win  3.0s speed 1.00 ends  20.68 (window ends  22.6)  ... ทำไมยาวขนาดนี้
+s3     22.8 chok  nat  1.55s win  2.0s speed 1.00 ends  24.39 (window ends  24.8)  ผมขอดูด้วยตา ตามมา
+s3     38.0 chok  nat  0.55s win  1.4s speed 1.00 ends  38.59 (window ends  39.4)  ถึงแล้ว!
+s3     45.2 uean  nat  1.41s win  3.8s speed 1.00 ends  46.65 (window ends  49.0)  นี่ ... กระดาษแผ่นเดียวเหรอ
+s3     49.2 ton   nat  1.04s win  2.0s speed 1.00 ends  50.28 (window ends  51.2)  ผมเขียนเท่าร้านนี้
+s3     51.4 uean  nat  1.15s win  1.6s speed 1.00 ends  52.59 (window ends  53.0)  ฉันเขียนต้นมะม่วง
+s3     53.2 chok  nat  0.96s win  1.4s speed 1.00 ends  54.20 (window ends  54.6)  ผมไม่ได้เขียน
+s3     54.8 uean  nat  0.49s win  1.2s speed 1.00 ends  55.33 (window ends  56.0)  โกง
+s3     62.0 ton   nat  3.97s win  6.0s speed 1.00 ends  66.01 (window ends  68.0)  ที่นี่ ... ถ้ายาวขนาดนี้ ... อีกสิบครั้ง
+s3     73.0 chok  nat  0.64s win  1.6s speed 1.00 ends  73.68 (window ends  74.6)  ดวงจันทร์ล่ะ
+s3     77.0 ton   nat  2.28s win  2.6s speed 1.00 ends  79.32 (window ends  79.6)  สี่สิบสอง! คำตอบคือสี่สิบสอง!
+s3     80.4 uean  nat  1.43s win  2.6s speed 1.00 ends  81.87 (window ends  83.0)  แล้วเอ็งเขียนอะไรหย่อนไป
+s3     86.0 ton   nat  0.54s win  1.4s speed 1.00 ends  86.58 (window ends  87.4)  ล้านครั้ง
+s3     88.6 ton   nat  0.94s win  1.2s speed 1.00 ends  89.58 (window ends  89.8)  ยาย ขอแก้คำตอบ
+s3     89.9 kaew  nat  1.25s win  1.1s speed 1.14 ends  91.04 (window ends  91.0)  ส่งแล้วส่งเลย
+s3     91.1 ton   nat  0.85s win  1.3s speed 1.00 ends  91.99 (window ends  92.4)  แต่ผมรู้แล้วนะ!
+s3     92.5 kaew  nat  0.72s win  0.8s speed 1.00 ends  93.26 (window ends  93.3)  ตอนนี้
+s3     93.4 uean  nat  1.56s win  1.6s speed 1.00 ends  95.00 (window ends  95.0)  หลานฉลาด แต่ฉลาดทีหลัง
+s4a     0.4 ton   nat  3.95s win  4.0s speed 1.00 ends   4.39 (window ends   4.4)  ยาย ถ้าผมพิสูจน์ได้ว่าไม่มีใครพับสี่สิบส
+s4a     4.6 kaew  nat  0.83s win  1.4s speed 1.00 ends   5.47 (window ends   6.0)  เชิญพิสูจน์
+s4a     6.4 ton   nat  1.70s win  2.0s speed 1.00 ends   8.14 (window ends   8.4)  ลุงโชค ผมขอม้วนกระดาษทำว่าว
+s4a     8.6 chok  nat  2.14s win  2.8s speed 1.00 ends  10.78 (window ends  11.4)  ม้วนนี้ทำว่าวงานพรุ่งนี้ ยาวร้อยเมตร
+s4a    11.6 ton   nat  3.63s win  4.0s speed 1.00 ends  15.27 (window ends  15.6)  ผมขอแค่คืนนี้ ถ้าเสีย ผมช่วยลุงทำว่าวใหม
+s4a    16.0 chok  nat  4.51s win  4.6s speed 1.00 ends  20.55 (window ends  20.6)  ได้ แต่พับทางเดียว ให้ยาวที่สุดเท่าที่ทำ
+s4a    24.0 ton   nat  3.23s win  5.0s speed 1.00 ends  27.27 (window ends  29.0)  ชาวบ้านทุกคน มาที่ลานวัดด่วน! ผมจะพิสูจน
+s4a    48.4 chok  nat  0.89s win  3.0s speed 1.00 ends  49.33 (window ends  51.4)  พร้อม ... พับหนึ่ง!
+s4b     0.0 chok  nat  0.52s win  2.6s speed 1.00 ends   0.56 (window ends   2.6)  พับหนึ่ง!
+s4b     3.3 chok  nat  0.71s win  2.6s speed 1.00 ends   4.05 (window ends   5.9)  พับสอง!
+s4b     6.5 chok  nat  0.71s win  2.7s speed 1.00 ends   7.25 (window ends   9.2)  พับสาม!
+s4b    10.1 chok  nat  0.52s win  2.7s speed 1.00 ends  10.66 (window ends  12.8)  พับสี่!
+s4b    13.7 chok  nat  0.44s win  2.5s speed 1.00 ends  14.18 (window ends  16.2)  ห้า!
+s4b    17.7 chok  nat  0.25s win  2.3s speed 1.00 ends  17.99 (window ends  20.0)  หก!
+s4b    21.4 ton   nat  1.55s win  4.0s speed 1.00 ends  22.99 (window ends  25.4)  เจ็ดแล้ว! เห็นไหมว่าใกล้หมด!
+s4c     4.2 chok  nat  0.28s win  1.2s speed 1.00 ends   4.52 (window ends   5.4)  แปด!
+s4c     9.2 chok  nat  0.40s win  1.8s speed 1.00 ends   9.64 (window ends  11.0)  เก้า!
+s4c    13.0 chok  nat  0.27s win  1.6s speed 1.00 ends  13.31 (window ends  14.6)  สิบ!
+s4c    17.9 ton   nat  1.07s win  1.5s speed 1.00 ends  19.01 (window ends  19.4)  แผนผมพังหมดแล้ว
+s4c    20.6 chok  nat  1.57s win  3.4s speed 1.00 ends  22.21 (window ends  24.0)  ต่ออีกครั้งไหวไหม พับสิบเอ็ด!
+s4c    30.6 ton   nat  0.20s win  1.8s speed 1.00 ends  30.84 (window ends  32.4)  หยุด!
+s4c    32.5 ton   nat  1.00s win  2.9s speed 1.00 ends  33.54 (window ends  35.4)  อย่าฉีกม้วนลุงโชค!
+s4c    38.0 chok  nat  4.92s win  4.6s speed 1.07 ends  42.64 (window ends  42.6)  กระดาษเขาไม่ยอมงอเป็นมุมแหลม เขาต้องอ้อม
+s4c    42.8 chok  nat  2.07s win  3.4s speed 1.00 ends  44.91 (window ends  46.2)  ชั้นนอกสุดต้องอ้อมไกลกว่าชั้นในสุด
+s4c    46.8 ton   nat  3.88s win  3.6s speed 1.08 ends  50.44 (window ends  50.4)  ถ้าก้อนหนาขึ้นเท่าตัว วงก็ใหญ่ขึ้นเท่าตั
+s4c    50.6 ton   nat  3.73s win  4.0s speed 1.00 ends  54.37 (window ends  54.6)  กระดาษที่ต้องใช้ก็ ... สี่เท่า ครั้งที่ส
+s4c    55.0 chok  nat  0.78s win  1.4s speed 1.00 ends  55.82 (window ends  56.4)  ฟังเข้าท่า
+s4c    58.0 ton   nat  2.45s win  4.0s speed 1.00 ends  60.49 (window ends  62.0)  ยาย ถ้าจะพับสี่สิบสองครั้ง กระดาษต้องยาว
+s4c    62.2 kaew  nat  2.43s win  3.2s speed 1.00 ends  64.67 (window ends  65.4)  ตัวเลขพวกนั้น เอ็งหาเอง ฉันไม่เฉลย
+s4c    65.6 ton   nat  0.73s win  1.4s speed 1.00 ends  66.37 (window ends  67.0)  ยาย บอกที
+s4c    67.2 kaew  nat  4.44s win  5.4s speed 1.00 ends  71.68 (window ends  72.6)  แสงที่วิ่งเร็วที่สุดในจักรวาล วิ่งตามกระ
+s4c    77.0 ton   nat  1.15s win  2.4s speed 1.00 ends  78.19 (window ends  79.4)  งั้นพับไม่ได้จริง ๆ
+s4c    79.8 kaew  nat  1.82s win  3.8s speed 1.00 ends  81.66 (window ends  83.6)  ซองไม่ได้ถามว่าพับได้ไหม
+s5      6.4 kaew  nat  0.96s win  2.2s speed 1.00 ends   7.40 (window ends   8.6)  สี่สิบสอง
+s5     13.2 uean  nat  0.82s win  2.0s speed 1.00 ends  14.06 (window ends  15.2)  ลุงโชคใกล้สุด
+s5     15.4 chok  nat  0.91s win  1.8s speed 1.00 ends  16.35 (window ends  17.2)  ผมชนะเหรอ
+s5     18.2 ton   nat  3.63s win  5.8s speed 1.00 ends  21.87 (window ends  24.0)  ดวงจันทร์ไม่ได้อยู่ที่เดิมนะ! ทีใกล้ทีไก
+s5     24.4 kaew  nat  1.03s win  2.4s speed 1.00 ends  25.47 (window ends  26.8)  เอ็งคำนวณเองสิ
+s5     33.0 ton   nat  3.28s win  4.4s speed 1.00 ends  36.32 (window ends  37.4)  สี่สิบเอ็ด ... ไม่ถึงแม้ตอนใกล้สุด สี่สิ
+s5     37.6 kaew  nat  0.78s win  1.2s speed 1.00 ends  38.42 (window ends  38.8)  ว่าไง
+s5     39.0 ton   nat  0.92s win  2.4s speed 1.00 ends  39.96 (window ends  41.4)  ... คำตอบมีอย่างเดียว
+s6     20.0 ton   nat  0.82s win  1.6s speed 1.00 ends  20.86 (window ends  21.6)  ป้า ... นี่มัน
+s6     21.8 uean  nat  0.51s win  1.0s speed 1.00 ends  22.35 (window ends  22.8)  ล้าง
+s6     47.0 ton   nat  1.92s win  4.5s speed 1.00 ends  48.96 (window ends  51.5)  ป้า ถ้าผมพับชามได้สี่สิบสองครั้ง ...
+s6     51.8 uean  nat  0.51s win  1.0s speed 1.00 ends  52.35 (window ends  52.8)  ล้าง
+s6     58.0 chok  nat  1.31s win  3.0s speed 1.00 ends  59.35 (window ends  61.0)  ล้างเสร็จมาหาผม
+lines 93 overruns >0.5s: []

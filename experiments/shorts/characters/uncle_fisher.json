@@ -1,0 +1,63 @@
+{
+  "id": "uncle_fisher",
+  "name": "ลุงนักตกปลา",
+  "role": "fisherman",
+  "gender": "male",
+  "age": "adult",
+  "fixed": [
+    "หมวกบักเก็ต",
+    "เสื้อกั๊กตกปลา",
+    "หนวด",
+    "พายเรือในซอย",
+    "พูดหน้าตาย ขายของเก่ง"
+  ],
+  "draw": {
+    "kind": "person",
+    "skin": "#D9A27A",
+    "cheek": "#D9867A",
+    "hair": "#B8B8BC",
+    "hair_style": "balding",
+    "mustache": true
+  },
+  "outfits": {
+    "boat": {
+      "top": "#F2EEE4",
+      "accent": "#7C8A55",
+      "top_style": "vest",
+      "bottom": "#4C5A72",
+      "hat": "bucket",
+      "hat_color": "#C9B37E",
+      "boat": true,
+      "arms": "hold"
+    },
+    "boat_net": {
+      "top": "#F2EEE4",
+      "accent": "#7C8A55",
+      "top_style": "vest",
+      "bottom": "#4C5A72",
+      "hat": "bucket",
+      "hat_color": "#C9B37E",
+      "boat": true,
+      "arms": "raise",
+      "prop": "net"
+    },
+    "boat_sandal": {
+      "top": "#F2EEE4",
+      "accent": "#7C8A55",
+      "top_style": "vest",
+      "bottom": "#4C5A72",
+      "hat": "bucket",
+      "hat_color": "#C9B37E",
+      "boat": true,
+      "arms": "raise",
+      "prop": "sandal"
+    }
+  },
+  "voice": {
+    "gemini": "Orus",
+    "edge": "th-TH-NiwatNeural",
+    "edge_pitch": "-2Hz",
+    "edge_rate": "+4%"
+  },
+  "subtitle_color": "#FFB86B"
+}

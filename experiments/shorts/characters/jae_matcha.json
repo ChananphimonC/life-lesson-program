@@ -1,0 +1,89 @@
+{
+  "id": "jae_matcha",
+  "name": "เจ๊ชาเขียว",
+  "role": "homeowner",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "เสื้อฮู้ดสีเขียวมัทฉะ",
+    "ผมยาวมัดจุก",
+    "หิวโหย ดราม่าเรื่องอาหาร",
+    "หน้าตาท่าทางเกินจริง"
+  ],
+  "draw": {
+    "kind": "person",
+    "skin": "#F6CFAA",
+    "cheek": "#F0928E",
+    "hair": "#3A2724",
+    "hair_style": "bun_long"
+  },
+  "outfits": {
+    "phone": {
+      "top": "#7FB069",
+      "accent": "#F4EBD0",
+      "top_style": "hoodie",
+      "bottom": "#F0E2C4",
+      "skirt": true,
+      "shoe": "#6B8F4E",
+      "arms": "phone",
+      "prop": "phone"
+    },
+    "dramatic": {
+      "top": "#7FB069",
+      "accent": "#F4EBD0",
+      "top_style": "hoodie",
+      "bottom": "#F0E2C4",
+      "skirt": true,
+      "shoe": "#6B8F4E",
+      "arms": "both_up",
+      "brows": "angry"
+    },
+    "sad": {
+      "top": "#7FB069",
+      "accent": "#F4EBD0",
+      "top_style": "hoodie",
+      "bottom": "#F0E2C4",
+      "skirt": true,
+      "shoe": "#6B8F4E",
+      "arms": "down",
+      "brows": "sad"
+    },
+    "leash": {
+      "top": "#7FB069",
+      "accent": "#F4EBD0",
+      "top_style": "hoodie",
+      "bottom": "#F0E2C4",
+      "skirt": true,
+      "shoe": "#6B8F4E",
+      "arms": "hold",
+      "prop": "leash"
+    },
+    "cup": {
+      "top": "#7FB069",
+      "accent": "#F4EBD0",
+      "top_style": "hoodie",
+      "bottom": "#F0E2C4",
+      "skirt": true,
+      "shoe": "#6B8F4E",
+      "arms": "hold",
+      "prop": "cup",
+      "brows": "sad"
+    },
+    "happy": {
+      "top": "#7FB069",
+      "accent": "#F4EBD0",
+      "top_style": "hoodie",
+      "bottom": "#F0E2C4",
+      "skirt": true,
+      "shoe": "#6B8F4E",
+      "arms": "raise"
+    }
+  },
+  "voice": {
+    "gemini": "Leda",
+    "edge": "th-TH-PremwadeeNeural",
+    "edge_pitch": "+16Hz",
+    "edge_rate": "+2%"
+  },
+  "subtitle_color": "#B9E58C"
+}

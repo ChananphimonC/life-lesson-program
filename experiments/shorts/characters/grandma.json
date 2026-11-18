@@ -1,0 +1,48 @@
+{
+  "id": "grandma",
+  "name": "คุณยาย",
+  "role": "grandmother",
+  "gender": "female",
+  "age": "elder",
+  "fixed": [
+    "คุณยายใจดี ผมสีเทาเกล้ามวย",
+    "เสื้อลายดอก นุ่งผ้าถุง"
+  ],
+  "draw": {
+    "kind": "person",
+    "style": "cute",
+    "gender": "female",
+    "skin": "#F1D2BC",
+    "cheek": "#E9A39B",
+    "hair": "#B9B7B8",
+    "hair_style": "gray_bun",
+    "outfit_kind": "sarong",
+    "age_lines": true,
+    "scale_mul": 1.0,
+    "chibi": 0.86,
+    "lashes": false
+  },
+  "outfits": {
+    "default": {
+      "top": "#9CC9A6",
+      "accent": "#F4E2B0",
+      "bottom": "#8B3F4A",
+      "shoe": "#7A5A44",
+      "arms": "down",
+      "flower": "#F6D9E0"
+    },
+    "hold": {
+      "top": "#9CC9A6",
+      "accent": "#F4E2B0",
+      "bottom": "#8B3F4A",
+      "shoe": "#7A5A44",
+      "arms": "hold",
+      "flower": "#F6D9E0"
+    }
+  },
+  "voice": {
+    "gemini": "Gacrux",
+    "edge": "th-TH-PremwadeeNeural"
+  },
+  "subtitle_color": "#E6E6E6"
+}

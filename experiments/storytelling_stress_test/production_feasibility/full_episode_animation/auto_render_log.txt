@@ -1,0 +1,7 @@
+16:05:52 waiting for the voicing job
+16:14:53 voicing finished
+16:29:08 robot_world render 855 s; rw1 1684 frames 131 s | rw2 1583 frames 252 s | rw3 1450 frames 399 s | rw4 1238 frames 536 s | rw5 1159 frames 626 s | rw6 1580 frames 754 s | rw7 976 frames 855 s | 
+16:29:35 robot_world assemble: wrote C:\life-lesson generator\life-lesson-program\experiments\storytelling_stress_test\production_feasibility\full_episode_animation\robot_world\renders\robot_world_episode.mp4 402.9 s | 
+16:42:32 red_thread render 777 s; rt1 1419 frames 151 s | rt2 1330 frames 273 s | rt3 998 frames 387 s | rt4 975 frames 502 s | rt5 1159 frames 631 s | rt6 888 frames 674 s | rt7 751 frames 776 s | 
+16:42:50 red_thread assemble: wrote C:\life-lesson generator\life-lesson-program\experiments\storytelling_stress_test\production_feasibility\full_episode_animation\red_thread\renders\red_thread_episode.mp4 313.3 s | 
+16:42:50 DONE

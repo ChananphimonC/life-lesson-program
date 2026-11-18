@@ -1,0 +1,74 @@
+{
+  "id": "jobber_fah",
+  "name": "ฟ้า (เด็กจบใหม่ เงินเดือน 40,000)",
+  "role": "first-jobber",
+  "gender": "female",
+  "age": "young adult",
+  "fixed": [
+    "เด็กจบใหม่ทำงานแรก เงินเดือน 40,000",
+    "ผมยาวสีน้ำตาล",
+    "เสื้อสีฟ้าสด (สื่อชื่อฟ้า)",
+    "สบายๆ ชอบกินข้าวนอกบ้านและกาแฟ"
+  ],
+  "draw": {
+    "kind": "person",
+    "skin": "#F9DDCB",
+    "cheek": "#F0A59E",
+    "hair": "#3A2A2C",
+    "hair_style": "bob",
+    "style": "cute",
+    "scale_mul": 1.06,
+    "chibi": 0.9,
+    "lashes": true,
+    "gender": "female"
+  },
+  "outfits": {
+    "default": {
+      "top": "#7DB9EA",
+      "accent": "#FFFFFF",
+      "top_style": "shirt",
+      "bottom": "#CDB79C",
+      "arms": "down",
+      "shoe": "#5A3E32"
+    },
+    "phone": {
+      "top": "#7DB9EA",
+      "accent": "#FFF3E0",
+      "top_style": "shirt",
+      "bottom": "#CDB79C",
+      "arms": "phone",
+      "prop": "phone",
+      "shoe": "#5A3E32"
+    },
+    "cup": {
+      "top": "#7DB9EA",
+      "accent": "#FFF3E0",
+      "top_style": "shirt",
+      "bottom": "#CDB79C",
+      "arms": "hold",
+      "prop": "cup",
+      "shoe": "#5A3E32"
+    },
+    "hips": {
+      "top": "#7DB9EA",
+      "accent": "#FFF3E0",
+      "top_style": "shirt",
+      "bottom": "#CDB79C",
+      "arms": "hips",
+      "shoe": "#5A3E32"
+    },
+    "raise": {
+      "top": "#7DB9EA",
+      "accent": "#FFF3E0",
+      "top_style": "shirt",
+      "bottom": "#CDB79C",
+      "arms": "raise",
+      "shoe": "#5A3E32"
+    }
+  },
+  "voice": {
+    "gemini": "Leda",
+    "edge": "th-TH-PremwadeeNeural"
+  },
+  "subtitle_color": "#FFD0B8"
+}

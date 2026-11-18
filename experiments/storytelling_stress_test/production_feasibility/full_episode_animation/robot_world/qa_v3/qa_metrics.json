@@ -1,0 +1,122 @@
+{
+ "frames": 9644,
+ "seconds": 401.8333333333333,
+ "scenes": {
+  "rw1": {
+   "start": 0.0,
+   "dur": 70.16,
+   "mean_change": 1.386,
+   "pct_frames_moving": 84.4,
+   "longest_still_s": 0.08,
+   "max_jump": 78.39
+  },
+  "rw2": {
+   "start": 70.16,
+   "dur": 65.94,
+   "mean_change": 0.892,
+   "pct_frames_moving": 71.7,
+   "longest_still_s": 0.12,
+   "max_jump": 78.39
+  },
+  "rw3": {
+   "start": 136.1,
+   "dur": 60.43,
+   "mean_change": 0.76,
+   "pct_frames_moving": 89.0,
+   "longest_still_s": 0.0,
+   "max_jump": 139.94
+  },
+  "rw4": {
+   "start": 196.53,
+   "dur": 50.59,
+   "mean_change": 0.401,
+   "pct_frames_moving": 73.4,
+   "longest_still_s": 0.12,
+   "max_jump": 37.09
+  },
+  "rw5": {
+   "start": 247.12,
+   "dur": 48.27,
+   "mean_change": 0.589,
+   "pct_frames_moving": 48.8,
+   "longest_still_s": 0.62,
+   "max_jump": 49.53
+  },
+  "rw6": {
+   "start": 295.39,
+   "dur": 65.82,
+   "mean_change": 0.863,
+   "pct_frames_moving": 65.3,
+   "longest_still_s": 1.75,
+   "max_jump": 157.08
+  },
+  "rw7": {
+   "start": 361.21,
+   "dur": 40.66,
+   "mean_change": 0.425,
+   "pct_frames_moving": 80.3,
+   "longest_still_s": 0.0,
+   "max_jump": 78.08
+  }
+ },
+ "black_frames": [
+  1684,
+  3267,
+  4717,
+  4718,
+  5931,
+  7089,
+  8668,
+  8669
+ ],
+ "jump_frames_over_25": [
+  444,
+  1097,
+  1159,
+  1967,
+  2128,
+  2437,
+  2711,
+  3015,
+  3260,
+  3261,
+  3262,
+  3263,
+  3264,
+  3265,
+  3267,
+  3268,
+  3269,
+  3270,
+  3271,
+  3272,
+  3273,
+  3936,
+  4021,
+  4287,
+  4710,
+  4711,
+  4712,
+  4713,
+  4714,
+  4715,
+  4716,
+  5932,
+  5933,
+  5934,
+  5935,
+  5937,
+  6596,
+  7083,
+  7084,
+  7085,
+  7086,
+  7087,
+  7088,
+  7464,
+  7775,
+  8166,
+  8394,
+  9426
+ ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "chi_latte",
+  "name": "ลูกจิ๋ว",
+  "role": "dog",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "ชิวาว่าสีขาวน้ำตาล",
+    "ลายสีขาวรูปหัวใจกลางกระหม่อม (ต้องเห็นทุกฉาก)",
+    "ขี้อ้อน เอียงหัวเวลาสงสัย"
+  ],
+  "draw": {
+    "kind": "dog",
+    "breed": "chi",
+    "scale_mul": 0.62,
+    "coat": "#B57E52",
+    "light": "#F7EFE5",
+    "chest": true,
+    "heart": true,
+    "face_dy": 250
+  },
+  "outfits": {
+    "default": {},
+    "tilt": {
+      "tilt": 9
+    }
+  },
+  "voice": {
+    "gemini": "Achernar",
+    "edge": "th-TH-PremwadeeNeural",
+    "edge_pitch": "+36Hz",
+    "edge_rate": "+0%"
+  },
+  "subtitle_color": "#F2CDA4"
+}

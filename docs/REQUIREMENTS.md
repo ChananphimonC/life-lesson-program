@@ -1,36 +1,189 @@
-# System Requirements
+# REQUIREMENTS — Video Studio (Life Lesson + Shorts + รู้หรือไม่)
 
-## 1. Functional Requirements
-- **Workflow UI:** Provide a Streamlit dashboard for a single human reviewer to interact with the pipeline (view topics, scripts, Critic results, audio preview, approve/reject, handle `FAILED_REVIEW` episodes). Multi-reviewer workflows are out of scope for MVP.
-- **Orchestration:** Python backend to manage the state of each episode through the following states:
-  `DRAFT -> TOPIC -> SCRIPT -> CRITIC_REVIEW -> (loop up to 3x) -> AUDIO -> SUBTITLES -> VIDEO -> HUMAN_REVIEW -> PUBLISHED`, with a `FAILED_REVIEW` terminal state reachable from `CRITIC_REVIEW` if the script still fails after 3 rewrite attempts.
-- **Persistence:** SQLite database, used from v0.1, storing:
-  - episode state and history (state transitions with timestamps),
-  - topics (including rejected/sensitive-filtered topics, for traceability),
-  - scripts (each generation attempt, not just the final approved one),
-  - Critic results per attempt (per-category pass/fail, rewrite diffs),
-  - prompt versions used per generation (topic prompt, script prompt, Critic prompt).
-  PostgreSQL + `pgvector` is intentionally deferred — introduced only when cross-episode semantic similarity search becomes necessary (see ROADMAP.md), not required for MVP state tracking.
-- **Generation:** Connect to Google Gemini API for Topic, Script, and Critic generation. The Critic prompt must check all seven prohibited categories defined in PRODUCT.md §3.2 / AI_DESIGN.md §4.
-- **Sensitive-topic filtering:** Screen generated topics before scripting, and re-check during the Critic pass, for self-harm, suicide, severe mental-health crisis, abuse, and medical/clinical-claim content (see PRODUCT.md §5, AI_DESIGN.md §6). Flagged topics are rejected and regenerated rather than "softened."
-- **Audio Processing:** Connect to a TTS API and interpret pause markers (or fall back to post-processing silence insertion where a provider doesn't support markers natively) to generate paced audio.
-- **Subtitle Generation:** Generate `.srt`/`.vtt` primarily via forced alignment of the known script text against the TTS audio. Fall back to Whisper/faster-whisper transcription only when forced alignment is unavailable for a given provider/output.
-- **Video Assembly:** Use FFmpeg to stitch a static/looping background video, the TTS audio, and subtitle files into an MP4, targeting **16:9 long-form** (YouTube standard). Shorts/vertical format is explicitly out of scope for MVP.
+> วางที่ `Docs/REQUIREMENTS.md` (ถ้ามี `Docs/PRODUCT.md` ให้เพิ่มลิงก์ไปที่ไฟล์นี้ ไม่ต้องลบของเดิม)
+> **ข้อจำกัดหลัก: ต้นทุนเพิ่ม = 0 บาท** ใช้ได้เฉพาะ Claude Code + Gemini API free tier + เครื่องมือในเครื่อง
+> **ต่อยอดโค้ดเดิม ห้ามเขียนใหม่ทั้งระบบ**
 
-## 2. Non-Functional Requirements
-- **Modularity (right-sized):** LLM Provider and TTS Provider access should go through a thin wrapper/function boundary so a provider swap doesn't require touching core pipeline logic — but do **not** build a heavy plugin/interface abstraction layer before the TTS benchmark (§ below, AI_DESIGN.md §8) has established what actually varies between providers. Abstraction should follow evidence from the benchmark, not precede it.
-- **Reproducibility:** Every generation attempt (topic, script, Critic pass) must be traceable to the exact prompt version and inputs used, via the SQLite `generation_attempts`-style records described in §1. This supports debugging content-quality regressions and comparing prompt revisions.
-- **Reliability:** The Critic rewrite loop must be bounded (max 3 attempts) and must never retry indefinitely; failure routes to `FAILED_REVIEW` for human handling, not silent failure or auto-publish.
-- **Performance:** Video rendering must happen in the background or show a clear progress state, as FFmpeg operations take time.
-- **Cost:** Maximize free tiers (Gemini AI Studio API) and open-source tools (FFmpeg, forced-alignment tooling, local Whisper as fallback).
-- **Simplicity:** No microservices, message queues, or distributed infrastructure for MVP — a single Python process/backend driven by the Streamlit dashboard is sufficient at 1 episode/day cadence (see ARCHITECTURE.md §"MVP Simplicity Principle").
+---
 
-## 3. MVP Scope Constraints (v0.1 - v0.5)
-- **Duration:** 3-5 minutes per video.
-- **Cadence:** 1 episode per day.
-- **Format:** 16:9 long-form video for YouTube. No Shorts optimization.
-- **Visuals:** Pre-curated folder of stock looping videos (no AI video generation).
-- **Persistence:** SQLite from v0.1 (see §1). No PostgreSQL/pgvector in MVP scope.
-- **Originality scope:** Critic-level rejection of quotes/attributed/derivative content is in scope for MVP (AI_DESIGN.md §5.B). Cross-episode embedding similarity search (5.A) and any external corpus-matching system are explicitly **not** in MVP scope.
-- **Reviewer:** Single human reviewer (project owner); Streamlit remains single-user.
-- **Publishing:** System exports MP4. Human manually uploads to YouTube. YouTube API integration remains a future milestone.
+## 0. สภาพโปรเจกต์ปัจจุบัน (ผลสำรวจจริง)
+
+- Python 3.11, Pillow วาดภาพทุกฉากเอง, ffmpeg ต่อเป็น MP4
+- Gemini (`google-genai`) ใช้ 3 อย่าง: เขียนสคริปต์, TTS, เขียนคำบนหน้าปก (โมเดลข้อความเริ่มต้น `gemini-2.5-flash` ตั้งผ่าน env `GEMINI_SCRIPT_MODEL`) **ไม่มี API สร้างรูป** และใช้โควตา free tier ก้อนเดียวกันทั้งหมด
+- เว็บ: `preview.py` (พอร์ต 52101, `http.server` ล้วน) และ `thumbnail_app.py` (พอร์ต 52102)
+- ข้อมูล: SQLite `data/life_lesson.db` (ตาราง `topics`, `episodes`, `scripts`)
+- ไฟล์ต่อตอน: `output/videos/EPxx - ชื่อ/` มี `info.json`, `cover.json`, `cover.jpg`; แคชเสียงที่ `output/_work/tts/<episode_id>/`
+- ฉาก: `experiments/cartoon_storyboard/` (`scenes.py` = EP01, `scenes_ep02..06.py`, `storyboard.py`, `render.py`)
+- ~~ยังไม่มีแนวคิด Playlist~~ (อัปเดต 2026-10-23) หน้าคลังแยก Life Lesson กับ Shorts แล้ว; ระบบเพลย์ลิสต์เต็มรูปแบบดู FR-2 / FR-6
+
+### จุดที่ล็อก 16:9 (ต้องทำให้ตั้งค่าได้)
+- `scenes.py:17` `OUT=(1920,1080)`, `scenes.py:50` `W,H=2400,1350`, `scenes.py:81` กล้องคำนวณจาก OUT
+- `scenes*.py` ทุกไฟล์: พิกัดตัวละคร/พื้น/`camera()` ตายตัว
+- `covers.py:22`, `thumbnail_app.py` (1920×1080, 3840×2160, preview 960×540), เทมเพลตใน `thumbnail_studio.py`
+- `preview.py` CSS `aspect-ratio:16/9`
+- `ffmpeg_assembler.py:17-18` 1920×1080
+
+**กติกา:** EP 1–6 เดิมต้องเรนเดอร์ได้ผลเหมือนเดิมทุกพิกเซล (ค่าเริ่มต้น 16:9) งาน 9:16 เป็นเส้นทางใหม่ ไม่แก้พิกัดฉากเดิม
+
+---
+
+## 0.5 สองสายงานทำควบคู่กัน (สำคัญ)
+- **สาย A: Life Lesson 16:9** ยังผลิต EP 7, 8, ... ต่อเรื่อยๆ ด้วย pipeline เดิม (`scenes_epNN.py` + `storyboard.py` + `render.py`) ต้องไม่ถูกกระทบจากงาน Shorts
+- **สาย B: Shorts 9:16** เป็นโมดูลใหม่แยกจากสาย A ใช้ร่วมกันเฉพาะส่วนที่เป็นของกลาง (Gemini client, แคชเสียง, ฐานข้อมูล, หน้าเว็บ)
+- ทุกฟีเจอร์ใหม่ (FR-1 ช่องแก้หน้าปก, FR-2 Playlist) ต้องใช้ได้กับทั้งสองสาย และ EP ใหม่ของสาย A ต้องเพิ่มได้ง่ายโดยไม่ต้องแก้โค้ดของ Shorts
+- ทุกครั้งที่แก้โค้ดส่วนกลาง ให้ทดสอบว่า EP เดิมของสาย A ยังเรนเดอร์ได้เหมือนเดิม
+
+## 1. FR-1 ช่อง "จุดที่อยากแก้" หน้าปก
+- ตำแหน่ง: ปุ่มที่เรียก `/api/cover-*` ใน `preview.py` (ฟังก์ชัน `rewrite_text()` / `generate()` ใน `covers.py`)
+- เพิ่มช่องพิมพ์ แล้วต่อท้ายคำสั่งเดิมที่ส่ง `generate_script_text()` (ไม่ทับของเดิม)
+- เก็บประวัติคำสั่งต่อตอนลง `cover.json` (แสดงย้อนหลัง/กดใช้ซ้ำ)
+- ช่องว่าง = พฤติกรรมเดิม; ใช้ได้ทั้ง EP 1–6
+- หมายเหตุ: ตอนนี้ AI แก้ได้เฉพาะ **คำบนปกและแนวองค์ประกอบ** (ภาพวาดด้วย Pillow) ข้อความที่พิมพ์ต้องถูกตีความเป็นคำสั่งระดับนั้น ไม่ใช่ "แก้พิกเซลภาพ"
+
+## 2. FR-2 สร้าง Playlist เองได้
+- ~~เพิ่มตาราง `playlists` ใน SQLite~~ **(เปลี่ยน 2026-10-21 ตามผู้ใช้: เก็บเป็นไฟล์ในเครื่อง)** ไฟล์ `experiments/cartoon_storyboard/output/playlists.json`: รายการเพลย์ลิสต์ (id, ชื่อ, aspect `16:9|9:16|1:1`, ประเภท, คำอธิบาย) + การผูกคลิปกับเพลย์ลิสต์ ไม่แก้ไฟล์ของ EP เดิม
+- Playlist "Life Lesson" (16:9), "Shorts" (9:16), "รู้หรือไม่" (16:9) เป็นค่าตั้งต้น (เปลี่ยนชื่อได้ ลบไม่ได้)
+- หน้าเว็บ: เพิ่ม/เปลี่ยนชื่อ/ลบ Playlist (ลบได้เมื่อว่าง), ย้ายคลิปข้าม Playlist
+- Playlist 9:16: preview, หน้าปก และการเรนเดอร์ใช้ขนาดแนวตั้ง (1080×1920; ปก 1080×1920)
+- แก้ CSS `aspect-ratio` ให้มาจากข้อมูลคลิป/Playlist ไม่ hard-code
+
+## 3. FR-3 Pipeline การ์ตูน Shorts (9:16)
+`หัวข้อ → Scene Script JSON → TTS ต่อบรรทัดพูด → ประกอบฉาก+ปากขยับ+ซับ → MP4`
+
+- **ใช้ Pillow + ffmpeg ที่มีอยู่** สร้าง renderer ใหม่แยกโมดูล (เช่น `experiments/shorts/`) ที่รับ aspect ได้ ไม่แตะ `scenes*.py` เดิม
+- **ตัวละครแบบเลเยอร์** วาดด้วยโค้ด (Pillow/SVG→PNG) เพราะไม่มี API สร้างรูป: ตัว + ปาก 4 ท่า (ปิด/แย้ม/อ้า/กว้าง) + ตาเปิด/ปิด + ชุดสลับได้
+- ภาพฉากหลัง: วาดแบบเรียบง่ายด้วยโค้ดและใช้ซ้ำ (ตลาดน้ำ, ห้องนอน, วัด ฯลฯ) เก็บใน `backgrounds/`
+- ถ้าภายหลังตรวจแล้วว่า Gemini free tier สร้างรูปได้ ให้เพิ่มเป็นตัวเลือก ไม่ใช่ข้อบังคับ
+
+### เสียง
+- Gemini TTS (มีอยู่แล้ว) เป็นหลัก แยกไฟล์ต่อบรรทัดพูดและต่อตัวละคร (ชาย/หญิง/เด็ก/โทนต่าง ตั้งใน character json); สำรองด้วย `edge-tts` ถ้าโควตาหมด
+- ใช้โครงแคชเดิม `output/_work/tts/<episode_id>/`; บรรทัดที่ไม่เปลี่ยนห้ามสร้างซ้ำ
+
+### ปากขยับ / รู้ว่าใครพูด
+- คำนวณ amplitude ต่อบรรทัดจากไฟล์เสียง → เลือกท่าปาก (ไม่ต้องใช้ GPU/phoneme)
+- เฉพาะตัวที่พูดขยับปาก + เด้งตัวเล็กน้อย; ตัวอื่นกะพริบตา/หายใจ; ซับสีตามตัวละคร
+- ใช้ `storyboard.py` เป็นต้นแบบเรื่องจับเวลาฉากกับเสียง
+
+## 4. Character Bible
+เก็บ `characters/<id>.json`: ชื่อ, บทบาท, เพศ/วัย, ลักษณะคงที่, ชุด (`outfits[]`), เสียง, พารามิเตอร์วาด
+
+| บทบาท | ลักษณะบังคับ |
+|---|---|
+| พระ | ไม่มีผม, จีวรสีส้ม/เหลือง |
+| ดารา | ชุดสวยวิบวับ |
+| นักการเมือง | สูท/เสื้อราชปะแตน ป้ายชื่อ (ตัวสมมติ ไม่ล้อเลียนบุคคลจริง) |
+| แม่ค้า | ผ้ากันเปื้อน/หมวกฟาง, ฉากตลาด/ตลาดน้ำ |
+| ยุง/ผลไม้/สัตว์ | มีหน้า ตา ปากชัด แบบมาสคอต |
+
+เมื่อไม่แน่ใจว่าสิ่งนั้นหน้าตาเป็นอย่างไร: ถาม Gemini (ข้อความ) หรือค้นเว็บเพื่ออ่านลักษณะ แล้ววาดเป็นการ์ตูนของเราเอง ห้ามลอกภาพ/ตัวการ์ตูนมีลิขสิทธิ์
+
+## 5. ข้อจำกัดต้นทุน
+- ห้ามบริการเสียเงิน/ผูกบัตร
+- ทุกการเรียก Gemini: ตัวนับโควตา, retry/backoff, แคช (เพราะสคริปต์/TTS/ปกแชร์โควตาเดียวกัน)
+- ชื่อโมเดลอยู่ใน env/config ไม่ hard-code
+
+## 6. คุณภาพ
+- ตัวละครเดียวกันหน้าตา/สีเหมือนเดิมทุกฉากทุกตอน (วาดจาก character json เดียวกัน)
+- อ่านง่ายบนมือถือ: สีตัดกัน, ซับใหญ่, เว้น safe-area บน/ล่างใน 9:16
+- วงจรตรวจเอง: เรนเดอร์แล้วดึงเฟรมต้น/กลาง/ท้ายฉากมาดู ตรวจซับล้น, ตัวหลุดกรอบ, ปากตรงผู้พูด
+- Shorts 30–60 วินาที ฮุกใน 3 วินาทีแรก
+- ตอนความรู้ (เช่น เลือดกรุ๊ป O กับยุง): ค้นแหล่งเชื่อถือได้ก่อนเขียนบท ใส่ `sources[]` และไม่พูดเกินหลักฐาน
+
+## 7. Scene Script (โครงสร้าง)
+```json
+{
+  "title": "...", "aspect": "9:16",
+  "scenes": [{
+    "background": "floating_market",
+    "characters": [{"id": "monk_a", "outfit": "default", "pos": "left"},
+                   {"id": "vendor_b", "outfit": "default", "pos": "right"}],
+    "lines": [{"speaker": "vendor_b", "text": "...", "emotion": "cheerful"}]
+  }],
+  "sources": []
+}
+```
+
+## 8. FR-4 ซีรีส์ "รู้หรือไม่ / ทำไม" (16:9, ผู้เล่า 1 คน)
+แนวคิดและหลักเนื้อหาอยู่ที่ PRODUCT.md §6
+
+`หัวข้อ → ค้นข้อมูล (สำหรับเรื่องความรู้) → สคริปต์ + sources → TTS ผู้เล่าแบบเลือกโทน → ฉากการ์ตูน + ตัวละครแสดง + กราฟิกเคลื่อนไหว → MP4 16:9 → หน้าปก`
+
+- **Renderer:** ใช้ `experiments/shorts/render_short.py` (รับ `"aspect": "16:9"` อยู่แล้ว) ไม่สร้างใหม่
+- **ผู้เล่า:** ตัวละครเสียงอย่างเดียว (`draw.kind: none`) หรือมีตัวเป็นพิธีกรการ์ตูนก็ได้
+- **ตัวละครแสดง:** ขยับท่าทาง/ปากได้โดยไม่มีเสียงของตัวเอง (บทพูดเป็นของผู้เล่า ตัวละครแค่ "แสดง" ประกอบ) ใช้ลายเส้นเดียวกับ Life Lesson
+- **กราฟิกประกอบ:** ไอคอน ตัวเลข ป้ายข้อความสั้น ลูกศร ภาพเปรียบเทียบ ปรากฏตามจังหวะบรรยาย (props ผูกกับบรรทัด)
+- **ค้นข้อมูล:** เรื่องความรู้ต้องค้นจากแหล่งน่าเชื่อถือก่อนเขียน ใส่ `sources[]` (ชื่อแหล่ง + URL) ในสคริปต์ ข้อความที่ไม่มีหลักฐานต้องตัดหรือบอกว่าเป็นความเชื่อ/การคาดการณ์
+- **ตัวละครที่ไม่รู้ว่าหน้าตาเป็นอย่างไร:** ค้นข้อมูลลักษณะก่อน แล้ววาดเป็นการ์ตูนของเราเอง ห้ามลอกภาพหรือตัวการ์ตูนที่มีลิขสิทธิ์ ห้ามล้อเลียนบุคคลจริง
+- **ความยาว:** 3–6 นาที (ปรับได้ต่อตอน)
+- **ผลลัพธ์:** อยู่ในเพลย์ลิสต์ "รู้หรือไม่" มีดาวน์โหลด MP4 และรูปปก (สร้าง/แก้/ดาวน์โหลด) เหมือน Life Lesson
+
+## 9. FR-5 TTS แบบเลือกโทนเสียง
+- **Gemini TTS เป็นหลัก** (โมเดลเดียวกับ Life Lesson) เพื่อการออกเสียงไทยที่ชัดและถูก
+- **ผู้เล่าคนเดียว = รวมบรรทัดเป็นช่วงยาว** พากย์ทีละช่วง (แบบ Life Lesson) เพื่อประหยัดโควตา
+- **กำหนดโทนต่อช่วง** ผ่านคำสั่งบอกสไตล์ภาษาธรรมชาติที่ Gemini TTS รองรับ เช่น "กระซิบเบา ๆ แบบเล่าเรื่องผี", "เล่าอย่างสนุกและตื่นเต้น", "พูดอบอุ่นและชัดเจน"
+- ต้องทดสอบว่าโมเดลไม่อ่านคำสั่งสไตล์ออกมาเป็นเสียง ก่อนใช้กับทั้งตอน
+- สำรองด้วย `edge-tts` เฉพาะตอนพรีวิว (เสียงไม่ชัดเท่า และมีเสียงไทยแค่ 2 เสียง)
+- แคชต่อช่วง ช่วงที่ไม่เปลี่ยนห้ามพากย์ซ้ำ; พากย์ต่อได้วันถัดไปเมื่อโควตาหมดกลางทาง
+
+## 10. FR-6 จัดระเบียบคลังวิดีโอ
+- หน้าคลังแสดงทีละเพลย์ลิสต์ พร้อมจำนวนคลิป
+- เพิ่มเพลย์ลิสต์ (ชื่อ, อัตราส่วน), เปลี่ยนชื่อ, ลบ (ลบได้เมื่อว่าง; เพลย์ลิสต์ตั้งต้นลบไม่ได้)
+- ทุกคลิปมีตัวเลือก "ย้ายไปเพลย์ลิสต์…"
+- ทุกคลิปในทุกเพลย์ลิสต์: ดู, ดาวน์โหลด MP4, เปลี่ยนชื่อ, ลบ, รูปปก (สร้าง/แก้ด้วย AI/ดาวน์โหลด)
+- กรอบวิดีโอและรูปปกใช้อัตราส่วนของคลิปนั้น (16:9 หรือ 9:16)
+
+## 10.5 FR-7 รูปปกต้องตรงกับวิดีโอ (เพิ่ม 2026-10-23)
+- **เวลาทำปก:** สร้างหลังเรนเดอร์วิดีโอเสร็จเสมอ (`covers.ensure`) จากชื่อเรื่อง + สรุป/สคริปต์ของคลิปที่เสร็จแล้ว ไม่ทำก่อนมีเนื้อหา ถ้าแก้ชื่อเรื่องหรือสคริปต์ภายหลัง ให้กด "สร้างปกใหม่" ปกเดิมที่ผู้ใช้แก้ไว้จะไม่ถูกเขียนทับตอนเรนเดอร์ซ้ำ
+- **คำสำคัญของเรื่องต้องอยู่บนปก:** ถ้าชื่อเรื่องมีคำเฉพาะ (เช่น MBTI, ชื่อทฤษฎี, ตัวเลข) ต้องใส่คำนั้นบนปกตามที่เขียนในชื่อ (ใช้ตัวอักษรละตินได้) ทั้งตอนสร้างปกและตอนให้ AI เขียนคำใหม่
+- **โทนสีตามโทนวิดีโอ** กำหนดตามเพลย์ลิสต์ (`covers.SERIES`):
+  - Life Lesson: นิ่ง ทบทวนตัวเอง สีหม่นอบอุ่น เย็น/กลางคืน ห้ามร่าเริง
+  - รู้หรือไม่: สว่าง สีสด เป็นมิตร อยากรู้อยากเห็น ฉากสตูดิโอ/กลางวัน เข้มขึ้นได้เฉพาะเมื่อหัวข้อน่ากลัวหรือเศร้า (เช่น เรื่องผี)
+  - Shorts: สว่าง สนุก สีอุ่น
+- **ปกรู้หรือไม่มีน้องปิ่น (พิธีกร) กับหมา 5 ตัวเสมอ** (`thumbnail_host.py` ใช้ตัวละครเดียวกับในวิดีโอ) คู่กับกราฟิกบอกหัวข้อ (เช่น การ์ดบุคลิก MBTI) ส่วนปก Life Lesson ใช้เทมเพลตเดิม
+- เพลย์ลิสต์ที่ผู้ใช้สร้างเองใช้โทนตามประเภทคลิป (Shorts → สว่าง, ตอนยาว → แบบ Life Lesson) จนกว่าจะเพิ่มโทนของตัวเองใน `SERIES`
+
+## 10.6 FR-8 สองรูปแบบตอน และตอนเปรียบเทียบเชิงตัวเลข (เพิ่ม 2026-10-24)
+- สคริปต์เลือกผู้เล่าได้: แบบ explainer ให้ `speaker` เป็นน้องปิ่น (`host_mint`) ปากขยับ ตัวไม่ขยับเท้า; แบบ story ให้ `speaker` เป็น `storyteller` (เสียงอย่างเดียว ไม่มีตัวบนจอ)
+- สคริปต์กำหนดแบบปกได้ด้วย `"cover": "jobbers"` (ไม่ใส่ = ปกน้องปิ่น)
+- กราฟิกเปรียบเทียบใหม่ใน `props_knowledge.py`: `budget` (ตาราง 2 คน ทยอยขึ้นทีละแถว เน้นแถวรวมได้) และ `bars` (แท่งเปรียบเทียบเคลื่อนไหว)
+- ฉากใหม่ใน `backgrounds_money.py`: ชานชาลารถไฟฟ้า, ถนน, ออฟฟิศ, หอพัก, คอนโด, ตลาด
+- ตัวเลขทุกตัวในตอนเชิงเงินต้อง: (ก) มาจากแหล่งที่อ้างได้ หรือ (ข) ระบุว่าเป็นสมมติฐานของเรื่อง และมีสูตรคำนวณเก็บใน `note` ของสคริปต์; ข้อความพูด (`say`) เขียนตัวเลขเป็นคำไทยเพื่อให้ TTS อ่านถูก แล้วตรวจด้วย `verify_voice.py`
+- **ตอนแบบ story ต้องเล่าด้วยภาพ ไม่ใช่ตาราง** (บทเรียนจากตอน know_jobber ฉบับแรกที่ผู้ใช้ตีกลับว่า "น่าเบื่อ มีแต่ตาราง"):
+  - ทุกประโยคเล่าต้องมีฉากที่ตรงกับคำพูด: นั่ง BTS/MRT, ไปร้านขายส่งลากรถเข็น, เข้าครัวผัดกับข้าว, ซื้อข้าวเหนียวหมูปิ้ง, นั่งร้านกาแฟ ฯลฯ ใช้ `cuts` เปลี่ยนฉากกลางประโยค และ `split:ก|ข|ชื่อซ้าย|ชื่อขวา` เมื่อเทียบสองคนพร้อมกัน
+  - ตัวเลขขึ้นเป็นป้ายราคาเล็ก (`tag`) ตรงจังหวะที่พูด ตารางสรุป (`budget`) เป็นมุมเล็กๆ ไม่ใช่พระเอกของฉาก
+  - ตัวละครสไตล์ `cute` (หัวโต ตัวสั้น แขนโค้งเป็นเส้นเดียว ตาโต เงาใต้เท้า) สีเสื้อสื่อชื่อ (ฟ้า = เสื้อฟ้า) แต่ละคนใช้ชีวิตตามบท (เดิน/ผัด/จิบกาแฟ) ด้วย `x:[จาก,ถึง]` และ `anim`
+  - ท่ายืนต้องนุ่ม: หายใจ/โยกช้ามาก วางพิกเซลแบบ sub-pixel (`Renderer._affine`) ห้ามเด้งตามแอมพลิจูดเสียง
+- **ข้อจำกัดฟอนต์:** Pillow ในเครื่องนี้ไม่มี raqm จึงไม่จัดวรรณยุกต์เหนือสระบน (เช่น ที่ นั่ง นี้ เที่ยว น้ำ) วรรณยุกต์จะหาย ข้อความบนจอต้องเลี่ยงคำเหล่านี้จนกว่าจะแก้ (คำพูดของผู้เล่าไม่กระทบ)
+- ตอนแรกของรูปแบบ story: `know_jobber` (เด็กจบใหม่ 28,000 vs 40,000) ภาษี = เงินได้ − ค่าใช้จ่าย 50% (ไม่เกิน 100,000) − ลดหย่อนส่วนตัว 60,000 − ประกันสังคม 10,500/ปี (875 บาท/เดือน เพราะเพดานค่าจ้างขึ้นเป็น 17,500 ตั้งแต่ 1 ม.ค. 2569) ขั้น 0–150,000 ยกเว้น, 150,001–300,000 อัตรา 5%, 300,001–500,000 อัตรา 10% (ขั้น 10% ยังไม่ได้ตรวจกับแหล่งโดยตรง)
+
+## 10.7 FR-9 คุณภาพการวาด (เพิ่ม 2026-10-25, ผู้ใช้ตีกลับตัวละครรุ่นแรก)
+- ตัวละครทุกตัวที่ใช้ในซีรีส์ "รู้หรือไม่" ต้องผ่านเช็กลิสต์ใน PRODUCT.md "แนวการวาดตัวละคร" ก่อนเรนเดอร์จริง: สัดส่วน ~3 หัว คอสั้น หน้าหวาน มือ/หู/แขนนุ่ม ผิวขาวขึ้น ทรงผมมีชั้น และ **แต่งกายตรงบริบทเรื่อง**
+- ดูภาพตัวละครเต็มตัวและจากเฟรมจริงในวิดีโอก่อนเรนเดอร์ทุกครั้ง (ตัวอย่าง `frames.py`/contact sheet) ห้ามเรนเดอร์เต็มความยาวเพื่อค่อยมาตรวจทีหลัง (เรนเดอร์ 1 ตอนใช้เวลาหลายสิบนาที)
+- ตัวละครใหม่/ของประกอบใหม่ต้องมีหลักฐานการหาข้อมูล (ค้นเว็บหรือถาม Gemini) ในบันทึกการออกแบบ ไม่วาดจากความจำล้วน ๆ
+- ภาพที่ต้องมีรายละเอียดจริง: อาหาร (หมูปิ้ง ข้าวเหนียว กาแฟเย็น ข้าวไข่ดาว) สินค้า (ไข่ ข้าวสาร ผัก หมู) รถเมล์ ห้อง ฯลฯ
+- ตอนเปิดคลิป "ฝากกดติดตาม" ของหมา 5 ตัวของน้องปิ่น: หมาพูดเสียงอ้อนพร้อมกัน (ใช้ `chorus` ให้ปากหลายตัวขยับตามเสียงเดียว), มีปุ่มติดตามกับระฆัง และหัวใจลอย
+- ตอนเปรียบเทียบเชิงตัวเลข: ต้องมีทางเลือกชีวิตที่หลากหลาย (นั่งรถเมล์ตื่นเช้าแทน BTS, อยู่บ้านครอบครัวตัดค่าเช่า) ไม่ยัดสมมติฐานเดียวให้ทุกคน และคำนวณค่าเดินทางจากเพดานค่าโดยสารจริง (BTS ข้ามส่วนต่อขยาย ≤ 65 บาท/เที่ยว)
+
+## 10.8 FR-10 ตอนความเชื่อ/สุขภาพ (เพิ่ม 2026-10-27)
+- ค้นแหล่งก่อนเขียนเสมอ และเก็บลิงก์ใน `sources` ของสคริปต์ (ตัวอย่าง `know_craving.json`: ตำรา ม.สงขลานครินทร์, Orloff & Hormes 2014, Mennella 2001, Tommy's, Axios)
+- กราฟิกใหม่ใน `props_story.py`: `card_grid` (การ์ดไอคอนทยอยขึ้น), `evidence` (ตัวชี้วัดหลักฐาน), `stamp` (ตราประทับ "ยังไม่มีหลักฐาน"), ไอคอนอาหาร/ของ 18 แบบ (`item`)
+- ตัวละครใหม่ในสไตล์ `cute`: ฮู้ด+ยีนส์, เดรส (+ท้อง), ผ้าถุง; ทรงผม long/bob/gray_bun (เลี่ยงทรงยุ่ง)
+- ตรวจเสียงด้วย `verify_voice.py` เสมอ ถ้าพบคำเพี้ยน/คำเกิน ให้เปลี่ยนคำแล้วพากย์เฉพาะช่วงนั้น (ครั้งนี้ "ทาย"→"บอก", "ฝั่ง"→"ทาง", "สุกๆ ดิบๆ"→"ไม่สุกดี")
+- ตัวอักษรบนจอห้ามใช้ลูกศร → และคำที่วรรณยุกต์ซ้อนสระบน (เสี่ยง เลี่ยง ดื่ม น้ำ นั้น ฯลฯ) เพราะฟอนต์วาดไม่ได้ ใช้คำอื่นแทน
+
+## 10.9 FR-11 บทต้องเป็น "เรื่องเล่า" ที่มีตัวละครคุยกัน (เพิ่ม 2026-11-05, ผู้ใช้ตีกลับตอนหุ่นยนต์ว่าเป็นการอธิบายเป็นข้อมูล)
+ผู้ใช้ชอบบทแบบ "ด้ายแดง": เล่าเป็นนิทาน มีเรื่องราว ตัวละครมีปัญหา ทำอะไรต่อ คุยกันยังไง คิดยังไง ปะทะกันเอง สนุก ลื่น ไม่เอื่อย ความรู้แทรกนิด ๆ ในจังหวะที่ตัวละครเจอ ไม่ใช่เทศน์
+
+- **บทต้องเป็นเรื่อง ไม่ใช่รายงาน:** ส่วนใหญ่ของบทเป็นเหตุการณ์ของตัวละคร (ใครมีปัญหาอะไร ลองทำอะไร ผลเป็นอย่างไร ใครพูดอะไรกับใคร ใครคิดอะไรอยู่) ข้อเท็จจริง/ตัวเลขเป็นส่วนเสริมที่ "โผล่มาจากเหตุการณ์" (ตัวละครเจอ ถาม ตกใจ แล้วผู้เล่าเฉลยสั้น ๆ) ห้ามมีช่วงยาวที่ผู้เล่ารายงานตัวเลขต่อเนื่องโดยไม่มีตัวละคร
+- **ทุกตอนต้องมีโครงสนุก 3 ส่วน:** เปิดเรื่อง (สถานการณ์ + ปมที่อยากรู้ภายใน 15 วินาที), กลางเรื่อง (ปัญหายกระดับ มีจุดหักมุมหรือเรื่องไม่คาดคิดอย่างน้อย 1 จุด), ตอนจบ (ผลลัพธ์ของตัวละคร + ความรู้/ข้อคิดที่ได้ สั้น ๆ) ส่วนที่ให้ความรู้ก็ต้องสนุก (ใช้มุก การเปรียบเทียบ จังหวะประหลาดใจ)
+- **ตัวละครคุยกันเยอะ:** ผู้เล่าอ่านบทพูดของตัวละครด้วยน้ำเสียงเดียว (ไม่แยกเสียงตัวละคร) แต่ต้องมีบทพูดโต้ตอบ ถามตอบ ทะเลาะ ล้อ ตกใจ ให้เยอะ ไม่ใช่เล่าสรุปว่า "เขาคุยกัน"
+- **เสียงผู้เล่า:** ผู้เล่าเสียงเดียวตลอดตอน ใช้เสียง Gemini ที่เหมาะกับการเล่านิทาน (ตอนนี้ผู้ใช้ให้ลองเสียงผู้ชายแนวตื่นเต้น/สนุก) คำสั่งสไตล์ต้องให้ "มีอารมณ์ร่วม เปลี่ยนโทนตามเหตุการณ์ ไม่ monotone" เสียงต้องไม่เปลี่ยนย่าน (ระดับเสียง/ช่วงเสียง) กลางตอน: ใช้เสียงเดียว คำสั่งสไตล์เดียว พากย์เป็นช่วงยาวให้น้อยครั้งที่สุดเท่าที่โมเดลทนได้ แล้ววัด F0 ต่อช่วงก่อนเรนเดอร์ ถ้าช่วงไหนเพี้ยนให้ปรับหรือพากย์ใหม่
+- **ภาพต้องเล่าการโต้ตอบ:** ตัวละครพูดกัน (ปากขยับ) แสดงสีหน้า คิด (ฟองความคิดเป็นไอคอน) และทำปฏิกิริยาต่อกันและต่อสิ่งของ แทนการยืนดูกราฟิก ตัวละครมีหลายคนหน้าตาไม่เหมือนกัน
+- **ตัวอย่างอ้างอิงของผู้ใช้:** ลุงถามรถว่า "ทำไมรถคันนี้ไม่มีคนขับ แล้วเราต้องทำไง"; ลุงโทรหาเจ้าหน้าที่แต่เป็น AI ตอบเรื่องเดิมซ้ำ ๆ เสียค่าโทร; เด็กสั่งอาหารแล้วหุ่นยนต์/โดรนมาส่งและชวนลุง "มากินกัน"; เรื่อง "ด้ายแดง" (เพื่อนร่วมคณะ 2 คนที่เฉียดกันมาหลายปี แฟนหึง หลบหน้า เลิกกัน แล้วกลับมาเคลียร์ใจ โดยไม่รู้ว่ามีด้ายแดงผูกนิ้วก้อยมาตั้งแต่ปีแรก)
+- **ก่อนเรนเดอร์ทุกครั้ง:** อ่านบททั้งตอนแล้วตอบ 3 ข้อ (1) ใครมีปัญหาอะไรในแต่ละฉาก (2) ใครพูดอะไรกับใคร (3) ฉากไหนที่ผู้เล่ารายงานข้อมูลเกิน ~15 วินาทีโดยไม่มีตัวละคร → ต้องแก้
+
+## 11. เรื่องที่ตรวจแล้ว / ยังต้องตรวจ
+- [x] Gemini free tier สร้างรูปได้ไหม → ไม่ใช้ (ไม่มี API สร้างรูปฟรี) วาดด้วย Pillow ทั้งหมด
+- [x] โควตา Gemini TTS (ตรวจ 2026-10-21): free tier **10 ครั้ง/วัน/โมเดล** (`gemini-2.5-flash-tts`); `gemini-2.5-pro-preview-tts` ใช้ฟรีไม่ได้; `edge-tts` ฟรีแต่มีเสียงไทยแค่ 2 เสียง (Niwat ชาย, Premwadee หญิง) และบางครั้งปฏิเสธเมื่อเรียกถี่
+- [x] ฟอนต์ไทยที่ Pillow ใช้ในซับ 9:16 อ่านชัดไหม → `LeelaUIb.ttf` อ่านชัด
+- [ ] Gemini TTS ทำตามคำสั่งโทนเสียงภาษาไทย (กระซิบ/ตื่นเต้น) ได้จริงไหม โดยไม่อ่านคำสั่งออกมา

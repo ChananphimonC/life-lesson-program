@@ -16,6 +16,8 @@ output/video/*
 
 .dist/
 
+experiments/*/output/
+
 # Locally-curated stock background videos (not source, not committed).
 assets/backgrounds/*
 !assets/backgrounds/README.md

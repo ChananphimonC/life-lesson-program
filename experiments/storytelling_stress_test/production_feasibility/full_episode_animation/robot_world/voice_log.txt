@@ -1,0 +1,8 @@
+Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
+scene 1: gemini -> line01-0102b66c42.gemini.wav
+scene 2: gemini -> line02-6b037d20bd.gemini.wav
+scene 3: gemini -> line03-9a77be79a8.gemini.wav
+scene 4: gemini -> line04-9888891af6.gemini.wav
+scene 5: gemini -> line05-d94faf1c0f.gemini.wav
+scene 6: gemini -> line06-d5ce4db8ee.gemini.wav
+scene 7: gemini -> line07-d184ace12e.gemini.wav

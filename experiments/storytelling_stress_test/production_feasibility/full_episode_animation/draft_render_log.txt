@@ -1,0 +1,7 @@
+rt1 1481 frames 261 s
+rt2 1505 frames 1606 s
+rt3 1025 frames 1716 s
+rt4 1097 frames 1827 s
+rt5 1625 frames 1989 s
+rt6 1025 frames 2065 s
+rt7 1001 frames 2202 s

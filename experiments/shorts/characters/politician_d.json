@@ -1,0 +1,15 @@
+{
+  "id": "politician_d",
+  "name": "นักการเมือง",
+  "role": "politician",
+  "gender": "male",
+  "age": "middle-aged",
+  "fixed": ["ตัวละครสมมติ ไม่ล้อเลียนบุคคลจริง", "ผมหงอกแสกข้าง", "ราชปะแตนขาวติดกระดุมทอง หรือสูท", "ป้ายชื่อสมมติที่อก", "ถือกระดาษปราศรัย"],
+  "draw": {"kind": "politician", "skin": "#E9BB93", "cheek": "#E8978A", "hair": "#B9BBC4", "tag": "ส.ส.สมมติ"},
+  "outfits": {
+    "default": {"jacket": "#F4F1E8", "jacket_dark": "#D3CEBF", "button": "#E2B93B", "pants": "#3B4366", "shoe": "#2B2428", "tie": null},
+    "suit": {"jacket": "#2D3B63", "jacket_dark": "#1F2A49", "button": "#C8C8D0", "pants": "#2D3B63", "shoe": "#2B2428", "tie": "#C23B3B"}
+  },
+  "voice": {"gemini": "Orus", "edge": "th-TH-NiwatNeural", "edge_rate": "-2%", "edge_pitch": "-12Hz"},
+  "subtitle_color": "#8FD3FF"
+}

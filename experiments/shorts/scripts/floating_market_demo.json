@@ -1,0 +1,23 @@
+{
+  "id": "demo_floating_market",
+  "title": "มะม่วงของแม่ค้ากับหลวงพี่",
+  "aspect": "9:16",
+  "scenes": [
+    {
+      "background": "floating_market",
+      "characters": [
+        {"id": "monk_a", "outfit": "default", "pos": "left"},
+        {"id": "vendor_b", "outfit": "default", "pos": "right"}
+      ],
+      "lines": [
+        {"speaker": "vendor_b", "text": "หลวงพี่คะ มะม่วงหวานเจี๊ยบ ไม่ซื้อไม่ได้แล้วนะคะ", "emotion": "cheerful"},
+        {"speaker": "monk_a", "text": "ขอบใจโยม แต่เลยเที่ยงแล้ว อาตมาฉันไม่ได้", "emotion": "calm"},
+        {"speaker": "vendor_b", "text": "อ้าว! งั้นหนูเก็บไว้ให้พรุ่งนี้เช้านะคะ", "emotion": "surprised"},
+        {"speaker": "monk_a", "text": "ได้โยม แต่มะม่วงสุกก่อนพรุ่งนี้แน่ๆ", "emotion": "smile"},
+        {"speaker": "vendor_b", "text": "ไม่เป็นไรค่ะ สุกก็ทำข้าวเหนียวมะม่วงถวายเลย", "emotion": "cheerful"},
+        {"speaker": "monk_a", "text": "สาธุ งั้นพรุ่งนี้อาตมามาแน่", "emotion": "smile"}
+      ]
+    }
+  ],
+  "sources": []
+}

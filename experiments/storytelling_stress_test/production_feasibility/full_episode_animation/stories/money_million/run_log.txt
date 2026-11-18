@@ -1,0 +1,38 @@
+2026-11-16 11:05:03 synth chunk 1: gemini scenes [1, 2] 115.5s (11.5 chars/s) | chunk 2: gemini scenes [3, 4] 108.9s (11.9 chars/s) |   gemini tts: transient error, retry 1/3 in 2s (3/10 used) | chunk 3: gemini scenes [5, 6] 81.6s (14.5 chars/s) | chunk 4: gemini scenes [7, 8] 99.6s (14.0 chars/s)
+2026-11-16 11:05:08 match chunk 1: F0 median 122 Hz (std 43), speech rms 0.189, 115.5s | chunk 2: F0 median 120 Hz (std 37), speech rms 0.142, 108.9s | chunk 3: F0 median 120 Hz (std 35), speech rms 0.119, 81.6s | chunk 4: F0 median 126 Hz (std 40), speech rms 0.139, 99.6s | target F0 120.91370558375635 | chunk 1: now F0 121 Hz, speech rms 0.142 (gain 0.74) | chunk 2: now F0 120 Hz, speech rms 0.140 (gain 0.99) | chunk 3: now F0 120 Hz, speech rms 0.139 (gain 1.18) | chunk 4: now F0 126 Hz, speech rms 0.140 (gain 1.01)
+2026-11-16 11:05:25 split   scene 2 starts at 59.0s (guess 57.1, model 59.3) | scene 1: 58.9s (chunk 1 0.0-58.9) | scene 2: 56.6s (chunk 1 58.9-115.5) |    scene 4 starts at 55.8s (guess 54.1, model 55.9) | scene 3: 55.6s (chunk 2 0.0-55.6) | scene 4: 53.2s (chunk 2 55.6-108.9) |    scene 6 starts at 39.9s (guess 38.6, model 39.9) | scene 5: 39.7s (chunk 3 0.0-39.7) | scene 6: 41.9s (chunk 3 39.7-81.6) |    scene 8 starts at 51.3s (guess 49.1, model 51.3) | scene 7: 51.2s (chunk 4 0.0-51.2) | scene 8: 48.4s (chunk 4 51.2-99.6) | timing.json written {'1': 58.92, '2': 56.58, '3': 55.65, '4': 53.23, '5': 39.75, '6': 41.89, '7': 51.22, '8': 48.4}
+2026-11-16 11:13:39 marks  'พอพี่ก้องเ': (45.7, 45.07), 'ส่วนเลขลึก': (53.3, 53.24)} | 3 {'นี่แหละเลข': (10.3, 10.29), 'เงินเดือนฉ': (14.1, 13.78), 'เอมโผล่มาจ': (19.5, 19.5), 'ต้าเปิดข่า': (23.0, 23.32), 'สมมติว่าได': (32.3, 32.25), 'เอมอ่านแล้': (40.0, 40.3), 'ล้านแรกไม่': (46.6, 46.71)} | 4 {'ชานมวันละแ': (3.8, 3.55), 'และที่น่าก': (7.7, 7.55), 'เอมปลอบ': (13.3, 13.18), 'มันคือหนี้': (19.3, 19.38), 'ตามผลสำรวจ': (21.6, 21.47), 'ต้าเลยทำสา': (31.0, 31.04), 'สอง ตั้งกฎ': (35.6, 35.45), 'สาม โอนเงิ': (41.1, 40.88), 'ผลคือแอปช้': (45.4, 45.34)} | 5 {'ต้าดูแล้วข': (8.8, 8.55), 'เอมหน้าแห้': (15.6, 15.63), 'ต้าเลยตั้ง': (22.1, 22.4), 'ชั้นแรก': (24.2, 24.07), 'ชั้นสอง': (31.6, 31.58), 'ชั้นสาม': (35.1, 34.84)} |    marks scene 6: implausible times [31.1, 32.0] (scene is 41.9s), asking again |    marks scene 6: retry 1/5 (Server disconnected without sending a response.) | 6 {'ต้านั่งคิด': (7.0, 6.9), 'ต้าเก่งแปล': (10.0, 10.2), 'คืนหนึ่งต้': (12.3, 12.25), 'ลูกค้าจ่าย': (18.0, 17.75), 'เอมอ่านข่า': (21.0, 20.98), 'ต้าถามกลับ': (26.0, 25.94), 'เอมเงียบ': (31.0, 31.19), 'ต้าสรุปว่า': (32.0, 32.06)} | 7 {'รายได้เสริ': (4.5, 4.4), 'เหลือเก็บเ': (9.3, 9.36), 'แต่ยังห่าง': (16.0, 15.78), 'เอมอุทาน': (17.6, 17.7), 'ปีที่สองรา': (22.3, 22.1), 'ถ้าเก็บต่อ': (35.0, 35.06), 'ส่วนใครที่': (38.9, 38.62), 'แต่ถ้ามีใค': (44.3, 44.43)} | 8 {'อย่างที่สอ': (8.1, 8.2), 'อย่างที่สา': (13.0, 12.95), 'อย่างที่สี': (15.0, 14.89), 'และอย่างที': (17.5, 17.44), 'เรื่องราวใ': (24.3, 23.92), 'ส่วนต้า ตอ': (34.4, 34.45), 'ถ้าคุณอยู่': (40.5, 40.64)}
+2026-11-16 11:14:59 asr scene 1: ratio 0.32 | scene 2: ratio 0.72 | scene 3: ratio 0.67 | scene 4: ratio 0.88 | scene 5: ratio 0.45 | scene 6: ratio 0.94 | scene 7: ratio 0.79 | scene 8: ratio 0.89
+2026-11-16 11:16:20 render gs_money_million_1 81 s gs_money_million_1 1455 frames 81 s
+2026-11-16 11:18:02 render gs_money_million_2 184 s gs_money_million_2 1399 frames 102 s
+2026-11-16 11:19:20 render gs_money_million_3 262 s gs_money_million_3 1376 frames 78 s
+2026-11-16 11:20:38 render gs_money_million_4 339 s gs_money_million_4 1318 frames 77 s
+2026-11-16 11:21:36 render gs_money_million_5 398 s gs_money_million_5 995 frames 58 s
+2026-11-16 11:22:34 render gs_money_million_6 455 s gs_money_million_6 1046 frames 57 s
+2026-11-16 11:23:57 render gs_money_million_7 539 s gs_money_million_7 1270 frames 83 s
+2026-11-16 11:25:31 render gs_money_million_8 632 s gs_money_million_8 1202 frames 93 s
+2026-11-16 11:26:05 assemble wrote C:\life-lesson generator\life-lesson-program\experiments\storytelling_stress_test\production_feasibility\full_episode_animation\stories\money_million\renders\money_million.mp4 419.2 s
+2026-11-16 11:26:24 qa    6804, |   6853, |   6985, |   7063, |   7344, |   7984, |   8030, |   8136, |   8447, |   8532, |   8672, |   9702, |   9851 |  ] | } | sheets done
+2026-11-16 11:26:29 library filed: EP12 - วิธีมีเงินล้านใน 2 ปี (แบบไม่โดนหลอก) -> รู้หรือไม่
+2026-11-16 11:26:29 DONE
+2026-11-16 11:34:51 render gs_money_million_1 90 s gs_money_million_1 1455 frames 89 s
+2026-11-16 11:37:04 render gs_money_million_2 222 s gs_money_million_2 1399 frames 132 s
+2026-11-16 11:38:31 render gs_money_million_3 309 s gs_money_million_3 1376 frames 86 s
+2026-11-16 11:39:57 render gs_money_million_4 395 s gs_money_million_4 1318 frames 86 s
+2026-11-16 11:41:21 render gs_money_million_5 480 s gs_money_million_5 995 frames 83 s
+2026-11-16 11:42:32 render gs_money_million_6 551 s gs_money_million_6 1046 frames 71 s
+2026-11-16 11:44:04 render gs_money_million_7 642 s gs_money_million_7 1270 frames 91 s
+2026-11-16 11:45:29 render gs_money_million_8 727 s gs_money_million_8 1202 frames 84 s
+2026-11-16 11:45:47 assemble wrote C:\life-lesson generator\life-lesson-program\experiments\storytelling_stress_test\production_feasibility\full_episode_animation\stories\money_million\renders\money_million.mp4 419.2 s
+2026-11-16 11:46:05 qa    6804, |   6853, |   6985, |   7063, |   7344, |   7984, |   8030, |   8136, |   8447, |   8532, |   8672, |   9702, |   9851 |  ] | } | sheets done
+2026-11-16 11:46:06 library filed: EP12 - วิธีมีเงินล้านใน 2 ปี (แบบไม่โดนหลอก) -> รู้หรือไม่
+2026-11-16 12:28:25 library filed: EP12 - วิธีมีเงินล้านใน 2 ปี (แบบไม่โดนหลอก) -> รู้หรือไม่
+2026-11-16 12:28:25 DONE
+2026-11-16 12:31:27 assemble wrote C:\life-lesson generator\life-lesson-program\experiments\storytelling_stress_test\production_feasibility\full_episode_animation\stories\money_million\renders\money_million.mp4 419.2 s
+2026-11-16 12:31:42 qa    6804, |   6853, |   6985, |   7063, |   7344, |   7984, |   8030, |   8136, |   8447, |   8532, |   8672, |   9702, |   9851 |  ] | } | sheets done
+2026-11-16 12:31:44 library filed: EP12 - วิธีมีเงินล้านใน 2 ปี (แบบไม่โดนหลอก) -> รู้หรือไม่
+2026-11-16 12:31:44 DONE
+2026-11-16 12:48:48 assemble wrote C:\life-lesson generator\life-lesson-program\experiments\storytelling_stress_test\production_feasibility\full_episode_animation\stories\money_million\renders\money_million.mp4 419.2 s
+2026-11-16 12:49:05 qa    6804, |   6853, |   6985, |   7063, |   7344, |   7984, |   8030, |   8136, |   8447, |   8532, |   8672, |   9702, |   9851 |  ] | } | sheets done
+2026-11-16 12:49:07 library filed: EP12 - วิธีมีเงินล้านใน 2 ปี (แบบไม่โดนหลอก) -> รู้หรือไม่
+2026-11-16 12:49:07 DONE

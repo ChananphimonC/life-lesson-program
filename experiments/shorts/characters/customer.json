@@ -1,0 +1,34 @@
+{
+  "id": "customer",
+  "name": "ลูกค้า",
+  "role": "customer",
+  "gender": "male",
+  "age": "adult",
+  "fixed": [
+    "เสื้อฮู้ดสีแดง",
+    "หิว"
+  ],
+  "draw": {
+    "kind": "person",
+    "skin": "#EDBF96",
+    "cheek": "#E58E86",
+    "hair": "#2B2224",
+    "hair_style": "short"
+  },
+  "outfits": {
+    "default": {
+      "top": "#D9534F",
+      "accent": "#FFFFFF",
+      "top_style": "hoodie",
+      "bottom": "#3E4A66",
+      "arms": "down"
+    }
+  },
+  "voice": {
+    "gemini": "Puck",
+    "edge": "th-TH-NiwatNeural",
+    "edge_pitch": "+10Hz",
+    "edge_rate": "+2%"
+  },
+  "subtitle_color": "#FFD36B"
+}

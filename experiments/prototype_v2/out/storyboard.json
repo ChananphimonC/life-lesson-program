@@ -1,0 +1,89 @@
+{
+  "source_audio": "C:\\life-lesson generator\\life-lesson-program\\experiments\\cartoon_storyboard\\output\\_work\\tts\\know_craving\\line01-02a6a1162f.gemini.wav",
+  "fps": 30,
+  "transition": {
+    "whip_pan": [
+      13.79,
+      14.09
+    ]
+  },
+  "shots": [
+    {
+      "id": "S1",
+      "t0": 0.0,
+      "t1": 2.97,
+      "voice": "เอ๊ะ! บ้านปิ่นมีคดีปริศนาค่ะ!",
+      "purpose": "Hook: the narrator herself is startled; viewers meet her face first.",
+      "action": "Close-up of ปิ่น turning to camera, eyebrows up, eyes wide; she speaks to the viewer.",
+      "shot": "close-up, eye level, character right of centre; living room behind, blurred",
+      "motion": "quick punch-in 0.25 s on 'เอ๊ะ', then hold",
+      "text": "none"
+    },
+    {
+      "id": "S2",
+      "t0": 2.97,
+      "t1": 6.15,
+      "voice": "คุณยายตอนท้องแม่ กินทุเรียนแทบทุกวัน",
+      "purpose": "Memory 1: grandma's craving. Warm sepia grade = the past, no caption needed.",
+      "action": "คุณยาย holds a plate of golden durian pods with both hands, eyes closed, chewing happily.",
+      "shot": "medium shot, slightly left; old living room in sepia",
+      "motion": "slow lateral drift with parallax",
+      "text": "none"
+    },
+    {
+      "id": "S3a",
+      "t0": 6.15,
+      "t1": 10.95,
+      "voice": "แม่ตอนท้องพี่สาว ไปกินสุกี้...ทุกสัปดาห์ เพราะอยากตับลวก",
+      "purpose": "Memory 2: mum pregnant with the elder sister, at a hotpot restaurant every week.",
+      "action": "Pregnant แม่ sits behind a table with a bubbling hotpot and a plate of liver, leaning in, eyes sparkling.",
+      "shot": "medium shot, mum right, pot left foreground, table edge hides her lap",
+      "motion": "steam and bubbles only",
+      "text": "none"
+    },
+    {
+      "id": "S3b",
+      "t0": 10.95,
+      "t1": 13.94,
+      "voice": "แต่ลวกสุกนะคะ",
+      "purpose": "Payoff joke: show the liver really is cooked.",
+      "action": "Insert: a ladle slowly lifts a cooked, brown slice out of the pot.",
+      "shot": "extreme close-up on the pot, no people",
+      "motion": "ladle rises over 1.5 s",
+      "text": "none"
+    },
+    {
+      "id": "S4",
+      "t0": 13.94,
+      "t1": 17.52,
+      "voice": "แต่พอท้องปิ่น แม่ทิ้งหมดเลย หันมากินตำผลไม้กับโอเลี้ยง!",
+      "purpose": "Memory 3 (contrast): a different pregnancy, a totally different craving.",
+      "action": "Pregnant แม่ in the kitchen hugs a bowl of fruit salad, grinning and chewing; an iced coffee waits on the counter.",
+      "shot": "medium shot, mum centre-left, glass right",
+      "motion": "whip-pan transition in, then chewing",
+      "text": "none"
+    },
+    {
+      "id": "S5",
+      "t0": 17.52,
+      "t1": 21.52,
+      "voice": "แล้วพอปิ่นโตขึ้น แม่ไม่เคยแตะตำผลไม้อีกเลยนะคะ!",
+      "purpose": "Twist: back in the present, mum refuses the very food she craved.",
+      "action": "Grown-up ปิ่น offers a bowl of fruit salad; แม่ (not pregnant) gives a flat, unimpressed look and leans away.",
+      "shot": "two-shot, ปิ่น left, แม่ right, present-day colours",
+      "motion": "mum leans back at 19 s",
+      "text": "none"
+    },
+    {
+      "id": "S6",
+      "t0": 21.52,
+      "t1": 28.93,
+      "voice": "ตกลงของที่แม่อยากกิน มันบอกอะไรเกี่ยวกับลูกหรือเปล่า วันนี้ปิ่นกับน้องหมาห้าตัว จะเปิดแฟ้มสืบสวนกันค่ะ!",
+      "purpose": "The question that drives the episode, then the 'case' begins.",
+      "action": "ปิ่น, hands clasped, puzzled; at 25.3 s she turns determined while the five dogs hop and the case folder opens.",
+      "shot": "wide, low angle: dogs and folder in the foreground, ปิ่น behind",
+      "motion": "dogs hop, folder opens",
+      "text": "none"
+    }
+  ]
+}

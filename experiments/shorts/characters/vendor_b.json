@@ -1,0 +1,17 @@
+{
+  "id": "vendor_b",
+  "name": "แม่ค้า",
+  "role": "vendor",
+  "gender": "female",
+  "age": "adult",
+  "fixed": ["หมวกฟาง", "ผ้ากันเปื้อน", "ร่าเริง พูดเร็ว", "ถือมะม่วง"],
+  "draw": {"kind": "vendor", "skin": "#F1C49A", "cheek": "#F08C86", "hair": "#3B2A26"},
+  "outfits": {
+    "default": {"hat": true, "straw": "#E6C373", "band": "#D8503F", "blouse": "#F5E6D3",
+                "apron": "#4FA98A", "pants": "#4A6A9C", "mango": "#F4B72E"},
+    "no_hat": {"hat": false, "straw": "#E6C373", "band": "#D8503F", "blouse": "#F5E6D3",
+               "apron": "#4FA98A", "pants": "#4A6A9C", "mango": "#F4B72E"}
+  },
+  "voice": {"gemini": "Aoede", "edge": "th-TH-PremwadeeNeural", "edge_rate": "+6%"},
+  "subtitle_color": "#FF8FB3"
+}

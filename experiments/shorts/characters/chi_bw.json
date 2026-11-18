@@ -1,0 +1,31 @@
+{
+  "id": "chi_bw",
+  "name": "แพนด้า",
+  "role": "dog",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "ชิวาว่าตัวสีดำ อกและแถบหน้าสีขาว",
+    "หัวหน้าแก๊ง นำทีมไปเที่ยว"
+  ],
+  "draw": {
+    "kind": "dog",
+    "breed": "chi",
+    "scale_mul": 0.62,
+    "coat": "#2F2A30",
+    "light": "#F5F1EA",
+    "chest": true,
+    "blaze": true,
+    "face_dy": 250
+  },
+  "outfits": {
+    "default": {}
+  },
+  "voice": {
+    "gemini": "Zephyr",
+    "edge": "th-TH-PremwadeeNeural",
+    "edge_pitch": "+34Hz",
+    "edge_rate": "+8%"
+  },
+  "subtitle_color": "#DADADA"
+}

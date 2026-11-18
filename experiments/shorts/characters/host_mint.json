@@ -1,0 +1,69 @@
+{
+  "id": "host_mint",
+  "name": "น้องปิ่น (ผู้เล่า)",
+  "role": "narrator-host",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "ผู้เล่าประจำซีรีส์ รู้หรือไม่ ชื่อน้องปิ่น",
+    "ผมยาว แว่นกลม",
+    "เสื้อฮู้ดสีเขียวมิ้นต์",
+    "ร่าเริง ชอบเล่าเรื่องสุดๆ",
+    "เลี้ยงหมา 5 ตัว: ลูกตาล สาคู แพนด้า ลูกจิ๋ว แพนดี้"
+  ],
+  "draw": {
+    "kind": "person",
+    "style": "cute",
+    "gender": "female",
+    "skin": "#F9DDCB",
+    "cheek": "#F0A59E",
+    "hair": "#3A2724",
+    "hair_style": "long",
+    "glasses": true,
+    "outfit_kind": "hoodie_jeans",
+    "scale_mul": 1.06,
+    "lashes": true,
+    "chibi": 0.9
+  },
+  "outfits": {
+    "default": {
+      "top": "#8FD6BE",
+      "accent": "#F4EBD0",
+      "top_style": "hoodie",
+      "bottom": "#5B7BA8",
+      "shoe": "#F2EFE8",
+      "arms": "down"
+    },
+    "present": {
+      "top": "#8FD6BE",
+      "accent": "#F4EBD0",
+      "top_style": "hoodie",
+      "bottom": "#5B7BA8",
+      "shoe": "#F2EFE8",
+      "arms": "raise"
+    },
+    "excited": {
+      "top": "#8FD6BE",
+      "accent": "#F4EBD0",
+      "top_style": "hoodie",
+      "bottom": "#5B7BA8",
+      "shoe": "#F2EFE8",
+      "arms": "both_up"
+    },
+    "hips": {
+      "top": "#8FD6BE",
+      "accent": "#F4EBD0",
+      "top_style": "hoodie",
+      "bottom": "#5B7BA8",
+      "shoe": "#F2EFE8",
+      "arms": "hips"
+    }
+  },
+  "voice": {
+    "gemini": "Kore",
+    "edge": "th-TH-PremwadeeNeural",
+    "edge_pitch": "+6Hz",
+    "edge_rate": "+0%"
+  },
+  "subtitle_color": "#B8F0DC"
+}

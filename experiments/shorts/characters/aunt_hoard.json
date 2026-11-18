@@ -1,0 +1,38 @@
+{
+  "id": "aunt_hoard",
+  "name": "ป้าสายตุน",
+  "role": "shopper",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "ผมดัด",
+    "เสื้อลายดอก",
+    "หิ้วถุงเสบียง",
+    "ตุนไว้ก่อน"
+  ],
+  "draw": {
+    "kind": "person",
+    "skin": "#E8B990",
+    "cheek": "#E58A86",
+    "hair": "#4A3A44",
+    "hair_style": "perm"
+  },
+  "outfits": {
+    "default": {
+      "top": "#8E6BB8",
+      "accent": "#F6A6C8",
+      "top_style": "floral",
+      "bottom": "#5B4A6E",
+      "skirt": true,
+      "arms": "hold",
+      "prop": "bags"
+    }
+  },
+  "voice": {
+    "gemini": "Kore",
+    "edge": "th-TH-PremwadeeNeural",
+    "edge_pitch": "-12Hz",
+    "edge_rate": "+2%"
+  },
+  "subtitle_color": "#F7A8D8"
+}

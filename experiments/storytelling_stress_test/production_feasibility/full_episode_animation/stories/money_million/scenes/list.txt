@@ -1,0 +1,8 @@
+file 'gs_money_million_1.mp4'
+file 'gs_money_million_2.mp4'
+file 'gs_money_million_3.mp4'
+file 'gs_money_million_4.mp4'
+file 'gs_money_million_5.mp4'
+file 'gs_money_million_6.mp4'
+file 'gs_money_million_7.mp4'
+file 'gs_money_million_8.mp4'

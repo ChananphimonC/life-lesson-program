@@ -1,0 +1,14 @@
+{
+  "id": "monk_a",
+  "name": "หลวงพี่",
+  "role": "monk",
+  "gender": "male",
+  "age": "adult",
+  "fixed": ["โกนผม ไม่มีผม", "จีวรสีส้ม/เหลือง", "ถือบาตร", "ใจเย็น พูดช้า"],
+  "draw": {"kind": "monk", "skin": "#EDBE92", "cheek": "#F2A08E"},
+  "outfits": {
+    "default": {"robe": "#E8872A", "robe_dark": "#C26A16", "inner": "#F2B44A", "bowl": "#3A3236"}
+  },
+  "voice": {"gemini": "Charon", "edge": "th-TH-NiwatNeural", "edge_rate": "-8%"},
+  "subtitle_color": "#FFC857"
+}

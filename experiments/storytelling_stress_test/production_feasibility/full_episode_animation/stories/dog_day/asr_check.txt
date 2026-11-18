@@ -1,0 +1,6 @@
+scene 1: ratio 0.97
+scene 2: ratio 0.97
+scene 3: ratio 0.84
+scene 4: ratio 0.98
+scene 5: ratio 0.99
+scene 6: ratio 0.99

@@ -1,0 +1,39 @@
+19:34:14 RUN split
+19:36:20   gemini text: transient error, retry 1/3 in 2s (123/200 used)
+  gemini text: transient error, retry 2/3 in 4s (124/200 used)
+   scene 2 starts at 68.6s (guess 64.2, model 68.6)
+scene 1: 68.5s (chunk 1 0.0-68.5)
+scene 2: 64.2s (chunk 1 68.5-132.7)
+  gemini text: transient error, retry 1/3 in 2s (126/200 used)
+   scene 4 starts at 58.8s (guess 52.1, model 58.7)
+scene 3: 58.7s (chunk 2 0.0-58.7)
+scene 4: 48.9s (chunk 2 58.7-107.6)
+   scene 6 starts at 46.7s (guess 42.8, model 46.9)
+   scene 7 starts at 110.8s (guess 108.5, model 110.7)
+scene 5: 46.6s (chunk 3 0.0-46.6)
+scene 6: 64.1s (chunk 3 46.6-110.7)
+scene 7: 39.0s (chunk 3 110.7-149.7)
+timing.json written {'1': 68.46, '2': 64.24, '3': 58.73, '4': 48.89, '5': 46.57, '6': 64.12, '7': 38.96}
+Direct use of automatic function calling (AFC) in Models.generate_content is not recommended. Instead, we recommend to use AFC in Chat.send_message. Similarly, direct use of AFC in Models.generate_content_stream is not recommended. Instead, we recommend to use AFC in Chat.send_message_stream.
+
+19:36:20 RUN marks
+19:37:26 site-packages\tenacity\__init__.py", line 187, in reraise
+    raise self.last_attempt.result()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\HP\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\tenacity\__init__.py", line 480, in __call__
+    result = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HP\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\google\genai\_api_client.py", line 1514, in _request_once
+    errors.APIError.raise_for_response(response)
+  File "C:\Users\HP\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\google\genai\errors.py", line 173, in raise_for_response
+    cls.raise_error(response.status_code, response_json, response)
+  File "C:\Users\HP\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\google\genai\errors.py", line 204, in raise_error
+    raise ServerError(status_code, response_json, response)
+google.genai.errors.ServerError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+
+19:37:26 RUN check

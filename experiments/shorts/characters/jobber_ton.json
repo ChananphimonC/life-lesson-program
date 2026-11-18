@@ -1,0 +1,74 @@
+{
+  "id": "jobber_ton",
+  "name": "ต้น (เด็กจบใหม่ เงินเดือน 28,000)",
+  "role": "first-jobber",
+  "gender": "male",
+  "age": "young adult",
+  "fixed": [
+    "เด็กจบใหม่ทำงานแรก เงินเดือน 28,000",
+    "ผมสั้น เสื้อเชิ้ตสีเขียวใบไม้",
+    "ใจสู้ ประหยัด วางแผนเก่ง"
+  ],
+  "draw": {
+    "kind": "person",
+    "skin": "#F3D2B8",
+    "cheek": "#F0A59E",
+    "hair": "#2A2326",
+    "hair_style": "short",
+    "style": "cute",
+    "scale_mul": 1.06,
+    "chibi": 0.9,
+    "lashes": false,
+    "gender": "male"
+  },
+  "outfits": {
+    "default": {
+      "top": "#9BCB9E",
+      "accent": "#FFFFFF",
+      "top_style": "shirt",
+      "bottom": "#2F3D55",
+      "arms": "down",
+      "shoe": "#2E2A2A"
+    },
+    "phone": {
+      "top": "#9BCB9E",
+      "accent": "#FFFFFF",
+      "top_style": "shirt",
+      "bottom": "#2F3D55",
+      "arms": "phone",
+      "prop": "phone",
+      "shoe": "#2E2A2A"
+    },
+    "bags": {
+      "top": "#9BCB9E",
+      "accent": "#FFFFFF",
+      "top_style": "shirt",
+      "bottom": "#2F3D55",
+      "arms": "down",
+      "prop": "bags",
+      "prop_hand": "right",
+      "shoe": "#2E2A2A"
+    },
+    "hips": {
+      "top": "#9BCB9E",
+      "accent": "#FFFFFF",
+      "top_style": "shirt",
+      "bottom": "#2F3D55",
+      "arms": "hips",
+      "shoe": "#2E2A2A"
+    },
+    "raise": {
+      "top": "#9BCB9E",
+      "accent": "#FFFFFF",
+      "top_style": "shirt",
+      "bottom": "#2F3D55",
+      "arms": "raise",
+      "shoe": "#2E2A2A"
+    }
+  },
+  "voice": {
+    "gemini": "Puck",
+    "edge": "th-TH-NiwatNeural"
+  },
+  "subtitle_color": "#BFE0FF"
+}

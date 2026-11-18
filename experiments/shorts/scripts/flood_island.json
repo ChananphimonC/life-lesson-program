@@ -1,0 +1,893 @@
+{
+  "id": "flood_island",
+  "title": "น้ำท่วม 3 ชั่วโมง บ้านฉันกลายเป็นเกาะร้าง!",
+  "aspect": "9:16",
+  "note": "สถานการณ์สมมติเพื่อความตลก ร้านค้าวาดแบบทั่วไป ไม่ใช่ภาพหรือข่าวจริงของร้านใด",
+  "scenes": [
+    {
+      "name": "1 น้ำมาไวกว่าแฟนเก่า",
+      "background": "flood_yard",
+      "lead": 0.7,
+      "min_dur": 5.5,
+      "tail": 0.4,
+      "fx": [
+        {
+          "name": "flood_rise",
+          "frm": 0.95,
+          "to": 0.62,
+          "rise": [
+            0.05,
+            0.7
+          ]
+        },
+        {
+          "name": "rain",
+          "density": 70
+        }
+      ],
+      "camera": {
+        "zoom": [
+          1.0,
+          1.1
+        ],
+        "focus": [
+          0.5,
+          0.42
+        ]
+      },
+      "props": [
+        {
+          "type": "news_bar",
+          "at": 0.0,
+          "dur": 999,
+          "y": 0.04,
+          "text": "บ้านเดี่ยวเลื่อนขั้นเป็นเกาะส่วนตัว"
+        },
+        {
+          "type": "caption",
+          "text": "ผ่านไปเพียง 3 ชั่วโมง…",
+          "style": "banner",
+          "at": 0.3,
+          "dur": 2.6,
+          "pos": [
+            0.5,
+            0.2
+          ]
+        }
+      ],
+      "sfx": [
+        {
+          "name": "news_jingle",
+          "at": 0.0,
+          "vol": 0.5
+        },
+        {
+          "name": "thunder",
+          "at": 0.5,
+          "vol": 0.6
+        },
+        {
+          "name": "water",
+          "at": 0.3,
+          "dur": 6.5,
+          "vol": 0.25
+        }
+      ],
+      "characters": [],
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": "ข่าวด่วนครับ! ฝนตกแป๊บเดียว บ้านเดี่ยวหลังนี้ก็กลายเป็นเกาะส่วนตัวซะแล้ว เจ้าของบ้านไม่ได้ขอด้วยนะครับ!"
+        }
+      ]
+    },
+    {
+      "name": "2 วิกฤตเดลิเวอรี",
+      "background": "living_room",
+      "characters": [
+        {
+          "id": "jae_matcha",
+          "outfit": "phone",
+          "x": 0.32
+        }
+      ],
+      "props": [
+        {
+          "type": "matcha_dream",
+          "line": 1,
+          "at": 0.1,
+          "dur": "line",
+          "pos": [
+            0.64,
+            0.15
+          ],
+          "scale": 0.9
+        },
+        {
+          "type": "phone_screen",
+          "line": 2,
+          "at": 0.0,
+          "dur": "line",
+          "extra": 0.2,
+          "pos": [
+            0.72,
+            0.3
+          ],
+          "scale": 0.62
+        },
+        {
+          "type": "island_badge",
+          "line": 2,
+          "at": 1.0,
+          "dur": 2.2,
+          "pos": [
+            0.72,
+            0.52
+          ],
+          "scale": 0.85
+        },
+        {
+          "type": "broken_heart",
+          "line": 5,
+          "at": 0.2,
+          "dur": "line",
+          "extra": 0.5,
+          "pos": [
+            0.62,
+            0.2
+          ]
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "jae_matcha",
+          "text": "ไรเดอร์คะ! มัทฉะหวานน้อย ซูชิสิบคำ ให้ทิปสองร้อย พายเรือมาส่งได้ป่ะ!?",
+          "emotion": "excited"
+        },
+        {
+          "speaker": "app_voice",
+          "text": "ขออภัยค่ะ พื้นที่ของคุณกลายเป็นเกาะแล้วค่ะ",
+          "sfx": "ding"
+        },
+        {
+          "speaker": "jae_matcha",
+          "text": "งั้นสั่งเรือมาสิ!",
+          "emotion": "excited"
+        },
+        {
+          "speaker": "app_voice",
+          "text": "ขออภัยค่ะ เรือถูกลุงนักตกปลาจองหมดแล้วค่ะ",
+          "sfx": "ding"
+        },
+        {
+          "speaker": "jae_matcha",
+          "text": "เกาะบ้านพ่อเธอสิ! ฉันยังมีเลขที่บ้านอยู่นะ!",
+          "emotion": "angry",
+          "outfit": "dramatic",
+          "sfx": "heartbreak",
+          "pause": 0.35
+        }
+      ]
+    },
+    {
+      "name": "3a แมคโครแตก",
+      "background": "wholesale_store",
+      "camera": {
+        "zoom": [
+          1.05,
+          1.0
+        ],
+        "focus": [
+          0.5,
+          0.5
+        ]
+      },
+      "characters": [
+        {
+          "id": "aunt_hoard",
+          "x": 0.3
+        },
+        {
+          "id": "uncle_b",
+          "x": 0.73
+        }
+      ],
+      "sfx": [
+        {
+          "name": "whoosh",
+          "at": 0.0,
+          "vol": 0.5
+        }
+      ],
+      "props": [
+        {
+          "type": "caption",
+          "text": "ขณะเดียวกัน ที่ห้างค้าส่ง…",
+          "style": "banner",
+          "at": 0.0,
+          "dur": 1.8,
+          "pos": [
+            0.5,
+            0.155
+          ]
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "aunt_hoard",
+          "text": "ซื้อไว้ก่อนลูก! อีกสามวันน้ำก็ยังไม่ลดหรอก!",
+          "emotion": "excited"
+        },
+        {
+          "speaker": "uncle_b",
+          "text": "ป้า นี่เพิ่งท่วมสามชั่วโมงเองนะ!",
+          "pause": 0.2
+        }
+      ]
+    },
+    {
+      "name": "3b เซเว่นเกลี้ยง",
+      "background": "convenience_store",
+      "characters": [
+        {
+          "id": "customer",
+          "x": 0.3
+        },
+        {
+          "id": "clerk",
+          "x": 0.73
+        }
+      ],
+      "sfx": [
+        {
+          "name": "whoosh",
+          "at": 0.0,
+          "vol": 0.5
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "customer",
+          "text": "พี่ครับ ชาเขียวขวดมีมั้ยครับ?"
+        },
+        {
+          "speaker": "clerk",
+          "text": "หมดค่ะ!",
+          "emotion": "shout",
+          "pause": 0.2
+        }
+      ]
+    },
+    {
+      "name": "3c ท่วมถึงชาเขียว",
+      "background": "living_room",
+      "camera": {
+        "zoom": [
+          1.0,
+          1.25
+        ],
+        "focus": [
+          0.5,
+          0.38
+        ]
+      },
+      "characters": [
+        {
+          "id": "jae_matcha",
+          "outfit": "dramatic",
+          "x": 0.5
+        }
+      ],
+      "props": [
+        {
+          "type": "exclaim",
+          "text": "!!",
+          "line": 1,
+          "at": 0.0,
+          "dur": "line",
+          "pos": [
+            0.78,
+            0.18
+          ],
+          "scale": 1.2
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "jae_matcha",
+          "text": "ไม่จริงอ่ะ! ท่วมก็ท่วมไปสิ ทำไมต้องท่วมถึงชาเขียวด้วยเนี่ย!",
+          "emotion": "shout",
+          "pause": 0.3
+        }
+      ]
+    },
+    {
+      "name": "4 หมู่บ้านชาวประมง",
+      "background": "flooded_street",
+      "fx": [
+        {
+          "name": "shimmer",
+          "top": 0.46
+        }
+      ],
+      "characters": [
+        {
+          "id": "uncle_fisher",
+          "outfit": "boat_net",
+          "x": 0.3,
+          "y": 0.69
+        },
+        {
+          "id": "jae_matcha",
+          "outfit": "happy",
+          "x": 0.79,
+          "y": 0.66,
+          "scale": 0.86,
+          "from_line": 5
+        }
+      ],
+      "sfx": [
+        {
+          "name": "splash",
+          "at": 0.1,
+          "vol": 0.5
+        },
+        {
+          "name": "water",
+          "at": 0.0,
+          "dur": 9.0,
+          "vol": 0.15
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "uncle_fisher",
+          "text": "ปลาสดจ้า! ปลาหน้าบ้าน ปลาข้างรั้ว!",
+          "emotion": "excited"
+        },
+        {
+          "speaker": "uncle_b",
+          "text": "ลุง! เมื่อเช้ายังขี่มอไซค์ไปซื้อหมูปิ้งอยู่เลย!",
+          "emotion": "shout"
+        },
+        {
+          "speaker": "uncle_fisher",
+          "text": "เศรษฐกิจไม่ดี ก็ต้องกระจายความเสี่ยงสิ!",
+          "pause": 0.25
+        },
+        {
+          "speaker": "uncle_fisher",
+          "text": "วันนี้ได้รองเท้าเบอร์สี่สิบสองมาคู่นึง! ใครเอามั้ย!",
+          "outfit": "boat_sandal",
+          "sfx": "boing",
+          "pause": 0.2
+        },
+        {
+          "speaker": "jae_matcha",
+          "text": "ลุง! มีชาเขียวมั้ย!",
+          "emotion": "excited"
+        },
+        {
+          "speaker": "uncle_fisher",
+          "text": "มีแต่ปลาทั้งตัวจ้า!",
+          "outfit": "boat",
+          "pause": 0.35
+        }
+      ],
+      "offscreen": [
+        "uncle_b"
+      ]
+    },
+    {
+      "name": "5 ผู้ประสบภัย 5 ชีวิต",
+      "background": "living_room",
+      "camera": {
+        "zoom": [
+          1.0,
+          1.06
+        ],
+        "focus": [
+          0.5,
+          0.5
+        ]
+      },
+      "characters": [
+        {
+          "id": "chi_bw",
+          "x": 0.31,
+          "y": 0.665
+        },
+        {
+          "id": "chi_nescafe",
+          "x": 0.88,
+          "y": 0.665
+        },
+        {
+          "id": "pom_brown",
+          "x": 0.12,
+          "y": 0.665
+        },
+        {
+          "id": "pom_white",
+          "x": 0.5,
+          "y": 0.665
+        },
+        {
+          "id": "chi_latte",
+          "x": 0.69,
+          "y": 0.665
+        }
+      ],
+      "props": [
+        {
+          "type": "suitcase",
+          "behind": true,
+          "pos": [
+            0.2,
+            0.47
+          ],
+          "scale": 0.9,
+          "at": 0.0,
+          "dur": 999
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": "แต่คนที่ซวยสุดไม่ใช่คนนะครับ คือผู้เช่าสนามหญ้าทั้งห้าชีวิตเนี่ย!"
+        },
+        {
+          "speaker": "pom_brown",
+          "text": "ฉันไม่เดินบนน้ำนะ! ฉันเดินบนพรมแดงเท่านั้น!",
+          "emotion": "angry"
+        },
+        {
+          "speaker": "pom_white",
+          "text": "(ถอนหายใจยาว…)",
+          "sfx_voice": "sigh",
+          "set": {
+            "pom_white": "lying"
+          },
+          "pause": 0.25
+        },
+        {
+          "speaker": "chi_bw",
+          "text": "ทุกคน! ภารกิจวันนี้ ออกไปเที่ยว!",
+          "emotion": "excited"
+        },
+        {
+          "speaker": "chi_latte",
+          "text": "หัวใจหนูสีขาวนะ แต่หัวใจแม่สีเขียว เพราะอยากกินมัทฉะ!",
+          "outfit": "tilt",
+          "emotion": "excited"
+        },
+        {
+          "speaker": "narrator",
+          "text": "กระเป๋าพร้อม ขาพร้อม ใจพร้อม แต่สนามหญ้าไม่พร้อมครับ!",
+          "set": {
+            "chi_nescafe": "back"
+          },
+          "pause": 0.2
+        },
+        {
+          "speaker": "chi_nescafe",
+          "text": "เตรียมตัวมาสามวัน ติดเกาะซะแล้ว ยังไม่ทันออกจากบ้านเลย!",
+          "outfit": "default",
+          "pause": 0.2
+        }
+      ]
+    },
+    {
+      "name": "6 ปฏิบัติการพาหมาเที่ยว",
+      "background": "living_room",
+      "characters": [
+        {
+          "id": "jae_matcha",
+          "outfit": "leash",
+          "x": 0.2
+        },
+        {
+          "id": "pom_brown",
+          "x": 0.56,
+          "y": 0.52,
+          "scale": 0.85
+        },
+        {
+          "id": "pom_white",
+          "x": 0.8,
+          "y": 0.52,
+          "scale": 0.85
+        },
+        {
+          "id": "chi_bw",
+          "x": 0.42,
+          "y": 0.67,
+          "scale": 1.0
+        },
+        {
+          "id": "chi_latte",
+          "x": 0.62,
+          "y": 0.67,
+          "scale": 1.0
+        },
+        {
+          "id": "chi_nescafe",
+          "x": 0.82,
+          "y": 0.67,
+          "scale": 1.0
+        }
+      ],
+      "props": [
+        {
+          "type": "leashes",
+          "behind": true,
+          "at": 0.0,
+          "dur": 999,
+          "hand": [
+            0.2,
+            0.485
+          ],
+          "to": [
+            [
+              0.56,
+              0.433
+            ],
+            [
+              0.8,
+              0.433
+            ],
+            [
+              0.42,
+              0.568
+            ],
+            [
+              0.62,
+              0.568
+            ],
+            [
+              0.82,
+              0.568
+            ]
+          ]
+        },
+        {
+          "type": "door_close",
+          "line": 1,
+          "at": 1.0,
+          "dur": 999,
+          "box": [
+            0.06,
+            0.2,
+            0.32,
+            0.58
+          ],
+          "speed": 0.5,
+          "behind": true
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "jae_matcha",
+          "text": "เด็กๆ วันนี้อดเที่ยวนะ สนามหญ้าเดินไม่ได้อ่ะ",
+          "outfit": "sad",
+          "sfx": "whoosh"
+        },
+        {
+          "speaker": "chi_bw",
+          "text": "แม่คะ หนูเตรียมกระเป๋าไว้แล้วนะ!",
+          "set": {
+            "pom_brown": "default"
+          },
+          "emotion": "excited"
+        },
+        {
+          "speaker": "chi_nescafe",
+          "text": "หนูว่ากระเป๋าน่าจะลอยน้ำได้นะคะ…",
+          "set": {
+            "pom_white": "back"
+          },
+          "pause": 0.2
+        },
+        {
+          "speaker": "jae_matcha",
+          "text": "งั้นเที่ยวในบ้านกันเนอะ ใครอยากไปทะเลบ้าง? …เออ ลืมไป เราอยู่ทะเลอยู่แล้วนี่หว่า",
+          "outfit": "happy",
+          "pause": 0.4
+        },
+        {
+          "speaker": "pom_brown",
+          "text": "ฉันกำลังคิดอยู่ว่าจะฟ้องใครดี!",
+          "emotion": "angry",
+          "pause": 0.3
+        }
+      ]
+    },
+    {
+      "name": "7 ชาเขียวที่ไม่ได้กิน",
+      "background": "living_room_night",
+      "characters": [
+        {
+          "id": "pom_white",
+          "outfit": "lying",
+          "x": 0.12,
+          "y": 0.6,
+          "scale": 0.8
+        },
+        {
+          "id": "chi_nescafe",
+          "x": 0.52,
+          "y": 0.6,
+          "scale": 0.8
+        },
+        {
+          "id": "chi_latte",
+          "x": 0.66,
+          "y": 0.6,
+          "scale": 0.8
+        },
+        {
+          "id": "chi_bw",
+          "x": 0.8,
+          "y": 0.6,
+          "scale": 0.8
+        },
+        {
+          "id": "pom_brown",
+          "outfit": "calm",
+          "x": 0.9,
+          "y": 0.665,
+          "scale": 0.85
+        },
+        {
+          "id": "jae_matcha",
+          "outfit": "cup",
+          "x": 0.28,
+          "y": 0.665
+        }
+      ],
+      "offscreen": [
+        "uncle_fisher"
+      ],
+      "props": [
+        {
+          "type": "char_move",
+          "id": "uncle_fisher",
+          "outfit": "boat",
+          "scale": 0.42,
+          "x0": 0.56,
+          "x1": 0.92,
+          "y": 0.36,
+          "at": 0.0,
+          "dur": 999,
+          "line": 1
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "narrator",
+          "text": "สรุป น้ำท่วมแค่ไม่กี่ชั่วโมง ได้เที่ยวเกาะฟรีหนึ่งทริป ได้อาชีพชาวประมงหนึ่งอาชีพ แต่ชาเขียวไม่ได้กินเลยซักหยด!"
+        },
+        {
+          "speaker": "pom_white",
+          "text": "แม่ครับ… อย่างน้อยแก้วน้ำนั้นก็ไม่ได้ท่วมนะ",
+          "outfit": "default",
+          "pause": 0.3
+        }
+      ]
+    },
+    {
+      "name": "7b ตอนจบ",
+      "background": "living_room_night",
+      "lead": 0.6,
+      "tail": 0.3,
+      "camera": {
+        "zoom": [
+          1.45,
+          1.5
+        ],
+        "focus": [
+          0.5,
+          0.36
+        ]
+      },
+      "characters": [
+        {
+          "id": "jae_matcha",
+          "outfit": "dramatic",
+          "x": 0.5
+        }
+      ],
+      "offscreen": [
+        "uncle_fisher"
+      ],
+      "props": [
+        {
+          "type": "fade_black",
+          "at": 0.0,
+          "dur": 0.7,
+          "fade": 0.3
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "jae_matcha",
+          "text": "น้ำลดเมื่อไหร่ ฉันจะไปซื้อชาเขียวเหมาเซเว่นทั้งร้านเลย!",
+          "emotion": "shout"
+        },
+        {
+          "speaker": "uncle_fisher",
+          "text": "น้องๆ! น้ำเริ่มลดแล้ว!",
+          "set": {
+            "jae_matcha": "happy"
+          },
+          "sfx": "cheer",
+          "sfx_vol": 0.5,
+          "pause": 0.5
+        },
+        {
+          "speaker": "jae_matcha",
+          "text": "แล้วไรเดอร์เริ่มวิ่งรึยังลุง!?",
+          "emotion": "excited"
+        }
+      ]
+    },
+    {
+      "name": "8 ไรเดอร์มาแล้ว (แต่…)",
+      "background": "flooded_street",
+      "tail": 2.6,
+      "fx": [
+        {
+          "name": "shimmer",
+          "top": 0.46
+        }
+      ],
+      "camera": {
+        "zoom": [
+          1.0,
+          1.08
+        ],
+        "focus": [
+          0.5,
+          0.5
+        ]
+      },
+      "characters": [
+        {
+          "id": "rider",
+          "outfit": "boat",
+          "x": 0.3,
+          "y": 0.69
+        },
+        {
+          "id": "jae_matcha",
+          "outfit": "happy",
+          "x": 0.79,
+          "y": 0.66,
+          "scale": 0.86
+        }
+      ],
+      "offscreen": [
+        "uncle_fisher"
+      ],
+      "sfx": [
+        {
+          "name": "splash",
+          "at": 0.1,
+          "vol": 0.5
+        },
+        {
+          "name": "water",
+          "at": 0.0,
+          "dur": 14.0,
+          "vol": 0.15
+        }
+      ],
+      "props": [
+        {
+          "type": "exclaim",
+          "text": "!",
+          "line": 2,
+          "at": 0.0,
+          "dur": "line",
+          "pos": [
+            0.9,
+            0.2
+          ],
+          "scale": 1.0
+        },
+        {
+          "type": "caption",
+          "text": "ชีวิตต้องไปต่อ…\nแต่ขอชาเขียวก่อน",
+          "style": "end",
+          "line": 11,
+          "at": 0.9,
+          "dur": 999,
+          "pos": [
+            0.5,
+            0.13
+          ]
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "rider",
+          "text": "ไรเดอร์มาแล้วครับ! ออเดอร์มัทฉะกับซูชิแซลมอนสิบคำ!",
+          "emotion": "excited"
+        },
+        {
+          "speaker": "jae_matcha",
+          "text": "มาจริงด้วย! ลุง ไรเดอร์มาจริงด้วย!",
+          "emotion": "excited",
+          "sfx": "cheer",
+          "sfx_vol": 0.35
+        },
+        {
+          "speaker": "rider",
+          "text": "ร้านปิดเพราะน้ำท่วมครับ ผมเลยตกปลามาให้แทน!",
+          "outfit": "boat_fish",
+          "sfx": "boing",
+          "pause": 0.25
+        },
+        {
+          "speaker": "jae_matcha",
+          "text": "ไม่จริงงง! หนูอยากกินปลาแซลมอนนะ!",
+          "outfit": "dramatic",
+          "sfx": "heartbreak",
+          "pause": 0.5
+        },
+        {
+          "speaker": "uncle_fisher",
+          "text": "ปลาส้มไปก่อนมั้ยลูก?",
+          "sfx": "boing",
+          "pause": 0.55
+        },
+        {
+          "speaker": "jae_matcha",
+          "text": "…ปลาส้มก็ปลาส้ม แต่ขอข้าวเหนียวด้วยนะ",
+          "outfit": "sad",
+          "pause": 0.4
+        },
+        {
+          "speaker": "uncle_fisher",
+          "text": "มีจ้า! ลุงเตรียมไว้ให้แล้ว!",
+          "sfx": "cheer",
+          "sfx_vol": 0.3,
+          "pause": 0.2
+        },
+        {
+          "speaker": "jae_matcha",
+          "text": "…เอ๊ะ อร่อยอ่ะ! แล้วมัทฉะหนูล่ะ?",
+          "outfit": "happy",
+          "pause": 0.35
+        },
+        {
+          "speaker": "rider",
+          "text": "…ผมดื่มไปแล้วครับ",
+          "outfit": "boat",
+          "sfx": "boing",
+          "pause": 0.55
+        },
+        {
+          "speaker": "jae_matcha",
+          "text": "ไรเดอร์!",
+          "outfit": "dramatic",
+          "emotion": "shout",
+          "sfx": "heartbreak",
+          "pause": 0.35
+        },
+        {
+          "speaker": "rider",
+          "text": "เจ๊นี่ สั่งแต่ของจำเป็นจริงๆ",
+          "outfit": "boat",
+          "pause": 0.3
+        }
+      ]
+    }
+  ],
+  "sources": [],
+  "subtitles": false,
+  "layout": {
+    "y_shift": 0.05,
+    "char_scale": 1.05
+  }
+}

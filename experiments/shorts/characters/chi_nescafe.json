@@ -1,0 +1,37 @@
+{
+  "id": "chi_nescafe",
+  "name": "แพนดี้",
+  "role": "dog",
+  "gender": "female",
+  "age": "adult",
+  "fixed": [
+    "ชิวาว่าสีขาวน้ำตาล",
+    "หน้าและหูสีน้ำตาล",
+    "แผ่นหลังสีน้ำตาลล้วน ไม่มีจุดขาว",
+    "สายรอเที่ยว จ้องประตู"
+  ],
+  "draw": {
+    "kind": "dog",
+    "breed": "chi",
+    "scale_mul": 0.62,
+    "coat": "#8A5A36",
+    "head": "#8A5A36",
+    "ears": "#8A5A36",
+    "light": "#F7EFE5",
+    "chest": true,
+    "face_dy": 250
+  },
+  "outfits": {
+    "default": {},
+    "back": {
+      "back": true
+    }
+  },
+  "voice": {
+    "gemini": "Gacrux",
+    "edge": "th-TH-PremwadeeNeural",
+    "edge_pitch": "+18Hz",
+    "edge_rate": "+2%"
+  },
+  "subtitle_color": "#D7A877"
+}
