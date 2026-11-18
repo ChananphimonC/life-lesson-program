@@ -37,6 +37,8 @@ class Settings:
     channel_url: str = "https://www.youtube.com/@SakidJai_%E0%B8%AA%E0%B8%B0%E0%B8%81%E0%B8%B4%E0%B8%94%E0%B9%83%E0%B8%88"
     export_dir: Path | None = None
     visual_mode: str = "illustrated"
+    reference_search: bool = False
+    cache_dir: Path | None = None
 
     @property
     def audio_output_dir(self) -> Path:
@@ -70,6 +72,8 @@ def get_settings() -> Settings:
         channel_handle=os.environ.get("CHANNEL_HANDLE", "@SakidJai_สะกิดใจ"),
         channel_url=os.environ.get("CHANNEL_URL", "https://www.youtube.com/@SakidJai_%E0%B8%AA%E0%B8%B0%E0%B8%81%E0%B8%B4%E0%B8%94%E0%B9%83%E0%B8%88"),
         visual_mode=os.environ.get("VISUAL_MODE", "illustrated").lower(),
+        reference_search=os.environ.get("REFERENCE_SEARCH", "0").lower() in ("1", "true", "yes"),
+        cache_dir=_resolve_path(os.environ.get("CACHE_DIR", "output/cache")),
         export_dir=_resolve_path(os.environ.get("EXPORT_DIR", "output/export")),
         tts_style_directives=os.environ.get("TTS_STYLE_DIRECTIVES", "1").lower() not in ("0", "false", "no"),
     )

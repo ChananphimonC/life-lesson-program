@@ -29,7 +29,7 @@ class ScriptBlock(BaseModel):
     time_label: str | None = None
     mood: BlockMood | None = None
     # Where the scene happens, so the illustrator can draw it (free, offline).
-    setting: Literal["room", "office", "street", "city", "sea", "island", "forest", "night_sky"] | None = None
+    setting: Literal["room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall"] | None = None
 
 
 class Fact(BaseModel):

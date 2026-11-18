@@ -47,6 +47,10 @@ from life_lesson.publish.thumbnail import render_thumbnail
 from life_lesson.tts.base import TTSProvider
 from life_lesson.tts.gemini_tts import GeminiTTSProvider
 from life_lesson.video.ffmpeg_assembler import assemble_video, extract_frame, pick_random_background
+from dataclasses import replace
+
+from life_lesson.video.references import blended_palette, search_references
+from life_lesson.video.scene_kb import RECIPES
 from life_lesson.video.scenes import (
     Scene,
     assemble_scene_video,
@@ -113,10 +117,12 @@ def run_pipeline(
                 conn, settings, episode_id, script, tts_provider
             )
             scenes = plan_scenes(script, block_starts_ms, duration_ms)
+            scenes, reference_credits = _gather_references(settings, scenes)
             audio_path = _master(conn, settings, episode_id, narration_path, scenes, duration_ms)
             video_path = _assemble_video(conn, settings, episode_id, audio_path, spec, scenes)
             publish_dir = _write_publish_bundle(
-                settings, episode_id, script, spec, block_starts_ms, duration_ms, scenes, video_path
+                settings, episode_id, script, spec, block_starts_ms, duration_ms, scenes, video_path,
+                extra_credits=reference_credits,
             )
             thumb = publish_dir / "thumbnail.png"
             repo.update_episode_meta(
@@ -304,6 +310,26 @@ def _assemble_video(
     return output_path
 
 
+def _gather_references(settings: Settings, scenes: list[Scene]) -> tuple[list[Scene], list[str]]:
+    """Opt-in: look up open-licence reference photos per scene type before drawing."""
+    if not settings.reference_search or settings.visual_mode != "illustrated":
+        return scenes, []
+    queries = {r.id: r.search_query for r in RECIPES if r.search_query}
+    cache: dict[str, list] = {}
+    out, credits = [], []
+    for scene in scenes:
+        query = queries.get(scene.recipe_id)
+        if not query:
+            out.append(scene)
+            continue
+        if query not in cache:
+            cache[query] = search_references(query, cache_dir=(settings.cache_dir / "references") if settings.cache_dir else None)
+        refs = cache[query]
+        out.append(replace(scene, ref_palette=blended_palette(refs)) if refs else scene)
+        credits += [r.credit_line for r in refs if r.credit_line not in credits]
+    return out, credits
+
+
 def channel_line(settings: Settings) -> str:
     return f"ดูเรื่องเต็มและเรื่องใหม่ได้ที่ช่อง {settings.channel_handle}\n{settings.channel_url}"
 
@@ -330,11 +356,12 @@ def _write_publish_bundle(
     duration_ms: int,
     scenes: list[Scene],
     video_path: Path,
+    extra_credits: list[str] | None = None,
 ) -> Path:
     out_dir = settings.output_dir / "publish" / episode_id
     write_publish_bundle(
         out_dir, script, spec, block_starts_ms, duration_ms,
-        credits=_credits(settings), channel_line=channel_line(settings),
+        credits=_credits(settings) + (extra_credits or []), channel_line=channel_line(settings),
     )
     # Needed later to rebuild chapters / cut Shorts without re-running TTS.
     (out_dir / "timeline.json").write_text(

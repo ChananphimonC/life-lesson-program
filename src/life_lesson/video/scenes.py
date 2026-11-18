@@ -24,7 +24,8 @@ from PIL import Image, ImageDraw, ImageFont
 from life_lesson.errors import VideoAssemblyError
 from life_lesson.generation.atmosphere import BlockMood, grade_filter, rain_chain, rain_opacity
 from life_lesson.generation.schema import ScriptOutput
-from life_lesson.video.illustrator import character_colors, illustrate_scene, infer_setting
+from life_lesson.video.illustrator import SETTINGS, character_colors, illustrate_scene
+from life_lesson.video.scene_kb import is_worker, retrieve_recipe
 from life_lesson.publish.fonts import find_thai_font
 
 logger = logging.getLogger(__name__)
@@ -47,6 +48,8 @@ class Scene:
     setting: str = "room"
     looks: tuple = ()  # character colour dicts for the illustrator
     character_names: tuple = ()
+    recipe_id: str = ""
+    ref_palette: tuple = ()
 
     @property
     def duration_s(self) -> float:
@@ -95,11 +98,20 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
         end = merged[i + 1]["start"] if i + 1 < len(merged) else total_ms
         mood = max(g["moods"], key=lambda m: m.tension) if g["moods"] else None
         cue_text = " ".join(g["cues"])
-        setting = infer_setting(cue_text, g["settings"][0] if g["settings"] else None)
+        explicit = g["settings"][0] if g["settings"] else None
+        recipe = retrieve_recipe(cue_text, explicit)
+        setting = explicit if explicit in SETTINGS else recipe.setting
         present = [c for c in script.characters if c.name and c.name in cue_text] or script.characters[:1]
-        looks = tuple(character_colors(c.outfit, c.palette, c.name) for c in present)
+        looks = tuple(
+            character_colors(
+                c.outfit, c.palette, c.name,
+                extra_items=recipe.wardrobe if is_worker(recipe, c.role, c.name, c.outfit) else (),
+                sleeve=recipe.sleeve if is_worker(recipe, c.role, c.name, c.outfit) else None,
+            )
+            for c in present
+        )
         scenes.append(Scene(i, g["start"], end, g["title"], g["time_label"], g["cue"], mood,
-                            setting, looks, tuple(c.name for c in present)))
+                            setting, looks, tuple(c.name for c in present), recipe.id))
     return scenes
 
 
@@ -264,6 +276,7 @@ def assemble_scene_video(
                     setting=scene.setting, mood=scene.mood,
                     characters=[dict(look) for look in scene.looks],
                     seed=f"{scene.index}-{scene.title}", out_path=clip,
+                    font_path=font_path, reference_palette=scene.ref_palette,
                 )
             else:
                 clip = chosen[n]

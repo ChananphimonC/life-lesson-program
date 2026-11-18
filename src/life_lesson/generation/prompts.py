@@ -13,7 +13,7 @@ from life_lesson.generation.formats import FormatSpec, get_format
 
 SCRIPT_PROMPT_NAME = "script_generation"
 SCRIPT_PROMPT_STAGE = "script"
-SCRIPT_PROMPT_VERSION = "script-v0.3.0"
+SCRIPT_PROMPT_VERSION = "script-v0.4.0"
 
 _CONTENT_CONSTRAINTS = """\
 This is a LIFE REFLECTION, not life advice or motivational content.
@@ -79,6 +79,12 @@ the outro so the ending stays open. Change light/weather at turning points; \
 let weather mirror the feeling without naming it (rain when plans fall \
 apart, fog when nobody is sure, a flickering lamp when money is short). \
 Match voice to tension (hushed for secrets, tense/urgent only at peaks).
+- SETTING & WARDROBE: give every block a "setting" (room|office|street|city|sea|\
+island|forest|night_sky|food_stall) and mention concrete props in visual_cue \
+(e.g. wok on a flame, plastic stools, menu board). Say what each person wears \
+in their "outfit" including accessories that fit the place and the job (apron, \
+hairnet, raincoat hood, backpack, lanyard, glasses) and whether sleeves are \
+short or long. Keep each person's base outfit identical across scenes.
 - Never describe violence, injury, death or any crisis topic.\
 """
 
@@ -137,6 +143,7 @@ matching exactly this structure:
       "chapter_title": "<short Thai chapter title>",
       "time_label": "<in-story time such as 23:47, or null>",
       "visual_cue": "<what the viewer sees, one sentence>",
+      "setting": "<one of the allowed settings>",
       "mood": {{"light": "dim", "weather": "clear", "color": "cool", "voice": "calm", "sounds": ["room_tone"], "tension": 2}},
       "text": "<Thai text>",
       "pause_after_ms": <int>
