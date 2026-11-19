@@ -195,6 +195,32 @@ def _run(command: list[str], what: str) -> None:
         raise VideoAssemblyError(f"ffmpeg failed while {what}: {result.stderr[-1500:]}")
 
 
+ANIM_FPS = 6          # character animation steps per second (flat 2D "limited animation")
+_BREATH = (0.0, 0.6, 1.0, 0.6, 0.0, -0.6, -1.0, -0.6)   # one breath cycle, 8 steps (~1.3 s)
+
+
+def anim_schedule(scene: Scene, steps: int) -> list[tuple[int, bool, int]]:
+    """Per-step (phase 0-7, blink, mouth). `phase` drives breathing, the cook's stir-fry and the walking cycle;
+    the speaker's mouth works open / half / closed with it while the line is being said."""
+    mouth = (1, 2, 0, 1, 1, 2, 0, 2)     # open, half, shut ... irregular, like speech
+    out = []
+    for i in range(steps):
+        ph = i % 8
+        blink = i % 24 == 21
+        out.append((ph, blink, mouth[ph] if scene.speaker else 0))
+    return out
+
+
+def _animated_listing(frames: list[Path], steps: list[int], path: Path) -> Path:
+    """ffmpeg concat list that plays frames[steps[i]] for 1/ANIM_FPS s each."""
+    lines = []
+    for k in steps:
+        lines.append(f"file '{frames[k].as_posix()}'\nduration {1 / ANIM_FPS:.5f}\n")
+    lines.append(f"file '{frames[steps[-1]].as_posix()}'\n")   # concat demuxer drops the last duration
+    path.write_text("".join(lines), encoding="utf-8")
+    return path
+
+
 def _motion_filter(scene: Scene, width: int, height: int, focus: dict | None = None) -> str:
     """Slow camera push-in (stronger when tense) with a gentle sideways drift;
     a speaking line pushes in on the speaker's face instead (a real close-up)."""
@@ -204,13 +230,13 @@ def _motion_filter(scene: Scene, width: int, height: int, focus: dict | None = N
         return (
             f"zoompan=z='1.35+0.45*on/{frames}':"
             f"x='min(max(iw*{fx:.4f}-iw/zoom/2,0),iw-iw/zoom)':y='min(max(ih*{fy:.4f}-ih/zoom/2,0),ih-ih/zoom)':"
-            f"d={frames}:s={width}x{height}:fps=30"
+            f"d=1:s={width}x{height}:fps=30"
         )
     push = 0.20 if (scene.mood and scene.mood.tension >= 4) else 0.11
     return (
         f"zoompan=z='1.0+{push}*on/{frames}':"
         f"x='(iw-iw/zoom)/2+iw*0.018*sin(on/210)':y='(ih-ih/zoom)/2':"
-        f"d={frames}:s={width}x{height}:fps=30"
+        f"d=1:s={width}x{height}:fps=30"
     )
 
 
@@ -220,10 +246,11 @@ def _scene_command(
 ) -> list[str]:
     dur = scene.duration_s
     fade_out_at = max(0.0, dur - FADE_S)
-    illustrated = clip.suffix.lower() == ".png"
+    illustrated = clip.suffix.lower() in (".png", ".txt")
     if illustrated:
-        cmd = [ffmpeg, "-y", "-i", str(clip)]
-        first = f"[0:v]{_motion_filter(scene, width, height, focus)},setsar=1,"
+        # .txt = concat list of animation frames; each is stretched to 30 fps, then pushed in frame by frame
+        cmd = [ffmpeg, "-y", "-f", "concat", "-safe", "0", "-i", str(clip)] if clip.suffix.lower() == ".txt" else [ffmpeg, "-y", "-i", str(clip)]
+        first = f"[0:v]fps=30,{_motion_filter(scene, width, height, focus)},setsar=1,"
     else:
         cmd = [ffmpeg, "-y", "-stream_loop", "-1", "-i", str(clip)]
         first = "[0:v]"
@@ -294,16 +321,29 @@ def assemble_scene_video(
         for n, scene in enumerate(scenes):
             focus: dict = {}
             if illustrated:
-                clip = tmp_dir / f"art{scene.index:03d}.png"
-                # drawn 1.2x larger than the frame so the camera push-in stays sharp
-                illustrate_scene(
-                    (int(width * 1.2), int(height * 1.2)),
-                    setting=scene.setting, mood=scene.mood,
-                    characters=[dict(look) for look in scene.looks],
-                    seed=f"{scene.index}-{scene.title}", out_path=clip,
-                    font_path=font_path, reference_palette=scene.ref_palette, props=scene.props,
-                    speaker=scene.speaker, focus_out=focus,
-                )
+                steps_n = max(2, int(scene.duration_s * ANIM_FPS) + 1)
+                schedule = anim_schedule(scene, steps_n)
+                variants: dict[tuple, int] = {}
+                frames: list[Path] = []
+                order: list[int] = []
+                for phase, blink, mouth in schedule:
+                    key = (phase, blink, mouth)
+                    if key not in variants:
+                        variants[key] = len(frames)
+                        png = tmp_dir / f"art{scene.index:03d}_{len(frames)}.png"
+                        # drawn 1.2x larger than the frame so the camera push-in stays sharp
+                        illustrate_scene(
+                            (int(width * 1.2), int(height * 1.2)),
+                            setting=scene.setting, mood=scene.mood,
+                            characters=[dict(look) for look in scene.looks],
+                            seed=f"{scene.index}-{scene.title}", out_path=png,
+                            font_path=font_path, reference_palette=scene.ref_palette, props=scene.props,
+                            speaker=scene.speaker, focus_out=focus,
+                            anim={"phase": key[0], "breath": _BREATH[key[0]], "blink": key[1], "mouth": key[2]},
+                        )
+                        frames.append(png)
+                    order.append(variants[key])
+                clip = _animated_listing(frames, order, tmp_dir / f"anim{scene.index:03d}.txt")
             else:
                 clip = chosen[n]
             card = None

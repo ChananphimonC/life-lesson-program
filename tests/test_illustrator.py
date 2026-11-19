@@ -111,3 +111,21 @@ def test_speaker_gets_focus_and_open_mouth(tmp_path):
     illustrate_scene((640, 360), setting="bus", mood=BlockMood(light="dark"), characters=cast, seed=1,
                      out_path=tmp_path / "b.png", focus_out=quiet)
     assert quiet == {}
+
+
+def test_animation_phases_change_the_picture(tmp_path):
+    """Limited animation: different phases must draw different frames (stir, walk, mouth) -- not copies of one still."""
+    from PIL import ImageChops
+    from life_lesson.video.illustrator import character_colors, illustrate_scene
+
+    cook = character_colors("เสื้อสีขาว", None, name="ป้า", extra_items=("apron",))
+    walker = character_colors("เสื้อสีฟ้า", None, name="ต้อม")
+    mood = BlockMood(light="dark")
+
+    def frame(setting, chars, ph, props=(), speaker=None, mouth=0):
+        return illustrate_scene((480, 270), setting=setting, mood=mood, characters=chars, seed=1, props=props,
+                                speaker=speaker, anim={"phase": ph, "breath": 0.0, "blink": False, "mouth": mouth})
+
+    assert ImageChops.difference(frame("food_stall", [cook], 0), frame("food_stall", [cook], 2)).getbbox()
+    assert ImageChops.difference(frame("street", [walker], 0, ("walking",)), frame("street", [walker], 2, ("walking",))).getbbox()
+    assert ImageChops.difference(frame("street", [walker], 0, (), "ต้อม", 0), frame("street", [walker], 0, (), "ต้อม", 1)).getbbox()

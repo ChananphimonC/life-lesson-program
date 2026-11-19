@@ -270,9 +270,11 @@ def _draw_face(d, x, head_y, s, expression: str, female: bool = False, talking: 
             d.ellipse([x + sign * 12 * s - 3.2 * s, head_y + 5 * s, x + sign * 12 * s + 3.2 * s, head_y + 9.5 * s], fill=(238, 160, 150))
     my = head_y + 10 * s
     w = max(2, int(1.8 * s))
-    if talking and expression != "asleep":   # the speaker: mouth open mid-word, brows lifted a little
-        d.ellipse([x - 4.4 * s, my - 2.6 * s, x + 4.4 * s, my + 6.4 * s], fill=(122, 38, 44))
-        d.ellipse([x - 2.6 * s, my + 2.6 * s, x + 2.6 * s, my + 6.0 * s], fill=(226, 120, 120))
+    if talking and expression != "asleep":   # the speaker: mouth open mid-word ("half" = between syllables)
+        open_h = 6.4 if talking is True else 2.6
+        d.ellipse([x - 4.4 * s, my - 2.6 * s, x + 4.4 * s, my + open_h * s], fill=(122, 38, 44))
+        if talking is True:
+            d.ellipse([x - 2.6 * s, my + 2.6 * s, x + 2.6 * s, my + 6.0 * s], fill=(226, 120, 120))
         return
     if expression == "asleep":  # eyes shut: pretending to sleep
         d.line([(x - 4 * s, my + 1 * s), (x + 4 * s, my + 1 * s)], fill=ink, width=w)
@@ -334,7 +336,7 @@ def _draw_arm(d, shoulder, target, s, colors):
     return hand
 
 
-def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutral", hands=None, items=None, talking=False):
+def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutral", hands=None, items=None, talking=False, breath=0.0, walk=None):
     """`hands` = {"L": (x, y), "R": (x, y)} screen-side targets in pixels; default pose if None."""
     outfit, hair, skin, accent = colors["outfit"], colors["hair"], colors["skin"], colors["accent"]
     items = set(items if items is not None else colors.get("items", ()))
@@ -347,20 +349,35 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
         torso_top, torso_bot, head_y = ground_y - 112 * s, ground_y - 4 * s, ground_y - 138 * s
     else:
         torso_top, torso_bot, head_y = ground_y - 128 * s, ground_y - 54 * s, ground_y - 152 * s
+    head_y += breath * 1.5 * s   # breathing: the head rises and settles a hair
     shoulder_y = torso_top + 9 * s
 
     if "backpack" in items:  # behind the body
         d.rounded_rectangle([x - 30 * s, torso_top + 4 * s, x + 30 * s, torso_bot - 4 * s], 10 * s, fill=(58, 62, 78))
-    if not sitting:
+    foot = {-1: 0.0, 1: 0.0}   # horizontal foot offset per side (walking cycle)
+    lift = {-1: 0.0, 1: 0.0}
+    if walk is not None and not sitting:
+        sw = math.sin(2 * math.pi * walk / 8)
+        foot = {-1: sw * 11 * s, 1: -sw * 11 * s}
+        lift = {-1: max(0.0, sw) * 7 * s, 1: max(0.0, -sw) * 7 * s}
+    if not sitting and walk is not None:
+        for sign, (a, b) in ((-1, (leg_out, leg_in)), (1, (leg_in, leg_out))):
+            top_y, fy = ground_y - 62 * s, ground_y - lift[sign]
+            d.polygon([(x + sign * leg_in * s if sign == 1 else x - leg_out * s, top_y),
+                       (x + sign * leg_in * s + (leg_out - leg_in) * s * sign if False else (x + leg_out * s if sign == 1 else x - leg_in * s), top_y),
+                       ((x + leg_out * s if sign == 1 else x - leg_in * s) + foot[sign], fy),
+                       ((x + leg_in * s if sign == 1 else x - leg_out * s) + foot[sign], fy)], fill=dark)
+    elif not sitting:
         d.rectangle([x - leg_out * s, ground_y - 62 * s, x - leg_in * s, ground_y], fill=dark)
         d.rectangle([x + leg_in * s, ground_y - 62 * s, x + leg_out * s, ground_y], fill=dark)
+    if not sitting:
         if "shopping_bags" in items:  # market bags dumped around the feet
             for dx, col, hh in ((-44, (232, 120, 120), 40), (36, (120, 180, 230), 34), (58, (240, 214, 120), 28)):
                 bx = x + dx * s
                 d.rounded_rectangle([bx - 14 * s, ground_y - hh * s, bx + 14 * s, ground_y + 2 * s], 8 * s, fill=col)
                 d.arc([bx - 9 * s, ground_y - (hh + 14) * s, bx + 9 * s, ground_y - (hh - 4) * s], 180, 360, fill=tuple(c - 40 for c in col), width=max(2, int(2 * s)))
         for sign in (-1, 1):  # shoes / rubber sandals
-            d.rounded_rectangle([x + sign * 8.5 * s - 10 * s, ground_y - 5 * s, x + sign * 8.5 * s + 10 * s, ground_y + 2 * s], 3 * s, fill=(36, 36, 44))
+            d.rounded_rectangle([x + sign * 8.5 * s - 10 * s + foot[sign], ground_y - 5 * s - lift[sign], x + sign * 8.5 * s + 10 * s + foot[sign], ground_y + 2 * s - lift[sign]], 3 * s, fill=(36, 36, 44))
     style = colors.get("hair_style", "short")
     if style == "long" and "hood" not in items:       # long hair falls behind the shoulders
         d.rounded_rectangle([x - 27 * s, head_y - 22 * s, x + 27 * s, torso_top + 50 * s], 16 * s, fill=hair)
@@ -882,6 +899,7 @@ def illustrate_scene(
     props: tuple = (),
     speaker: str | None = None,
     focus_out: dict | None = None,
+    anim: dict | None = None,
 ) -> Image.Image:
     """Draw one scene. `characters` = list of dicts from `character_colors`."""
     if font_path is None:  # signs carry Thai text: find a font ourselves (best effort)
@@ -914,13 +932,22 @@ def illustrate_scene(
 
     def draw_fig(d_, x_, gy_, s_, col_, **kw):
         """Draw one person; the speaker is a touch bigger, mid-word, softly lit, and recorded as the close-up target."""
-        talking = bool(speaker) and col_.get("name") == speaker
-        if talking:
+        is_speaker = bool(speaker) and col_.get("name") == speaker
+        talking = is_speaker
+        a = anim or {}
+        if is_speaker and "mouth" in a:
+            talking = (False, True, "half")[a["mouth"]]
+        if a.get("blink") and kw.get("expression") != "asleep":
+            kw["expression"] = "asleep"      # eyes shut for one frame = a blink
+        if is_speaker:
             s_ = s_ * 1.08
-            if kw.get("expression") == "asleep":
+            if kw.get("expression") == "asleep" and not a.get("blink"):
                 kw["expression"] = "neutral"
-        pos = _draw_character(d_, x_, gy_, s_, col_, talking=talking, **kw)
-        if talking:
+        br = a.get("breath", 0.0)
+        if kw.get("walk") is not None:
+            br = -abs(math.sin(math.pi * kw["walk"] / 4)) * 1.6     # footfall bob
+        pos = _draw_character(d_, x_, gy_, s_, col_, talking=talking, breath=br, **kw)
+        if is_speaker:
             focus["x"], focus["y"] = pos["head"][0] / w, pos["head"][1] / h
             lights.append(((pos["head"][0], pos["head"][1]), int(h * 0.2), (104, 92, 80)))
         return pos
@@ -968,8 +995,12 @@ def illustrate_scene(
             if "apron" in col.get("items", ()) and not cook_placed:
                 cook_placed = True
                 subject_x = info["cook_x"] / w
+                ph = (anim or {}).get("phase", 0)
+                ang = 2 * math.pi * ph / 8
+                sx, sy = info["spatula_hand"]      # stir-fry: spatula circles in the wok, the other hand tosses the handle
                 draw_fig(d, info["cook_x"], ground, s, col, expression=face,
-                                hands={"L": info["spatula_hand"], "R": info["handle_end"]})
+                         hands={"L": (sx + 15 * s * math.cos(ang), sy + 8 * s * math.sin(ang)),
+                                "R": (info["handle_end"][0], info["handle_end"][1] + 5 * s * math.sin(ang * 2))})
             else:  # customers stand to the right of the counter, side by side
                 cx = int(w * (0.64 + 0.125 * customers))
                 customers += 1
@@ -988,8 +1019,13 @@ def illustrate_scene(
             hands = {"L": (x - 4 * s, desk_top - 6), "R": (x + 38 * s, desk_top - 6)}
         if subject_x is None:
             subject_x = x / w
-        pos = draw_fig(d, x, gy, s * (1.1 if seat else (1.3 if setting == "alley" else 1.0)), col, sitting=seat is not None,
-                              expression=face, hands=hands)
+        scale_ = s * (1.1 if seat else (1.3 if setting == "alley" else 1.0))
+        wk = None
+        if "walking" in props and seat is None:   # walking cycle: legs and arms swing, body bobs
+            wk = (anim or {}).get("phase", 0) + 2 * i
+            sw_ = math.sin(2 * math.pi * wk / 8)
+            hands = {"L": (x - 24 * scale_, gy - 62 * scale_ + 12 * scale_ * sw_), "R": (x + 24 * scale_, gy - 62 * scale_ - 12 * scale_ * sw_)}   # arms swing up/down at the sides
+        pos = draw_fig(d, x, gy, scale_, col, sitting=seat is not None, expression=face, hands=hands, walk=wk)
         if "headlamp" in col.get("items", ()):  # the lamp lights his face and the wall behind
             lights.append(((pos["head"][0], pos["head"][1] - int(10 * s)), int(h * 0.22), (255, 246, 210)))
 
