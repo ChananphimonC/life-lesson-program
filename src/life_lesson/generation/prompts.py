@@ -163,7 +163,7 @@ let weather mirror the feeling without naming it (rain when plans fall \
 apart, fog when nobody is sure, a flickering lamp when money is short). \
 Match voice to tension (hushed for secrets, tense/urgent only at peaks).
 - SETTING & WARDROBE: give every block a "setting" (room|office|street|city|sea|\
-island|forest|night_sky|food_stall|alley|bus) and mention concrete props in visual_cue \
+island|forest|night_sky|food_stall|alley|bus|chicken_cart|market|mall|kitchen) and mention concrete props in visual_cue \
 (e.g. wok on a flame, plastic stools, menu board). Say what each person wears \
 in their "outfit" including accessories that fit the place and the job (apron, \
 hairnet, raincoat hood, backpack, lanyard, glasses) and whether sleeves are \

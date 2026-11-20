@@ -119,7 +119,7 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
                 + (lamp if "ไฟคาดหัว" in f"{c.signature_item} {c.outfit}" else ())
                 + (("seated",) if "นั่ง" in (c.role or "") else ()),
                 sleeve=recipe.sleeve if is_worker(recipe, c.role, c.name, c.outfit) else None,
-                hair=c.hair, gender=c.gender,
+                hair=c.hair, gender=c.gender, age=c.age_range,
             )
             for c in present
         )
@@ -326,8 +326,10 @@ def assemble_scene_video(
                 variants: dict[tuple, int] = {}
                 frames: list[Path] = []
                 order: list[int] = []
-                for phase, blink, mouth in schedule:
-                    key = (phase, blink, mouth)
+                walking = "walking" in scene.props
+                for step_i, (phase, blink, mouth) in enumerate(schedule):
+                    prog = step_i / max(1, len(schedule) - 1) if walking else None
+                    key = (phase, blink, mouth, step_i if walking else 0)
                     if key not in variants:
                         variants[key] = len(frames)
                         png = tmp_dir / f"art{scene.index:03d}_{len(frames)}.png"
@@ -339,7 +341,7 @@ def assemble_scene_video(
                             seed=f"{scene.index}-{scene.title}", out_path=png,
                             font_path=font_path, reference_palette=scene.ref_palette, props=scene.props,
                             speaker=scene.speaker, focus_out=focus,
-                            anim={"phase": key[0], "breath": _BREATH[key[0]], "blink": key[1], "mouth": key[2]},
+                            anim={"phase": key[0], "breath": _BREATH[key[0]], "blink": key[1], "mouth": key[2], "prog": prog},
                         )
                         frames.append(png)
                     order.append(variants[key])

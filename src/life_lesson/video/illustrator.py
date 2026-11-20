@@ -23,7 +23,7 @@ from life_lesson.generation.atmosphere import BlockMood
 from life_lesson.publish.fonts import find_thai_font
 from life_lesson.video.scene_kb import SceneRecipe
 
-SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus")
+SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen")
 
 _COLOR_WORDS = {
     "เหลือง": (240, 196, 40), "yellow": (240, 196, 40), "แดง": (206, 52, 48), "red": (206, 52, 48),
@@ -80,8 +80,8 @@ def items_from_text(text: str | None) -> set[str]:
 _HAIR_COLORS = [("น้ำตาลเข้ม", (70, 44, 30)), ("น้ำตาลอ่อน", (140, 96, 60)), ("น้ำตาล", (100, 66, 44)), ("ดำ", (30, 24, 22)),
                 ("เทา", (124, 124, 132)), ("ขาว", (226, 226, 228)), ("บลอนด์", (222, 186, 98)), ("ทอง", (222, 186, 98)),
                 ("แดง", (150, 54, 42)), ("ชมพู", (232, 130, 170)), ("black", (30, 24, 22)), ("brown", (100, 66, 44))]
-_HAIR_STYLES = [("หางม้า", "ponytail"), ("ผมมวย", "bun"), ("มวย", "bun"), ("บ๊อบ", "bob"), ("ยาว", "long"), ("สยาย", "long"),
-                ("สั้น", "short"), ("เกรียน", "short"), ("ดัด", "curly"), ("ลอน", "curly")]
+_HAIR_STYLES = [("หางม้า", "ponytail"), ("ผมมวย", "bun"), ("มวย", "bun"), ("ดัด", "curly"), ("ลอน", "curly"), ("บ๊อบ", "bob"),
+                ("ยาว", "long"), ("สยาย", "long"), ("สั้น", "short"), ("เกรียน", "short")]
 
 
 def hair_from_text(text: str | None) -> tuple[tuple[int, int, int] | None, str | None]:
@@ -99,6 +99,7 @@ def character_colors(
     sleeve: str | None = None,
     hair: str | None = None,
     gender: str | None = None,
+    age: str | None = None,
 ) -> dict:
     main = None
     for pal in palette or []:
@@ -109,6 +110,10 @@ def character_colors(
     h = hashlib.md5(name.encode("utf-8")).digest()
     hair_rgb, style = hair_from_text(hair)
     hair_rgb = hair_rgb or [(30, 24, 22), (58, 40, 30), (24, 24, 30), (88, 60, 40)][h[0] % 4]
+    digits = [int(t) for t in re.findall(r"\d+", age or "")]
+    older = bool(digits) and digits[0] >= 45
+    if older:  # grey creeping into the hair
+        hair_rgb = _lerp(hair_rgb, (150, 150, 156), 0.55)
     female = (gender or "").strip().lower() in ("หญิง", "female", "f") or (not gender and style in ("long", "ponytail", "bun"))
     skin = [(236, 200, 170), (214, 170, 130), (190, 140, 100)][h[1] % 3]
     accent = (240, 196, 40) if sum(main) < 380 else (206, 52, 48)
@@ -116,7 +121,7 @@ def character_colors(
     if sleeve is None:
         sleeve = "short" if any(w in (outfit or "").lower() for w in _SHORT_SLEEVE_WORDS) else "long"
     return {"name": name, "outfit": main, "hair": hair_rgb, "skin": skin, "accent": accent, "items": items, "sleeve": sleeve,
-            "hair_style": style or "short", "female": female}
+            "hair_style": style or "short", "female": female, "older": older}
 
 
 # -- drawing helpers ---------------------------------------------------------
@@ -234,7 +239,7 @@ def expression_for(mood: BlockMood | None) -> str:
     return "neutral"
 
 
-def _draw_face(d, x, head_y, s, expression: str, female: bool = False, talking: bool = False):
+def _draw_face(d, x, head_y, s, expression: str, female: bool = False, talking: bool = False, older: bool = False):
     ink = (34, 28, 30)
     ey = head_y - 1 * s
     wide = expression == "wide"
@@ -249,6 +254,9 @@ def _draw_face(d, x, head_y, s, expression: str, female: bool = False, talking: 
         look = 0.8 * s * sign * -0.0  # looking straight at the viewer
         pr = 2.3 * s if not wide else 1.9 * s
         d.ellipse([cx - pr + look, ey - pr, cx + pr + look, ey + pr], fill=ink)
+        d.ellipse([cx + 0.2 * s, ey - 1.6 * s, cx + 1.6 * s, ey - 0.2 * s], fill=(255, 255, 255))       # eye shine = alive
+        if female:   # a defined upper lid
+            d.arc([cx - 4.8 * s, ey - 5.6 * s, cx + 4.8 * s, ey + 1.5 * s], 200, 340, fill=ink, width=max(2, int(1.7 * s)))
         # eyebrow: outer end at sign*13, inner end at sign*3
         outer, inner = (x + sign * 13 * s, x + sign * 3 * s)
         by = ey - (9.5 if wide else 8.5) * s
@@ -270,6 +278,15 @@ def _draw_face(d, x, head_y, s, expression: str, female: bool = False, talking: 
             d.ellipse([x + sign * 12 * s - 3.2 * s, head_y + 5 * s, x + sign * 12 * s + 3.2 * s, head_y + 9.5 * s], fill=(238, 160, 150))
     my = head_y + 10 * s
     w = max(2, int(1.8 * s))
+    d.arc([x - 2.2 * s, head_y + 3.5 * s, x + 2.2 * s, head_y + 8 * s], 20, 160, fill=(176, 120, 100), width=max(1, int(1.3 * s)))   # nose
+    if older:   # age lines: forehead, crow's feet, smile lines
+        wr = (150, 108, 88)
+        for sign in (-1, 1):
+            ox = x + sign * 13.2 * s
+            d.line([(ox, ey - 0.5 * s), (ox + sign * 2.6 * s, ey - 2.2 * s)], fill=wr, width=max(1, int(1.1 * s)))
+            d.line([(ox, ey + 1.2 * s), (ox + sign * 2.6 * s, ey + 2.4 * s)], fill=wr, width=max(1, int(1.1 * s)))
+            d.line([(x + sign * 8.4 * s, head_y + 5 * s), (x + sign * 6.6 * s, my + 4 * s)], fill=wr, width=max(1, int(1.2 * s)))
+    lip = (196, 74, 86) if female else ink
     if talking and expression != "asleep":   # the speaker: mouth open mid-word ("half" = between syllables)
         open_h = 6.4 if talking is True else 2.6
         d.ellipse([x - 4.4 * s, my - 2.6 * s, x + 4.4 * s, my + open_h * s], fill=(122, 38, 44))
@@ -277,20 +294,20 @@ def _draw_face(d, x, head_y, s, expression: str, female: bool = False, talking: 
             d.ellipse([x - 2.6 * s, my + 2.6 * s, x + 2.6 * s, my + 6.0 * s], fill=(226, 120, 120))
         return
     if expression == "asleep":  # eyes shut: pretending to sleep
-        d.line([(x - 4 * s, my + 1 * s), (x + 4 * s, my + 1 * s)], fill=ink, width=w)
+        d.line([(x - 4 * s, my + 1 * s), (x + 4 * s, my + 1 * s)], fill=lip, width=w)
         return
     if expression == "smile":
-        d.arc([x - 7 * s, my - 6 * s, x + 7 * s, my + 5 * s], 15, 165, fill=ink, width=w)
+        d.arc([x - 7 * s, my - 6 * s, x + 7 * s, my + 5 * s], 15, 165, fill=lip, width=w)
         for sign in (-1, 1):  # blush
             d.ellipse([x + sign * 11 * s - 3 * s, my - 4 * s, x + sign * 11 * s + 3 * s, my - 0.5 * s], fill=(236, 150, 140))
     elif expression == "soft":
-        d.arc([x - 5 * s, my - 4 * s, x + 5 * s, my + 3 * s], 20, 160, fill=ink, width=w)
+        d.arc([x - 5 * s, my - 4 * s, x + 5 * s, my + 3 * s], 20, 160, fill=lip, width=w)
     elif expression == "worried":
-        d.arc([x - 5 * s, my - 1 * s, x + 5 * s, my + 6 * s], 200, 340, fill=ink, width=w)
+        d.arc([x - 5 * s, my - 1 * s, x + 5 * s, my + 6 * s], 200, 340, fill=lip, width=w)
     elif expression == "wide":
         d.ellipse([x - 3.2 * s, my - 2 * s, x + 3.2 * s, my + 5 * s], fill=(120, 40, 44))
     else:
-        d.line([(x - 4 * s, my + 1 * s), (x + 4 * s, my + 1 * s)], fill=ink, width=w)
+        d.line([(x - 4 * s, my + 1 * s), (x + 4 * s, my + 1 * s)], fill=lip, width=w)
 
 
 def _ik(shoulder, target, upper, fore):
@@ -316,6 +333,14 @@ def _limb(d, p, q, width, color):
     r = width / 2
     for cx, cy in (p, q):
         d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=color)
+
+
+def _ground_shadow(d, x, y, s, night):
+    """Soft contact shadow so people sit IN the scene, not on it."""
+    k = 0.34 if night else 0.22
+    for i, grow in enumerate((1.0, 0.75, 0.5)):
+        c = (int(40 * (1 - k)), int(36 * (1 - k)), int(44 * (1 - k)))
+        d.ellipse([x - 40 * s * grow, y - 5 * s * grow, x + 40 * s * grow, y + 7 * s * grow], fill=c)
 
 
 def _draw_arm(d, shoulder, target, s, colors):
@@ -465,6 +490,13 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
         if style in ("long", "bob", "curly", "ponytail"):  # a glossy highlight and a parting
             d.arc([x - 14 * s, head_y - 22 * s, x + 6 * s, head_y - 4 * s], 200, 300, fill=tuple(min(255, c + 34) for c in hair), width=max(2, int(2.4 * s)))
             d.line([(x + 2 * s, head_y - 24 * s), (x - 6 * s, head_y - 8 * s)], fill=tuple(max(0, c - 16) for c in hair), width=max(1, int(1.2 * s)))
+        if style == "curly":   # permed curls over the crown (older women's classic short perm)
+            for k in range(-3, 4):
+                cxk = x + k * 5.6 * s
+                d.ellipse([cxk - 5.2 * s, head_y - 28 * s + abs(k) * 2.4 * s, cxk + 5.2 * s, head_y - 16 * s + abs(k) * 2.4 * s], fill=hair)
+        if style == "ponytail":   # side-swept fringe + a bright hair tie
+            d.pieslice([x - 18 * s, head_y - 22 * s, x + 6 * s, head_y - 2 * s], 180, 300, fill=tuple(max(0, c - 10) for c in hair))
+            d.ellipse([x + 13 * s, head_y - 4 * s, x + 21 * s, head_y + 4 * s], fill=(206, 60, 80))
         if style == "bun":
             d.ellipse([x - 10 * s, head_y - 36 * s, x + 10 * s, head_y - 18 * s], fill=hair)
         if style in ("short", "bob", "ponytail"):
@@ -479,7 +511,7 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
     if "cap" in items:
         d.pieslice([x - 20 * s, head_y - 28 * s, x + 20 * s, head_y + 8 * s], 180, 360, fill=accent)
         d.rounded_rectangle([x - 22 * s, head_y - 6 * s, x + 24 * s, head_y - 1 * s], 2 * s, fill=tuple(max(0, c - 40) for c in accent))
-    _draw_face(d, x, head_y, s, expression, colors.get("female", False), talking)
+    _draw_face(d, x, head_y, s, expression, colors.get("female", False), talking, colors.get("older", False))
     if "earbuds" in items:
         for sign in (-1, 1):
             d.ellipse([x + sign * 19 * s - 3 * s, head_y + 1 * s, x + sign * 19 * s + 3 * s, head_y + 7 * s], fill=(250, 250, 250))
@@ -533,12 +565,11 @@ def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Ra
                 if spot:
                     lights.append((spot, int(h * 0.18), (255, 214, 130)))
         if setting == "office":
-            fg.append(lambda dd: (
-                dd.rectangle([int(w * 0.1), ground - 40, int(w * 0.62), ground - 22], fill=(54, 40, 34)),
-                dd.rectangle([int(w * 0.1), ground - 22, int(w * 0.62), h], fill=(40, 30, 28)),
-                dd.rectangle([int(w * 0.36), ground - 108, int(w * 0.5), ground - 44], fill=(24, 28, 36)),
-            ))
-            lights.append(((int(w * 0.43), ground - 76), int(h * 0.16), (120, 190, 255)))
+            from life_lesson.video import places
+            places.office_back(img, (w, h), ground, night, lights, fig_s, font_path)
+            d = ImageDraw.Draw(img)
+            fg.append(lambda dd: places.office_front(dd, (w, h), ground, night, fig_s, font_path))
+            lights.append(((int(w * 0.43), ground - 76), int(h * 0.18), (120, 190, 255)))
             seat = "sit"
     elif setting == "sea" or setting == "island":
         hor = int(h * 0.55)
@@ -588,6 +619,10 @@ def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Ra
     elif setting == "alley":
         img, ground, lights, fg, info = _alley(img, size, mood, rng, fig_s, night, props)
         d = ImageDraw.Draw(img)
+    elif setting in ("chicken_cart", "market", "mall", "kitchen"):
+        from life_lesson.video import places   # lazy: places imports helpers from this module
+        img, ground, lights, fg, info = getattr(places, setting)(img, size, mood, rng, fig_s, font_path, night, props)
+        d = ImageDraw.Draw(img)
     elif setting == "food_stall":
         img, ground, lights, fg, info = _food_stall(img, size, mood, rng, fig_s, font_path, night, ref, cook_present, props)
         d = ImageDraw.Draw(img)
@@ -618,11 +653,16 @@ def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Ra
     return img, ground, lights, seat, fg, info
 
 
+_ANIM: dict = {"phase": 0, "prog": None}   # current animation step; things that move (flames, steam, bulbs) read it
+
+
 def _flame(d, cx, base_y, s, scale=1.0):
     for dx, hh, col in ((-34, 30, (255, 120, 30)), (-12, 44, (255, 150, 40)), (12, 40, (255, 140, 30)), (34, 28, (255, 110, 30)), (0, 26, (255, 214, 90))):
+        ph = _ANIM["phase"]
+        hh = hh * (1 + 0.28 * math.sin(ph * 1.9 + dx * 0.35))            # each tongue of flame licks up and down
         w = 11 * s * scale
         top = base_y - hh * s * scale
-        cx2 = cx + dx * s * scale
+        cx2 = cx + dx * s * scale + 2.2 * s * math.sin(ph * 1.3 + dx)
         d.polygon([(cx2 - w, base_y), (cx2 - w * 0.4, top + hh * s * 0.35), (cx2, top), (cx2 + w * 0.4, top + hh * s * 0.35), (cx2 + w, base_y)], fill=col)
 
 
@@ -873,6 +913,9 @@ def _bus(img, size, mood, rng, s, night, props, stand_xs, bench_slots, named_slo
 
 
 def _steam(img: Image.Image, origin, s: float, rng: random.Random) -> Image.Image:
+    ph = _ANIM["phase"]
+    rng = random.Random(ph * 7 + 1)                    # puffs re-roll every step so the steam really moves
+    origin = (origin[0], origin[1] - (ph % 8) * 3 * s)
     layer = Image.new("RGB", img.size, (0, 0, 0))
     d = ImageDraw.Draw(layer)
     ox, oy = origin
@@ -902,6 +945,8 @@ def illustrate_scene(
     anim: dict | None = None,
 ) -> Image.Image:
     """Draw one scene. `characters` = list of dicts from `character_colors`."""
+    _ANIM["phase"] = (anim or {}).get("phase", 0)
+    _ANIM["prog"] = (anim or {}).get("prog")
     if font_path is None:  # signs carry Thai text: find a font ourselves (best effort)
         try:
             font_path = find_thai_font()
@@ -910,7 +955,7 @@ def illustrate_scene(
     ss = 2  # supersample for smooth edges
     w, h = size[0] * ss, size[1] * ss
     rng = random.Random(int(hashlib.md5(f"{seed}{setting}".encode()).hexdigest(), 16) % (2**32))
-    s = h / 720 * 1.3 * (1.45 if setting == "food_stall" else (1.5 if setting == "bus" else 1.0))
+    s = h / 720 * 1.3 * (1.45 if setting in ("food_stall", "chicken_cart") else (1.5 if setting == "bus" else 1.0))
     layout = None
     if setting == "bus":
         seated = [c for c in (characters or []) if "seated" in c.get("items", ())]
@@ -928,6 +973,7 @@ def illustrate_scene(
         cook_present=any("apron" in c.get("items", ()) for c in (characters or [])), props=tuple(props), layout=layout,
     )
 
+    night_ = _is_night(mood)
     focus: dict = {}
 
     def draw_fig(d_, x_, gy_, s_, col_, **kw):
@@ -946,6 +992,7 @@ def illustrate_scene(
         br = a.get("breath", 0.0)
         if kw.get("walk") is not None:
             br = -abs(math.sin(math.pi * kw["walk"] / 4)) * 1.6     # footfall bob
+        _ground_shadow(d_, x_, gy_ + (0 if not kw.get("sitting") else 22 * s_), s_, night_)
         pos = _draw_character(d_, x_, gy_, s_, col_, talking=talking, breath=br, **kw)
         if is_speaker:
             focus["x"], focus["y"] = pos["head"][0] / w, pos["head"][1] / h
@@ -1008,6 +1055,35 @@ def illustrate_scene(
                 if "headlamp" in col.get("items", ()):
                     lights.append(((pos["head"][0], pos["head"][1] - int(10 * s)), int(h * 0.2), (255, 246, 210)))
             continue
+        if setting == "chicken_cart":
+            if "apron" in col.get("items", ()) and not cook_placed:
+                cook_placed = True
+                subject_x = info["cook_x"] / w
+                bx0, by0, bx1, by1 = info["board"]
+                ph = (anim or {}).get("phase", 0)
+                chop = abs(math.sin(math.pi * ph / 4))              # cleaver rises and falls twice per cycle
+                bxm = (bx0 + bx1) // 2
+                pos = draw_fig(d, info["cook_x"], ground, s, col, expression=face,
+                               hands={"R": (bxm + 14 * s, by0 - 38 * s + 30 * s * (1 - chop)), "L": (bxm - 26 * s, by0 - 8 * s)})
+                if "serving" in props:                               # lifts the plate across the counter toward the customer
+                    t_ = (math.sin(2 * math.pi * ph / 8) + 1) / 2
+                    px_, py_ = bxm + (30 + 80 * t_) * s, by0 - (26 + 14 * t_) * s
+                    pos = draw_fig(d, info["cook_x"], ground, s, col, expression=face, hands={"R": (px_ + 20 * s, py_ + 4 * s), "L": (px_ - 22 * s, py_ + 4 * s)})
+                    from life_lesson.video.places import plate_chicken_rice
+                    plate_chicken_rice(d, px_, py_ + 8 * s, s * 0.8)
+                else:
+                    hx, hy = pos["R"]                                # cleaver follows the hand
+                    d.line([(hx, hy), (hx + 4 * s, hy + 34 * s)], fill=(214, 216, 224), width=max(6, int(14 * s)))
+                    d.line([(hx, hy - 4 * s), (hx - 2 * s, hy - 22 * s)], fill=(120, 80, 44), width=max(4, int(8 * s)))
+            else:  # customers sit on the plastic stools
+                sx = info["stools"][min(customers, len(info["stools"]) - 1)]
+                customers += 1
+                seat_top = info["stool_top"]
+                pos = draw_fig(d, sx, seat_top + int(22 * s), s, col, sitting=True, expression=face,
+                               hands={"L": (sx - 26 * s, seat_top - 40 * s), "R": (sx + 30 * s, seat_top - 46 * s)})
+                if subject_x is None:
+                    subject_x = sx / w
+            continue
         x = int(w * (0.5 if n == 1 else 0.3 + 0.4 * i / max(1, n - 1)))
         if setting == "alley":
             x = int(w * (0.2 + 0.17 * i))
@@ -1021,6 +1097,8 @@ def illustrate_scene(
             subject_x = x / w
         scale_ = s * (1.1 if seat else (1.3 if setting == "alley" else 1.0))
         wk = None
+        if "walking" in props and seat is None and _ANIM["prog"] is not None:   # really crosses the frame
+            x = int(w * (0.14 + 0.72 * _ANIM["prog"]) - i * 0.07 * w)
         if "walking" in props and seat is None:   # walking cycle: legs and arms swing, body bobs
             wk = (anim or {}).get("phase", 0) + 2 * i
             sw_ = math.sin(2 * math.pi * wk / 8)
@@ -1037,13 +1115,19 @@ def illustrate_scene(
     for paint in fg:
         paint(d)
     night = _is_night(mood)
+    ph = _ANIM["phase"]
     for center, radius, color in lights:
-        if night or setting in ("island", "food_stall"):
-            img = _glow(img, center, radius, color, 0.75)
+        if night or setting in ("island", "food_stall", "chicken_cart", "kitchen"):
+            k = 1.0
+            if color[2] < 170:                       # warm lights (fire, bulbs) breathe
+                k = 0.82 + 0.26 * math.sin(ph * 1.7 + center[0] * 0.013)
+            if mood is not None and mood.light == "flicker":   # failing tube: drops out on some steps
+                k = 0.25 if ph % 3 == 0 else (0.55 if ph % 5 == 1 else 1.0)
+            img = _glow(img, center, radius, color, 0.75 * k)
     d = ImageDraw.Draw(img)
     for paint in info.get("post", ()):
         paint(d)
-    if setting == "food_stall":
+    if setting in ("food_stall", "chicken_cart"):
         if info.get("steam"):
             img = _steam(img, info["steam"], s, rng)
         if info.get("ledge_steam"):  # thin wisp over the plate set out at the back window

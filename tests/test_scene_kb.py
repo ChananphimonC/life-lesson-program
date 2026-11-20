@@ -28,3 +28,13 @@ def test_every_recipe_is_well_formed():
     ids = [r.id for r in RECIPES]
     assert len(ids) == len(set(ids))
     assert all(r.keywords and r.setting for r in RECIPES)
+
+
+def test_chicken_rice_cue_picks_cart_and_vendor_wardrobe():
+    from life_lesson.video.scene_kb import is_worker, retrieve_recipe
+
+    r = retrieve_recipe("ป้าหน่อยสับไก่ข้างรถเข็นข้าวมันไก่ ไก่แขวนในตู้กระจก")
+    assert r.setting == "chicken_cart" and "apron" in r.wardrobe
+    assert is_worker(r, "แม่ค้าข้าวมันไก่")
+    assert retrieve_recipe("เดินผ่านห้างสรรพสินค้า").setting == "mall"
+    assert retrieve_recipe("ชั่งไก่ในตลาดสด").setting == "market"

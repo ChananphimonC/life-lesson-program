@@ -30,7 +30,7 @@ class ScriptBlock(BaseModel):
     speaker: str | None = None  # character whose line dominates this block: gets a talking close-up
     mood: BlockMood | None = None
     # Where the scene happens, so the illustrator can draw it (free, offline).
-    setting: Literal["room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus"] | None = None
+    setting: Literal["room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen"] | None = None
 
 
 class Fact(BaseModel):

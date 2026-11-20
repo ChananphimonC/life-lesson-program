@@ -129,3 +129,56 @@ def test_animation_phases_change_the_picture(tmp_path):
     assert ImageChops.difference(frame("food_stall", [cook], 0), frame("food_stall", [cook], 2)).getbbox()
     assert ImageChops.difference(frame("street", [walker], 0, ("walking",)), frame("street", [walker], 2, ("walking",))).getbbox()
     assert ImageChops.difference(frame("street", [walker], 0, (), "ต้อม", 0), frame("street", [walker], 0, (), "ต้อม", 1)).getbbox()
+
+
+def test_new_places_draw_and_cart_vendor_chops(tmp_path):
+    from PIL import ImageChops
+    from life_lesson.video.illustrator import SETTINGS, character_colors, illustrate_scene
+
+    assert {"chicken_cart", "market", "mall"} <= set(SETTINGS)
+    vendor = character_colors("เสื้อสีเหลือง", None, name="ป้า", extra_items=("apron",))
+    mood = BlockMood(light="golden")
+    imgs = [illustrate_scene((480, 270), setting=st, mood=mood, characters=[vendor], seed=1) for st in ("chicken_cart", "market", "mall")]
+    assert all(ImageChops.difference(imgs[0], i).getbbox() for i in imgs[1:])   # three different places
+    f = lambda ph: illustrate_scene((480, 270), setting="chicken_cart", mood=mood, characters=[vendor], seed=1,
+                                    anim={"phase": ph, "breath": 0.0, "blink": False, "mouth": 0})
+    assert ImageChops.difference(f(0), f(2)).getbbox()      # the cleaver comes down: not a still picture
+
+
+def test_office_and_kitchen_have_detail_and_people_cast_shadows():
+    from PIL import ImageChops
+    from life_lesson.video.illustrator import character_colors, illustrate_scene
+
+    mood = BlockMood(light="bright")
+    cook = character_colors("เสื้อสีเหลือง", None, name="ป้า", extra_items=("apron",), age="50s", hair="ผมดัดลอนสั้น สีเทา", gender="หญิง")
+    assert cook["older"] is True and cook["hair_style"] == "curly"
+    young = character_colors("เสื้อสีฟ้า", None, name="ฟ้า", age="20s", gender="หญิง")
+    assert young["older"] is False
+    for st in ("office", "kitchen"):
+        empty = illustrate_scene((480, 270), setting=st, mood=mood, characters=[], seed=1)
+        full = illustrate_scene((480, 270), setting=st, mood=mood, characters=[young], seed=1)
+        assert ImageChops.difference(empty, full).getbbox()
+    # office wall clock / window: not a flat colour field
+    office = illustrate_scene((480, 270), setting="office", mood=mood, characters=[], seed=1)
+    assert len(set(office.resize((48, 27)).getdata())) > 40
+
+
+def test_scene_things_really_move_between_steps():
+    """Flames, steam/bubbles, bulbs, flickering lights, serving a plate and crossing the street are all animated."""
+    from PIL import ImageChops
+    from life_lesson.video.illustrator import character_colors, illustrate_scene
+
+    cook = character_colors("เสื้อสีเหลือง", None, name="ป้า", extra_items=("apron",))
+    walker = character_colors("เสื้อสีฟ้า", None, name="ต้อม")
+
+    def fr(setting, ph, chars=(), props=(), light="golden", prog=None):
+        return illustrate_scene((480, 270), setting=setting, mood=BlockMood(light=light), characters=list(chars), seed=1, props=props,
+                                anim={"phase": ph, "breath": 0.0, "blink": False, "mouth": 0, "prog": prog})
+
+    differs = lambda a, b: ImageChops.difference(a, b).getbbox() is not None
+    assert differs(fr("kitchen", 0), fr("kitchen", 3))                       # fire + bubbles + steam
+    assert differs(fr("chicken_cart", 0, light="dim"), fr("chicken_cart", 1, light="dim"))   # bulbs twinkle
+    assert differs(fr("office", 0, light="flicker"), fr("office", 1, light="flicker"))        # tube flickers
+    assert differs(fr("chicken_cart", 0, [cook], ("serving",)), fr("chicken_cart", 2, [cook], ("serving",)))
+    a, b = fr("street", 0, [walker], ("walking",), prog=0.1), fr("street", 0, [walker], ("walking",), prog=0.9)
+    assert differs(a, b)                                                     # the walker crosses the frame

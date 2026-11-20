@@ -39,6 +39,30 @@ RECIPES: tuple[SceneRecipe, ...] = (
         search_query="thai street food stall pad kaprao wok flame night",
     ),
     SceneRecipe(
+        id="chicken_cart", setting="chicken_cart",
+        keywords=("ข้าวมันไก่", "รถเข็น", "รถสามล้อ", "ไก่แขวน", "ไก่ต้ม", "ไก่ทอด", "พ่วงมอเตอร์ไซค์", "สับไก่", "chicken rice", "food cart"),
+        props=("hanging_chicken", "chopping_board", "bulbs"),
+        role_words=("แม่ค้า", "พ่อค้า", "คนขาย", "vendor"), wardrobe=("apron", "towel"), sleeve="short", worker_pose="chop",
+        search_query="thai chicken rice tricycle cart motorbike roadside hanging chicken glass case",
+    ),
+    SceneRecipe(
+        id="home_kitchen", setting="kitchen",
+        keywords=("ห้องครัว", "ต้มไก่", "หม้อต้ม", "น้ำซุป", "หุงข้าว", "ครัวบ้าน", "kitchen"),
+        props=("big_pot", "ginger"), role_words=("แม่ค้า", "แม่ครัว"), wardrobe=("apron",), sleeve="short",
+        search_query="thai home kitchen boiling whole chicken big pot ginger coriander root steam",
+    ),
+    SceneRecipe(
+        id="wet_market", setting="market",
+        keywords=("ตลาดสด", "ตลาดเช้า", "ตลาด", "ชั่งไก่", "แผงไก่", "wet market"),
+        role_words=("แม่ค้า", "พ่อค้า", "คนขาย"), wardrobe=("apron",), sleeve="short",
+        search_query="thai wet market early morning chicken stall tarp",
+    ),
+    SceneRecipe(
+        id="shopping_mall", setting="mall",
+        keywords=("ห้างสรรพสินค้า", "ห้าง", "เซ็นทรัล", "ร้านค้าในห้าง", "mall", "shopping"),
+        search_query="shopping mall concourse shopfronts bright floor",
+    ),
+    SceneRecipe(
         id="island_camp", setting="island",
         keywords=("เกาะ", "ชายหาด", "ติดเกาะ", "เรือแตก", "กองไฟ", "island", "beach", "stranded"),
         props=("campfire",), role_words=("นักศึกษา", "student"), wardrobe=("lanyard", "backpack"),
@@ -56,7 +80,7 @@ RECIPES: tuple[SceneRecipe, ...] = (
     ),
     SceneRecipe(
         id="office_floor", setting="office",
-        keywords=("ออฟฟิศ", "ที่ทำงาน", "ประชุม", "ลิฟต์", "ห้าง", "office", "elevator", "meeting"),
+        keywords=("ออฟฟิศ", "ที่ทำงาน", "ประชุม", "ลิฟต์", "office", "elevator", "meeting"),
         role_words=("พนักงาน", "หัวหน้า", "staff"), wardrobe=("lanyard",), search_query="office night city window desk",
     ),
     SceneRecipe(
@@ -131,6 +155,8 @@ def props_from_cue(cue_text: str | None) -> tuple[str, ...]:
         props.append("passengers_awake")
     if any(k in text for k in ("นั่งลง", "นั่งบน", "ได้นั่ง")):
         props.append("protagonist_seated")
+    if any(k in text for k in ("ยื่นจาน", "ยกจาน", "เสิร์ฟ", "ตักข้าวให้")):
+        props.append("serving")
     if "เดิน" in text:
         props.append("walking")
     if "เงา" in text:
