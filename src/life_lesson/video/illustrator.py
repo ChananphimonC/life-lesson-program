@@ -23,7 +23,7 @@ from life_lesson.generation.atmosphere import BlockMood
 from life_lesson.publish.fonts import find_thai_font
 from life_lesson.video.scene_kb import SceneRecipe
 
-SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen", "bts", "compare")
+SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen", "bts", "compare", "bus_stop")
 
 _COLOR_WORDS = {
     "เหลือง": (240, 196, 40), "yellow": (240, 196, 40), "แดง": (206, 52, 48), "red": (206, 52, 48),
@@ -68,6 +68,8 @@ _ITEM_WORDS = {
     "waist_wrap": ("ผูกเอว", "waist"),
     "skirt_white": ("กระโปรงสีขาว", "กระโปรงขาว"),
     "shopping_bags": ("ถุงตลาด", "ถุงพลาสติก"),
+    "conductor_bag": ("กระเป๋ากระบอก", "กระเป๋ารถเมล์", "ที่เก็บตั๋ว", "กระเป๋าตั๋ว"),
+    "laptop_bag": ("ถุงใส่โน้ตบุ๊ก", "กระเป๋าโน้ตบุ๊ก", "ถุงโน้ตบุ๊ก"),
 }
 _SHORT_SLEEVE_WORDS = ("แขนสั้น", "โปโล", "เสื้อยืด", "t-shirt", "polo", "short sleeve")
 
@@ -453,6 +455,14 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
         d.line([(x - 13 * s, torso_top + 6 * s), (x - 7 * s, torso_top - 8 * s)], fill=ap, width=max(2, int(3 * s)))
         d.line([(x + 13 * s, torso_top + 6 * s), (x + 7 * s, torso_top - 8 * s)], fill=ap, width=max(2, int(3 * s)))
         d.rounded_rectangle([x - 9 * s, torso_bot - 26 * s, x + 9 * s, torso_bot - 10 * s], 3 * s, outline=tuple(max(0, c - 40) for c in ap), width=max(1, int(1.5 * s)))
+    if "conductor_bag" in items:   # cross-body strap + the orange ticket pouch on the hip
+        d.line([(x - 14 * s, torso_top - 2 * s), (x + 24 * s, torso_bot - 14 * s)], fill=(120, 74, 40), width=max(3, int(4 * s)))
+        d.rounded_rectangle([x + 14 * s, torso_bot - 36 * s, x + 40 * s, torso_bot - 8 * s], 5 * s, fill=(222, 128, 40), outline=(150, 80, 24), width=max(1, int(2 * s)))
+        d.ellipse([x + 22 * s, torso_bot - 28 * s, x + 32 * s, torso_bot - 18 * s], fill=(250, 232, 190))
+    if "laptop_bag" in items:      # slim bag hanging from one shoulder at the hip
+        d.line([(x + 14 * s, torso_top - 2 * s), (x - 30 * s, torso_bot - 16 * s)], fill=(50, 54, 66), width=max(3, int(3 * s)))
+        d.rounded_rectangle([x - 52 * s, torso_bot - 34 * s, x - 14 * s, torso_bot - 4 * s], 4 * s, fill=(70, 78, 98), outline=(40, 44, 58), width=max(1, int(2 * s)))
+        d.line([(x - 52 * s, torso_bot - 26 * s), (x - 14 * s, torso_bot - 26 * s)], fill=(40, 44, 58), width=max(1, int(2 * s)))
     if "lanyard" in items:
         d.line([(x - 6 * s, torso_top - 4 * s), (x, torso_top + 30 * s)], fill=accent, width=max(2, int(2 * s)))
         d.line([(x + 6 * s, torso_top - 4 * s), (x, torso_top + 30 * s)], fill=accent, width=max(2, int(2 * s)))
@@ -621,7 +631,7 @@ def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Ra
     elif setting == "alley":
         img, ground, lights, fg, info = _alley(img, size, mood, rng, fig_s, night, props)
         d = ImageDraw.Draw(img)
-    elif setting in ("chicken_cart", "market", "mall", "kitchen", "bts", "compare"):
+    elif setting in ("chicken_cart", "market", "mall", "kitchen", "bts", "compare", "bus_stop"):
         from life_lesson.video import places   # lazy: places imports helpers from this module
         img, ground, lights, fg, info = getattr(places, setting)(img, size, mood, rng, fig_s, font_path, night, props)
         d = ImageDraw.Draw(img)

@@ -38,3 +38,11 @@ def test_chicken_rice_cue_picks_cart_and_vendor_wardrobe():
     assert is_worker(r, "แม่ค้าข้าวมันไก่")
     assert retrieve_recipe("เดินผ่านห้างสรรพสินค้า").setting == "mall"
     assert retrieve_recipe("ชั่งไก่ในตลาดสด").setting == "market"
+
+
+def test_bus_story_cues_pick_bus_stop_and_arrival():
+    from life_lesson.video.scene_kb import props_from_cue, retrieve_recipe
+
+    assert retrieve_recipe("น้ำฝนรอรถเมล์ไฟฟ้าสีน้ำเงินที่ป้ายรถเมล์").setting == "bus_stop"
+    assert "arriving" in props_from_cue("รถเมล์เข้าป้ายแล้วจอด")
+    assert "passengers_awake" in props_from_cue("ผู้โดยสารเล่นโทรศัพท์ทั้งคัน")

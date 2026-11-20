@@ -164,7 +164,7 @@ let weather mirror the feeling without naming it (rain when plans fall \
 apart, fog when nobody is sure, a flickering lamp when money is short). \
 Match voice to the SCENE, not to a default mood: everyday scenes (commute, office, market, food, jokes) are natural or warm; a quiet ending is soft; calm for steady explanation; hushed only for real secrets or fear (ghost/survival peaks); wistful only in quiet endings; tense/urgent only at peaks. Never use hushed/wistful for more than two blocks in a row. The narrator's voice itself never changes; only the delivery does.
 - SETTING & WARDROBE: give every block a "setting" (room|office|street|city|sea|\
-island|forest|night_sky|food_stall|alley|bus|chicken_cart|market|mall|kitchen|bts|compare) and mention concrete props in visual_cue \
+island|forest|night_sky|food_stall|alley|bus|chicken_cart|market|mall|kitchen|bts|compare|bus_stop) and mention concrete props in visual_cue \
 (e.g. wok on a flame, plastic stools, menu board). Say what each person wears \
 in their "outfit" including accessories that fit the place and the job (apron, \
 hairnet, raincoat hood, backpack, lanyard, glasses) and whether sleeves are \

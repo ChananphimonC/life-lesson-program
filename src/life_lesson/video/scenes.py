@@ -336,7 +336,7 @@ def assemble_scene_video(
                 variants: dict[tuple, int] = {}
                 frames: list[Path] = []
                 order: list[int] = []
-                walking = "walking" in scene.props
+                walking = "walking" in scene.props or "arriving" in scene.props
                 for step_i, (phase, blink, mouth) in enumerate(schedule):
                     prog = step_i / max(1, len(schedule) - 1) if walking else None
                     key = (phase, blink, mouth, step_i if walking else 0)

@@ -473,3 +473,59 @@ def compare(img, size, mood, rng, s, font_path, night, props=()):
         _text(d, (int(w * 0.36), int(h * 0.925)), cfg["note"], font_path, 15 * s, (255, 255, 255))
     info.update(ground=ground, cook_x=int(w * 0.75), left_x=int(w * 0.25), right_x=int(w * 0.75))
     return img, ground, lights, fg, info
+
+
+def bus_stop(img, size, mood, rng, s, font_path, night, props=()):
+    """Roadside bus stop in the evening. A blue-and-white electric bus rolls in from the right and stops
+    (animated by `prog`), brake lights flash as it settles; shelter with bench, route sign, skyline behind."""
+    w, h = size
+    d = ImageDraw.Draw(img)
+    ground = int(h * 0.90)
+    lights, fg, info = [], [], {}
+    top, bottom = _sky_colors(mood)
+    img.paste(_gradient((w, int(h * 0.62)), top, bottom), (0, 0))
+    d = ImageDraw.Draw(img)
+    far = _lerp(top, (0, 0, 0), 0.3) if night else _lerp(bottom, (70, 90, 120), 0.5)
+    _skyline(d, rng, w, int(h * 0.60), (int(h * 0.12), int(h * 0.36)), far, (250, 214, 120) if night else None, 0.2)
+    d.rectangle([0, int(h * 0.60), w, int(h * 0.82)], fill=(54, 56, 64) if night else (96, 98, 106))             # road
+    for x in range(0, w, int(110 * s)):
+        d.rectangle([x, int(h * 0.71), x + int(56 * s), int(h * 0.72)], fill=(230, 224, 170))
+    d.rectangle([0, int(h * 0.82), w, h], fill=(126, 124, 120) if not night else (66, 66, 72))                      # pavement
+    d.rectangle([0, int(h * 0.82), w, int(h * 0.84)], fill=(190, 188, 180) if not night else (100, 100, 108))      # curb
+    # the bus: eases in from the right
+    prog = _ANIM["prog"] if _ANIM["prog"] is not None else 0.85
+    t = 1 - (1 - min(1.0, prog * 1.15)) ** 2
+    bw, bh = int(w * 0.62), int(h * 0.30)
+    bx = int(w * 1.04 - (w * 1.04 - w * 0.34) * t)
+    by1 = int(h * 0.805)
+    by0 = by1 - bh
+    d.rounded_rectangle([bx, by0, bx + bw, by1], int(14 * s), fill=(28, 92, 196))
+    d.rectangle([bx, by0 + int(bh * 0.62), bx + bw, by0 + int(bh * 0.70)], fill=(240, 244, 252))                  # white stripe
+    for k in range(5):                                                                                           # windows with silhouettes
+        wx = bx + int(bw * (0.04 + 0.185 * k))
+        d.rounded_rectangle([wx, by0 + int(bh * 0.1), wx + int(bw * 0.16), by0 + int(bh * 0.5)], int(6 * s), fill=(176, 214, 244))
+        d.ellipse([wx + int(bw * 0.05), by0 + int(bh * 0.28), wx + int(bw * 0.11), by0 + int(bh * 0.42)], fill=(60, 70, 96))
+    d.rounded_rectangle([bx + int(bw * 0.03), by0 + int(bh * 0.04), bx + int(bw * 0.2), by0 + int(bh * 0.1)], int(3 * s), fill=(20, 24, 32))   # destination board
+    _text(d, (bx + int(bw * 0.04), by0 + int(bh * 0.03)), "515 ศาลายา", font_path, 13 * s, (255, 200, 60))
+    for wx in (bx + int(bw * 0.2), bx + int(bw * 0.78)):
+        d.ellipse([wx - int(30 * s), by1 - int(30 * s), wx + int(30 * s), by1 + int(30 * s)], fill=(22, 22, 26))
+        d.ellipse([wx - int(14 * s), by1 - int(14 * s), wx + int(14 * s), by1 + int(14 * s)], fill=(150, 150, 158))
+    d.ellipse([bx - int(6 * s), by1 - int(bh * 0.32), bx + int(10 * s), by1 - int(bh * 0.18)], fill=(255, 240, 180))   # headlight
+    braking = t > 0.92 and (_ANIM["phase"] % 2 == 0)
+    d.rectangle([bx + bw - int(10 * s), by0 + int(bh * 0.74), bx + bw, by0 + int(bh * 0.88)], fill=(255, 60, 50) if braking else (130, 30, 30))
+    lights.append(((bx + int(4 * s), by1 - int(bh * 0.25)), int(h * 0.12), (255, 240, 190)))
+    if braking:
+        lights.append(((bx + bw, by0 + int(bh * 0.8)), int(h * 0.07), (255, 70, 60)))
+    # shelter + sign on the pavement (left)
+    sx0, sx1 = int(w * 0.04), int(w * 0.30)
+    d.rectangle([sx0, int(h * 0.58), sx1, int(h * 0.605)], fill=(70, 76, 90))
+    for x in (sx0 + int(8 * s), sx1 - int(8 * s)):
+        d.rectangle([x - 3, int(h * 0.605), x + 3, int(h * 0.84)], fill=(70, 76, 90))
+    d.rectangle([sx0 + int(14 * s), int(h * 0.76), sx1 - int(14 * s), int(h * 0.78)], fill=(150, 110, 70))        # bench
+    px = int(w * 0.34)
+    d.rectangle([px - 4, int(h * 0.50), px + 4, int(h * 0.86)], fill=(60, 64, 74))
+    d.rounded_rectangle([px - int(30 * s), int(h * 0.46), px + int(30 * s), int(h * 0.53)], int(5 * s), fill=(220, 40, 50))
+    _text(d, (px - int(26 * s), int(h * 0.455)), "515", font_path, 22 * s, (255, 255, 255))
+    lights.append(((px, int(h * 0.50)), int(h * 0.1), (255, 220, 160)))
+    info.update(ground=ground, cook_x=int(w * 0.5))
+    return img, ground, lights, fg, info

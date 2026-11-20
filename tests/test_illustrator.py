@@ -224,3 +224,17 @@ def test_captions_never_orphan_a_thai_vowel_or_tone_mark():
         assert chunk[0] not in "ะาำัิีึืุู็่้๊๋์ๆ", chunk
         assert chunk[-1] not in "เแโใไ", chunk
     assert "".join(c for c, _, _ in caption_chunks(text, 0, 10000, 20)).replace(" ", "") == text
+
+
+def test_bus_stop_bus_rolls_in_and_new_items_draw():
+    from PIL import ImageChops
+    from life_lesson.video.illustrator import SETTINGS, character_colors, illustrate_scene
+
+    assert "bus_stop" in SETTINGS
+    f = lambda pr: illustrate_scene((480, 270), setting="bus_stop", mood=BlockMood(light="golden"), characters=[], seed=1,
+                                    props=("arriving",), anim={"phase": 0, "breath": 0.0, "blink": False, "mouth": 0, "prog": pr})
+    assert ImageChops.difference(f(0.1), f(0.9)).getbbox()
+    plain = character_colors("เสื้อสีฟ้า", None, name="พี่")
+    conductor = character_colors("เสื้อสีฟ้า กระเป๋ากระบอกตั๋ว", None, name="พี่")
+    laptop = character_colors("เสื้อสีขาว ถุงใส่โน้ตบุ๊ก", None, name="น้ำ")
+    assert "conductor_bag" in conductor["items"] and "laptop_bag" in laptop["items"] and "conductor_bag" not in plain["items"]

@@ -52,6 +52,11 @@ RECIPES: tuple[SceneRecipe, ...] = (
         search_query="thai home kitchen boiling whole chicken big pot ginger coriander root steam",
     ),
     SceneRecipe(
+        id="bus_stop", setting="bus_stop",
+        keywords=("ป้ายรถเมล์", "รอรถเมล์", "รถเมล์ไฟฟ้า", "รถไฟฟ้าสีน้ำเงิน", "รถเมล์เข้าป้าย", "bus stop"),
+        search_query="thai smile bus blue electric bus bus stop bangkok",
+    ),
+    SceneRecipe(
         id="sky_train", setting="bts",
         keywords=("รถไฟฟ้า", "บีทีเอส", "bts", "สถานีรถไฟฟ้า", "skytrain"),
         search_query="bangkok bts sky train interior morning commuters",
@@ -162,7 +167,7 @@ def props_from_cue(cue_text: str | None) -> tuple[str, ...]:
         props.append("second_plate")
     if "ไข่ดาวหายไป" in text or "ครึ่งฟอง" in text:
         props.append("half_eaten")
-    if any(k in text for k in ("ลืมตาพร้อมกัน", "ตื่นพร้อมกัน", "ทั้งคันลืมตา")):
+    if any(k in text for k in ("ลืมตาพร้อมกัน", "ตื่นพร้อมกัน", "ทั้งคันลืมตา", "เล่นโทรศัพท์", "ก้มหน้าเล่นมือถือ")):
         props.append("passengers_awake")
     if any(k in text for k in ("นั่งลง", "นั่งบน", "ได้นั่ง")):
         props.append("protagonist_seated")
@@ -170,6 +175,8 @@ def props_from_cue(cue_text: str | None) -> tuple[str, ...]:
         props.append("serving")
     if any(k in text for k in ("ขอบเตียง", "บนเตียง", "นอนคลุมผ้า", "นาฬิกาปลุก")):
         props.append("bed")
+    if any(k in text for k in ("เข้าป้าย", "รถมาจอด", "รถเมล์มาถึง", "รอรถเมล์")):
+        props.append("arriving")
     if "เดิน" in text:
         props.append("walking")
     if "เงา" in text:
