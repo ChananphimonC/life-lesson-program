@@ -169,7 +169,7 @@ def render_chapter_card(
     img = Image.new("RGBA", size, (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     margin = int(56 * u)
-    y = int(h * 0.74) if w >= h else int(h * 0.60)
+    y = int(h * 0.56) if w >= h else int(h * 0.60)   # landscape: above the caption band
     if scene.time_label:
         f = ImageFont.truetype(str(font_file), int(30 * u))
         tw = d.textlength(scene.time_label, font=f)
@@ -242,7 +242,7 @@ def _motion_filter(scene: Scene, width: int, height: int, focus: dict | None = N
 
 def _scene_command(
     ffmpeg: str, clip: Path, card: Path | None, scene: Scene, width: int, height: int, out: Path,
-    focus: dict | None = None,
+    focus: dict | None = None, captions: list[tuple[Path, float, float]] | None = None,
 ) -> list[str]:
     dur = scene.duration_s
     fade_out_at = max(0.0, dur - FADE_S)
@@ -281,6 +281,14 @@ def _scene_command(
         )
         label = "g2"
 
+    for png, a_s, b_s in captions or []:   # one burned-in caption per phrase, shown only while it is spoken
+        cmd += ["-loop", "1", "-i", str(png)]
+        steps.append(
+            f"[{next_input}:v]format=rgba[c{next_input}];"
+            f"[{label}][c{next_input}]overlay=0:0:enable='between(t,{a_s:.3f},{b_s:.3f})':shortest=0[g{next_input + 10}]"
+        )
+        label, next_input = f"g{next_input + 10}", next_input + 1
+
     steps.append(
         f"[{label}]fade=t=in:st=0:d={FADE_S},fade=t=out:st={fade_out_at}:d={FADE_S},format=yuv420p[v]"
     )
@@ -306,6 +314,7 @@ def assemble_scene_video(
     font_path: str | None = None,
     background_offset: int = 0,
     visual_mode: str = "stock",
+    captions: list[tuple[str, int, int]] | None = None,
 ) -> Path:
     if not scenes:
         raise VideoAssemblyError("No scenes to assemble")
@@ -353,7 +362,16 @@ def assemble_scene_video(
             if show_cards and new_title:
                 card = render_chapter_card(scene, (width, height), tmp_dir / f"card{scene.index}.png", font_path=font_path)
             part = tmp_dir / f"scene{scene.index:03d}.mp4"
-            _run(_scene_command(ffmpeg_binary, clip, card, scene, width, height, part, focus), f"rendering scene {scene.index}")
+            scene_caps: list[tuple[Path, float, float]] = []
+            if captions:
+                from life_lesson.video.subtitles import render_caption
+                for k, (text, a_ms, b_ms) in enumerate(captions):
+                    if b_ms <= scene.start_ms or a_ms >= scene.end_ms:
+                        continue
+                    png = tmp_dir / f"cap{scene.index:03d}_{k}.png"
+                    render_caption(text, (width, height), Path(find_thai_font(font_path))).save(png)
+                    scene_caps.append((png, max(0.0, (a_ms - scene.start_ms) / 1000), (min(b_ms, scene.end_ms) - scene.start_ms) / 1000))
+            _run(_scene_command(ffmpeg_binary, clip, card, scene, width, height, part, focus, scene_caps), f"rendering scene {scene.index}")
             parts.append(part)
 
         listing = tmp_dir / "list.txt"

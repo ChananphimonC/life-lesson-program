@@ -1,0 +1,334 @@
+[
+  {
+    "index": 0,
+    "start_ms": 0,
+    "end_ms": 20216,
+    "title": "ตีสี่ ตลาดสด",
+    "time_label": "04:00",
+    "visual_cue": "ป้าหน่อยเดินชั่งไก่ในตลาดสดตอนมืด ยกไก่ตัวใหญ่ขึ้นมาดู",
+    "mood": {
+      "light": "dim",
+      "weather": "clear",
+      "color": "amber",
+      "tension": 2,
+      "voice": "calm",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "market",
+    "character_names": [
+      "ป้าหน่อย"
+    ],
+    "recipe_id": "wet_market",
+    "ref_palette": [],
+    "props": [
+      "walking"
+    ],
+    "speaker": null
+  },
+  {
+    "index": 1,
+    "start_ms": 20216,
+    "end_ms": 47799,
+    "title": "ห้าโมงสี่สิบ ห้องเช่า",
+    "time_label": "05:40",
+    "visual_cue": "ฟ้าใสนั่งขอบเตียงในห้องเช่ามืด มือเอื้อมไปปิดนาฬิกาปลุก",
+    "mood": {
+      "light": "dim",
+      "weather": "clear",
+      "color": "cool",
+      "tension": 1,
+      "voice": "hushed",
+      "sounds": [
+        "clock",
+        "room_tone"
+      ]
+    },
+    "setting": "room",
+    "character_names": [
+      "ฟ้าใส"
+    ],
+    "recipe_id": "desk_night",
+    "ref_palette": [],
+    "props": [
+      "bed"
+    ],
+    "speaker": null
+  },
+  {
+    "index": 2,
+    "start_ms": 47799,
+    "end_ms": 71582,
+    "title": "เจ็ดโมงครึ่ง รถไฟฟ้า",
+    "time_label": "07:30",
+    "visual_cue": "ฟ้าใสยืนในรถไฟฟ้าแน่น ผู้โดยสารตื่นพร้อมกันก้มดูมือถือ ห้อยบัตรพนักงาน ถือกาแฟ",
+    "mood": {
+      "light": "bright",
+      "weather": "clear",
+      "color": "cool",
+      "tension": 2,
+      "voice": "calm",
+      "sounds": [
+        "engine",
+        "room_tone"
+      ]
+    },
+    "setting": "bus",
+    "character_names": [
+      "ฟ้าใส"
+    ],
+    "recipe_id": "desk_night",
+    "ref_palette": [],
+    "props": [
+      "passengers_awake"
+    ],
+    "speaker": null
+  },
+  {
+    "index": 3,
+    "start_ms": 71582,
+    "end_ms": 92465,
+    "title": "แปดโมง ตลาดเช้า",
+    "time_label": "08:00",
+    "visual_cue": "ป้าหน่อยยืนข้างหม้อต้มไก่ใบใหญ่ในครัว ไอน้ำลอย ใส่ขิงกับรากผักชี",
+    "mood": {
+      "light": "golden",
+      "weather": "clear",
+      "color": "warm",
+      "tension": 2,
+      "voice": "warm",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "kitchen",
+    "character_names": [
+      "ป้าหน่อย"
+    ],
+    "recipe_id": "home_kitchen",
+    "ref_palette": [],
+    "props": [],
+    "speaker": null
+  },
+  {
+    "index": 4,
+    "start_ms": 92465,
+    "end_ms": 114165,
+    "title": "เที่ยง ออฟฟิศ",
+    "time_label": "12:10",
+    "visual_cue": "ฟ้าใสนั่งกินข้าวกล่องหน้าคอม เลื่อนดูมือถือ",
+    "mood": {
+      "light": "bright",
+      "weather": "clear",
+      "color": "cool",
+      "tension": 2,
+      "voice": "wistful",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "office",
+    "character_names": [
+      "ฟ้าใส"
+    ],
+    "recipe_id": "desk_night",
+    "ref_palette": [],
+    "props": [],
+    "speaker": null
+  },
+  {
+    "index": 5,
+    "start_ms": 114165,
+    "end_ms": 135865,
+    "title": "บ่ายสาม ลงรถ",
+    "time_label": "15:00",
+    "visual_cue": "ป้าหน่อยเข็นรถสามล้อพ่วงมอเตอร์ไซค์ ไก่แขวนเรียงในตู้กระจก ผ้ากันเปื้อนแดง",
+    "mood": {
+      "light": "golden",
+      "weather": "clear",
+      "color": "warm",
+      "tension": 2,
+      "voice": "warm",
+      "sounds": [
+        "engine"
+      ]
+    },
+    "setting": "chicken_cart",
+    "character_names": [
+      "ป้าหน่อย"
+    ],
+    "recipe_id": "chicken_cart",
+    "ref_palette": [],
+    "props": [],
+    "speaker": null
+  },
+  {
+    "index": 6,
+    "start_ms": 135865,
+    "end_ms": 156118,
+    "title": "ห้าโมง เปิดร้าน",
+    "time_label": "17:00",
+    "visual_cue": "ป้าหน่อยจอดรถข้างทาง ตั้งเก้าอี้พลาสติก สับไก่",
+    "mood": {
+      "light": "golden",
+      "weather": "clear",
+      "color": "amber",
+      "tension": 3,
+      "voice": "warm",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "chicken_cart",
+    "character_names": [
+      "ป้าหน่อย"
+    ],
+    "recipe_id": "chicken_cart",
+    "ref_palette": [],
+    "props": [],
+    "speaker": null
+  },
+  {
+    "index": 7,
+    "start_ms": 156118,
+    "end_ms": 174584,
+    "title": "หกโมง เลิกงาน",
+    "time_label": "18:00",
+    "visual_cue": "ฟ้าใสเดินออกจากตึกกับกลุ่มคนทำงาน แสงเย็น",
+    "mood": {
+      "light": "golden",
+      "weather": "clear",
+      "color": "cool",
+      "tension": 2,
+      "voice": "calm",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "mall",
+    "character_names": [
+      "ฟ้าใส"
+    ],
+    "recipe_id": "city_roof",
+    "ref_palette": [],
+    "props": [
+      "walking"
+    ],
+    "speaker": null
+  },
+  {
+    "index": 8,
+    "start_ms": 174584,
+    "end_ms": 191337,
+    "title": "สองทุ่ม ริมทาง",
+    "time_label": "19:40",
+    "visual_cue": "ฟ้าใสเดินมาถึงรถเข็น ป้าหน่อยยิ้มทักทาย ไก่แขวนเหลือตัวสุดท้าย",
+    "mood": {
+      "light": "dim",
+      "weather": "clear",
+      "color": "amber",
+      "tension": 3,
+      "voice": "warm",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "chicken_cart",
+    "character_names": [
+      "ฟ้าใส",
+      "ป้าหน่อย"
+    ],
+    "recipe_id": "chicken_cart",
+    "ref_palette": [],
+    "props": [
+      "walking"
+    ],
+    "speaker": null
+  },
+  {
+    "index": 9,
+    "start_ms": 191337,
+    "end_ms": 206930,
+    "title": "เก้าอี้พลาสติก",
+    "time_label": "19:45",
+    "visual_cue": "ฟ้าใสนั่งเก้าอี้พลาสติก ป้าหน่อยยื่นจานข้าวมันไก่ให้ ไอร้อนลอย",
+    "mood": {
+      "light": "dim",
+      "weather": "clear",
+      "color": "warm",
+      "tension": 3,
+      "voice": "warm",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "chicken_cart",
+    "character_names": [
+      "ฟ้าใส",
+      "ป้าหน่อย"
+    ],
+    "recipe_id": "chicken_cart",
+    "ref_palette": [],
+    "props": [
+      "serving"
+    ],
+    "speaker": "ป้าหน่อย"
+  },
+  {
+    "index": 10,
+    "start_ms": 206930,
+    "end_ms": 226280,
+    "title": "น้ำจิ้ม",
+    "time_label": "19:52",
+    "visual_cue": "ฟ้าใสกินข้าว ป้าหน่อยนับเหรียญจากกระป๋องใต้โต๊ะ",
+    "mood": {
+      "light": "dim",
+      "weather": "clear",
+      "color": "amber",
+      "tension": 3,
+      "voice": "wistful",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "chicken_cart",
+    "character_names": [
+      "ฟ้าใส",
+      "ป้าหน่อย"
+    ],
+    "recipe_id": "desk_night",
+    "ref_palette": [],
+    "props": [],
+    "speaker": "ฟ้าใส"
+  },
+  {
+    "index": 11,
+    "start_ms": 226280,
+    "end_ms": 246196,
+    "title": "สองทุ่ม",
+    "time_label": "20:00",
+    "visual_cue": "ป้าหน่อยเก็บเก้าอี้ ฟ้าใสเดินจากไป ถือถุงขนม แสงไฟรถเข็นอยู่ข้างหลัง",
+    "mood": {
+      "light": "dark",
+      "weather": "clear",
+      "color": "warm",
+      "tension": 2,
+      "voice": "wistful",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "chicken_cart",
+    "character_names": [
+      "ฟ้าใส",
+      "ป้าหน่อย"
+    ],
+    "recipe_id": "chicken_cart",
+    "ref_palette": [],
+    "props": [
+      "walking"
+    ],
+    "speaker": null
+  }
+]

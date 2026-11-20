@@ -1104,7 +1104,7 @@ def illustrate_scene(
             hands = {"L": (x - 4 * s, desk_top - 6), "R": (x + 38 * s, desk_top - 6)}
         if subject_x is None:
             subject_x = x / w
-        scale_ = s * (1.1 if seat else (1.3 if setting == "alley" else 1.0))
+        scale_ = s * (1.1 if seat else (1.3 if setting == "alley" else (1.5 if setting in ("mall", "market") else 1.0)))
         wk = None
         if "walking" in props and seat is None and _ANIM["prog"] is not None:   # really crosses the frame
             x = int(w * (0.14 + 0.72 * _ANIM["prog"]) - i * 0.07 * w)

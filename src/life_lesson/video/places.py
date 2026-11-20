@@ -127,8 +127,8 @@ def chicken_cart(img, size, mood, rng, s, font_path, night, props=()):
         for wx in (cx0 + int(38 * s), cx1 - int(38 * s)):
             dd.ellipse([wx - int(26 * s), ground - int(52 * s), wx + int(26 * s), ground + 4], fill=(24, 24, 28))
             dd.ellipse([wx - int(13 * s), ground - int(39 * s), wx + int(13 * s), ground - int(9 * s)], fill=(150, 150, 158))
-        _text(dd, (cx0 + int(26 * s), counter_y + int(8 * s)), "ธรรมดา 50 บาท", font_path, 18 * s, (176, 36, 40))
-        _text(dd, (cx0 + int(26 * s), counter_y + int(30 * s)), "พิเศษ 60 บาท", font_path, 18 * s, (176, 36, 40))
+        _text(dd, (cx0 + int((cx1 - cx0) * 0.42), counter_y + int(8 * s)), "ธรรมดา 50 บาท", font_path, 18 * s, (176, 36, 40))
+        _text(dd, (cx0 + int((cx1 - cx0) * 0.42), counter_y + int(30 * s)), "พิเศษ 60 บาท", font_path, 18 * s, (176, 36, 40))
 
     fg.append(cart_front)
 

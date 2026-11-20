@@ -60,6 +60,7 @@ from dataclasses import replace
 from life_lesson.video.illustrator import thumbnail_backdrop
 from life_lesson.video.references import blended_palette, search_references
 from life_lesson.video.scene_kb import RECIPES
+from life_lesson.video.subtitles import caption_cues, write_srt
 from life_lesson.video.scenes import (
     Scene,
     assemble_scene_video,
@@ -136,7 +137,8 @@ def run_pipeline(
             scenes = plan_scenes(script, block_starts_ms, duration_ms)
             scenes, reference_credits = _gather_references(settings, scenes)
             audio_path = _master(conn, settings, episode_id, narration_path, scenes, duration_ms)
-            video_path = _assemble_video(conn, settings, episode_id, audio_path, spec, scenes)
+            cues = caption_cues(script, block_starts_ms, duration_ms) if spec.name != "short" else None
+            video_path = _assemble_video(conn, settings, episode_id, audio_path, spec, scenes, cues)
             publish_dir = _write_publish_bundle(
                 settings, episode_id, script, spec, block_starts_ms, duration_ms, scenes, video_path,
                 extra_credits=reference_credits,
@@ -373,6 +375,7 @@ def _assemble_video(
     audio_path: Path,
     spec: FormatSpec,
     scenes: list[Scene],
+    captions: list | None = None,
 ) -> Path:
     output_path = settings.video_output_dir / f"{episode_id}.mp4"
     needs_scenes = (
@@ -391,6 +394,7 @@ def _assemble_video(
             show_cards=spec.name != "short",
             font_path=settings.thai_font_path,
             visual_mode=settings.visual_mode,
+            captions=captions,
         )
     else:
         assemble_video(
@@ -452,6 +456,8 @@ def _write_publish_bundle(
         json.dumps({"block_starts_ms": block_starts_ms, "duration_ms": duration_ms}), encoding="utf-8"
     )
     write_shot_list(scenes, out_dir / "shot_list.json")
+    if spec.name != "short":
+        write_srt(caption_cues(script, block_starts_ms, duration_ms), out_dir / "subtitles.srt")
 
     # Thumbnail PNG is best-effort: a missing Thai font must not sink an episode
     # whose video is already rendered; the JSON spec is always written.
