@@ -239,6 +239,16 @@ def mall(img, size, mood, rng, s, font_path, night, props=()):
     for x in range(0, w, int(90 * s)):
         d.line([(x, ground), (x - int(60 * s), h)], fill=(214, 216, 224), width=2)
     d.rectangle([0, ground, w, ground + int(10 * s)], fill=(168, 170, 180))
+    ph = _ANIM["phase"]
+    for i in range(n):                                                                                     # neon "SALE" strips blink across shops
+        if (i + ph) % 3 == 0:
+            x0 = int(w * i / n) + int(30 * s)
+            d.rounded_rectangle([x0, int(h * 0.285), x0 + int(60 * s), int(h * 0.31)], int(4 * s), fill=(255, 250, 200))
+    from life_lesson.video.illustrator import _draw_character, character_colors
+    for k, base in enumerate((0.12, 0.36, 0.80)):                                                           # shoppers strolling past the windows
+        col = character_colors(["เสื้อสีม่วง", "เสื้อสีเขียว", "เสื้อสีแดง"][k], None, name=f"mall{k}")
+        px = int(w * ((base + 0.012 * ph * (1 if k % 2 else -1)) % 1.0))
+        _draw_character(d, px, ground - int(14 * s), s * 0.9, col, walk=(ph + 3 * k) % 8)
     for x in (0.05, 0.95):                                                                           # planters
         px = int(w * x)
         d.rounded_rectangle([px - int(22 * s), ground - int(36 * s), px + int(22 * s), ground + int(4 * s)], int(6 * s), fill=(120, 96, 76))
@@ -360,4 +370,106 @@ def kitchen(img, size, mood, rng, s, font_path, night, props=()):
     _flame(d, cx, counter_y, s * 1.1, 0.8)
     info.update(cook_x=int(w * 0.50), ground=ground, counter_y=counter_y, steam=(cx, pot_y - int(30 * s)))
     lights.append(((cx, pot_y), int(h * 0.16), (255, 190, 110)))
+    return img, ground, lights, fg, info
+
+
+def bts(img, size, mood, rng, s, font_path, night, props=()):
+    """Sky-train carriage: sliding doors, route strip above them, poles + hand straps, side seats,
+    window onto a skyline that scrolls past (animated), commuters on their phones in the background."""
+    from life_lesson.video.illustrator import _draw_character, character_colors
+
+    w, h = size
+    d = ImageDraw.Draw(img)
+    ground = int(h * 0.86)
+    lights, fg, info = [], [], {}
+    wall = (214, 218, 226) if not night else (70, 76, 92)
+    d.rectangle([0, 0, w, h], fill=wall)
+    d.rectangle([0, 0, w, int(h * 0.07)], fill=_lerp(wall, (255, 255, 255), 0.35))                         # ceiling
+    for i in range(6):
+        x = int(w * (i + 0.5) / 6)
+        d.rectangle([x - int(50 * s), int(h * 0.02), x + int(50 * s), int(h * 0.045)], fill=(255, 252, 240))
+        lights.append(((x, int(h * 0.04)), int(h * 0.14), (255, 250, 230)))
+    # route strip with stations; the next station blinks
+    ry = int(h * 0.09)
+    d.rounded_rectangle([int(w * 0.18), ry, int(w * 0.82), ry + int(34 * s)], int(8 * s), fill=(40, 44, 56))
+    d.line([(int(w * 0.21), ry + int(17 * s)), (int(w * 0.79), ry + int(17 * s))], fill=(120, 200, 140), width=max(3, int(4 * s)))
+    for i in range(9):
+        sx = int(w * (0.21 + 0.58 * i / 8))
+        on = i == (_ANIM["phase"] // 4) % 2 + 4
+        d.ellipse([sx - int(7 * s), ry + int(10 * s), sx + int(7 * s), ry + int(24 * s)], fill=(255, 220, 90) if on else (240, 240, 244), outline=(30, 30, 36))
+    # windows with a scrolling skyline
+    wy0, wy1 = int(h * 0.20), int(h * 0.52)
+    top, bottom = _sky_colors(mood)
+    sky = _gradient((w, wy1 - wy0), top, bottom)
+    img.paste(sky, (0, wy0))
+    d = ImageDraw.Draw(img)
+    off = (_ANIM["phase"] * int(36 * s)) % int(w * 0.5)
+    r2 = random.Random(5)
+    x = -off
+    while x < w + 100:
+        bw, bh = r2.randrange(int(60 * s), int(150 * s)), r2.randrange(int(40 * s), int(wy1 - wy0 - 20 * s))
+        d.rectangle([x, wy1 - bh, x + bw, wy1], fill=_lerp(bottom, (40, 50, 80), 0.55))
+        x += bw + r2.randrange(0, int(20 * s))
+    for k in range(5):                                                                                      # window frames
+        fx = int(w * k / 4)
+        d.rectangle([fx - int(10 * s), wy0, fx + int(10 * s), wy1], fill=wall)
+    d.rectangle([0, wy0 - int(8 * s), w, wy0], fill=wall)
+    d.rectangle([0, wy1, w, wy1 + int(8 * s)], fill=wall)
+    # side seats (blue) under the windows + floor
+    d.rectangle([0, int(h * 0.54), w, int(h * 0.72)], fill=(60, 110, 190))
+    d.rectangle([0, int(h * 0.72), w, int(h * 0.76)], fill=(40, 80, 150))
+    d.rectangle([0, ground - int(40 * s), w, h], fill=(120, 124, 134))
+    d.rectangle([0, ground, w, h], fill=(96, 100, 112))
+    # overhead rail + hanging straps (they sway)
+    d.line([(0, int(h * 0.27) - int(60 * s)), (w, int(h * 0.27) - int(60 * s))], fill=(190, 194, 204), width=max(4, int(6 * s)))
+    for k in range(9):
+        hx = int(w * (k + 0.5) / 9)
+        sway = int(5 * s * math.sin(_ANIM["phase"] * 0.8 + k))
+        d.line([(hx, int(h * 0.27) - int(60 * s)), (hx + sway, int(h * 0.27) - int(10 * s))], fill=(60, 64, 76), width=max(2, int(3 * s)))
+        d.ellipse([hx + sway - int(12 * s), int(h * 0.27) - int(10 * s), hx + sway + int(12 * s), int(h * 0.27) + int(18 * s)], outline=(240, 240, 244), width=max(3, int(4 * s)))
+    # commuters on phones in the background (seated, faces lit by the screen)
+    outfits = ["เสื้อสีเขียว", "เสื้อสีเหลือง", "เสื้อสีม่วง", "เสื้อสีแดง", "เสื้อสีเทา"]
+    for k, fx in enumerate((0.09, 0.27, 0.73, 0.91)):
+        col = character_colors(outfits[k % len(outfits)], None, name=f"extra{k}", extra_items=("seated",))
+        _draw_character(d, int(w * fx), int(h * 0.74) + int(22 * s), s * 0.9, col, sitting=True,
+                        hands={"L": (int(w * fx) - 8 * s, int(h * 0.70)), "R": (int(w * fx) + 8 * s, int(h * 0.70))})
+        d.rounded_rectangle([int(w * fx) - 9 * s, int(h * 0.67), int(w * fx) + 9 * s, int(h * 0.70)], int(2 * s), fill=(180, 220, 255))   # phone
+    # vertical pole near the middle
+    d.rectangle([int(w * 0.62) - int(5 * s), int(h * 0.20), int(w * 0.62) + int(5 * s), ground], fill=(220, 224, 232))
+    info.update(ground=ground, cook_x=int(w * 0.45))
+    return img, ground, lights, fg, info
+
+
+def compare(img, size, mood, rng, s, font_path, night, props=()):
+    """Two columns, same day: office worker vs. rice-cart vendor. Hours and money as bars (story numbers)."""
+    w, h = size
+    d = ImageDraw.Draw(img)
+    ground = int(h * 0.88)
+    lights, fg, info = [], [], {}
+    d.rectangle([0, 0, w // 2, h], fill=(48, 62, 92) if night else (205, 222, 244))
+    d.rectangle([w // 2, 0, w, h], fill=(86, 56, 40) if night else (248, 222, 180))
+    d.rectangle([w // 2 - int(3 * s), 0, w // 2 + int(3 * s), h], fill=(30, 30, 38))
+    d.rectangle([0, ground, w, h], fill=(60, 60, 68) if night else (160, 156, 150))
+    ink_l = (240, 244, 255) if night else (30, 50, 90)
+    ink_r = (255, 236, 200) if night else (110, 50, 20)
+    cfg = _ANIM.get("compare") or {}
+    _text(d, (int(w * 0.07), int(h * 0.04)), cfg.get("left", "ฝั่งซ้าย"), font_path, 34 * s, ink_l)
+    _text(d, (int(w * 0.57), int(h * 0.04)), cfg.get("right", "ฝั่งขวา"), font_path, 34 * s, ink_r)
+    y = int(h * 0.14)
+    for row in (cfg.get("rows") or [])[:3]:
+        a, b = float(row["left"]), float(row["right"])
+        mx = max(a, b, 1e-9)
+        _text(d, (int(w * 0.07), y), row["label"], font_path, 22 * s, ink_l)
+        _text(d, (int(w * 0.57), y), row["label"], font_path, 22 * s, ink_r)
+        bar_h = int(38 * s)
+        by = y + int(32 * s)
+        grow = 0.94 + 0.06 * math.sin(_ANIM["phase"] * 0.8)           # the bars breathe a little
+        d.rounded_rectangle([int(w * 0.07), by, int(w * 0.07) + int(w * 0.38 * a / mx * grow), by + bar_h], int(8 * s), fill=(70, 120, 210))
+        d.rounded_rectangle([int(w * 0.57), by, int(w * 0.57) + int(w * 0.38 * b / mx * grow), by + bar_h], int(8 * s), fill=(226, 120, 40))
+        _text(d, (int(w * 0.075), by + int(5 * s)), row.get("left_text", str(row["left"])), font_path, 17 * s, (255, 255, 255))
+        _text(d, (int(w * 0.575), by + int(5 * s)), row.get("right_text", str(row["right"])), font_path, 17 * s, (255, 255, 255))
+        y += int(92 * s)
+    if cfg.get("note"):
+        _text(d, (int(w * 0.36), int(h * 0.925)), cfg["note"], font_path, 15 * s, (255, 255, 255))
+    info.update(ground=ground, cook_x=int(w * 0.75), left_x=int(w * 0.25), right_x=int(w * 0.75))
     return img, ground, lights, fg, info

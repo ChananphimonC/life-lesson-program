@@ -151,19 +151,20 @@ never on a moral.
 signature item and list them in "characters" (name, role, age_range, outfit, \
 signature_item, palette). Keep the outfit identical in every visual_cue. Never \
 base a character on a real person.
+- PAYOFF: before writing, decide what the viewer GETS in the MIDDLE (a reveal, a comparison with real numbers, a surprise, an answer to the hook's question) and what they CARRY AWAY at the END (a feeling, a question, an image - not a lesson or advice). Put them in "payoff": {"middle": ..., "ending": ...} and make one block in the middle (setting "compare" with a "compare" table when it suits) deliver it. A viewer must always know what the story is about by the midpoint.
 - ATMOSPHERE: give EVERY block a "mood" so picture, sound and voice agree. \
 Use only these values: light (bright|dim|dark|golden|neon|flicker), weather \
 (clear|rain|storm|fog|wind), color (warm|cool|teal|amber|mono|green), voice \
-(calm|hushed|warm|wistful|tense|urgent), sounds (any of rain|thunder|wind|\
+(natural|soft|calm|warm|hushed|wistful|tense|urgent), sounds (any of rain|thunder|wind|\
 waves|room_tone|heartbeat|clock|engine|silence), tension (integer 1-5). \
 Shape a TENSION CURVE: start low or with one sharp image, climb across the \
 exploration, peak at the start of the shift, then let it fall (not to 1) in \
 the outro so the ending stays open. Change light/weather at turning points; \
 let weather mirror the feeling without naming it (rain when plans fall \
 apart, fog when nobody is sure, a flickering lamp when money is short). \
-Match voice to tension (hushed for secrets, tense/urgent only at peaks).
+Match voice to the SCENE, not to a default mood: everyday scenes (commute, office, market, food, jokes) are natural or warm; a quiet ending is soft; calm for steady explanation; hushed only for real secrets or fear (ghost/survival peaks); wistful only in quiet endings; tense/urgent only at peaks. Never use hushed/wistful for more than two blocks in a row. The narrator's voice itself never changes; only the delivery does.
 - SETTING & WARDROBE: give every block a "setting" (room|office|street|city|sea|\
-island|forest|night_sky|food_stall|alley|bus|chicken_cart|market|mall|kitchen) and mention concrete props in visual_cue \
+island|forest|night_sky|food_stall|alley|bus|chicken_cart|market|mall|kitchen|bts|compare) and mention concrete props in visual_cue \
 (e.g. wok on a flame, plastic stools, menu board). Say what each person wears \
 in their "outfit" including accessories that fit the place and the job (apron, \
 hairnet, raincoat hood, backpack, lanyard, glasses) and whether sleeves are \

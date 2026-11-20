@@ -15,7 +15,7 @@ from life_lesson.generation.schema import ScriptOutput
 Cue = tuple[str, int, int]  # text, start_ms, end_ms
 
 
-def caption_cues(script: ScriptOutput, starts_ms: list[int], total_ms: int, max_chars: int = 30) -> list[Cue]:
+def caption_cues(script: ScriptOutput, starts_ms: list[int], total_ms: int, max_chars: int = 40) -> list[Cue]:
     from life_lesson.library.shorts import block_end_times, caption_chunks   # lazy: shorts imports the video package
 
     ends = block_end_times(script, starts_ms, total_ms)

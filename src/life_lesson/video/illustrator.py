@@ -23,7 +23,7 @@ from life_lesson.generation.atmosphere import BlockMood
 from life_lesson.publish.fonts import find_thai_font
 from life_lesson.video.scene_kb import SceneRecipe
 
-SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen")
+SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen", "bts", "compare")
 
 _COLOR_WORDS = {
     "เหลือง": (240, 196, 40), "yellow": (240, 196, 40), "แดง": (206, 52, 48), "red": (206, 52, 48),
@@ -172,9 +172,11 @@ def _sky_colors(mood: BlockMood | None):
 
 
 def _stars(d: ImageDraw.ImageDraw, rng, w, h_limit, n=70):
-    for _ in range(n):
+    for idx in range(n):
         x, y = rng.randrange(w), rng.randrange(max(1, int(h_limit)))
         r = rng.choice((1, 1, 2))
+        if (idx + _ANIM["phase"]) % 6 == 0:      # a few stars dim on each step: the sky twinkles
+            r = 0
         d.ellipse([x - r, y - r, x + r, y + r], fill=(220, 226, 240))
 
 
@@ -195,7 +197,7 @@ def _skyline(d, rng, w, base_y, h_range, color, win_color, lit_p, bw=(40, 110)):
         if win_color and lit_p > 0:
             for wy in range(base_y - bh + 14, base_y - 8, 22):
                 for wx in range(x + 8, x + bwid - 10, 18):
-                    if rng.random() < lit_p:
+                    if rng.random() < lit_p and (wx * 7 + wy * 13 + (_ANIM["phase"] // 2) * 31) % 23 != 0:   # a window now and then switches off/on
                         d.rectangle([wx, wy, wx + 8, wy + 11], fill=win_color)
         x += bwid + rng.randrange(0, 8)
 
@@ -578,7 +580,7 @@ def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Ra
         d = ImageDraw.Draw(img)
         for i in range(26):
             y = hor + 10 + i * (h - hor) / 26
-            x0 = rng.randrange(-80, w)
+            x0 = rng.randrange(-80, w) + int(14 * math.sin(_ANIM["phase"] * 0.8 + i) * (0.4 + (y - hor) / (h - hor)))   # waves drift
             L = rng.randrange(60, 220) * (0.4 + (y - hor) / (h - hor))
             d.line([(x0, y), (x0 + L, y)], fill=_lerp(sea_top, (200, 220, 240), 0.35), width=max(2, int((y - hor) / 40)))
         if night:
@@ -619,7 +621,7 @@ def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Ra
     elif setting == "alley":
         img, ground, lights, fg, info = _alley(img, size, mood, rng, fig_s, night, props)
         d = ImageDraw.Draw(img)
-    elif setting in ("chicken_cart", "market", "mall", "kitchen"):
+    elif setting in ("chicken_cart", "market", "mall", "kitchen", "bts", "compare"):
         from life_lesson.video import places   # lazy: places imports helpers from this module
         img, ground, lights, fg, info = getattr(places, setting)(img, size, mood, rng, fig_s, font_path, night, props)
         d = ImageDraw.Draw(img)
@@ -952,10 +954,12 @@ def illustrate_scene(
     speaker: str | None = None,
     focus_out: dict | None = None,
     anim: dict | None = None,
+    compare: dict | None = None,
 ) -> Image.Image:
     """Draw one scene. `characters` = list of dicts from `character_colors`."""
     _ANIM["phase"] = (anim or {}).get("phase", 0)
     _ANIM["prog"] = (anim or {}).get("prog")
+    _ANIM["compare"] = compare
     if font_path is None:  # signs carry Thai text: find a font ourselves (best effort)
         try:
             font_path = find_thai_font()
@@ -1016,7 +1020,7 @@ def illustrate_scene(
         d = ImageDraw.Draw(img)
         pretending = "passengers_awake" not in props and "protagonist_seated" not in props and (mood is None or mood.tension < 5)
         for i, (col, fx) in enumerate(zip(layout["seated"], layout["named_slots"])):
-            cx = int(w * fx)
+            cx = int(w * fx) + int(3 * s * math.sin(_ANIM["phase"] * 0.8 + i))   # the bus rocks: everyone sways a little
             sc = s * 0.95
             hands = {"L": (cx - 10 * sc, info["bench_top"] - 14 * sc), "R": (cx + 10 * sc, info["bench_top"] - 14 * sc)}
             if mood is not None and mood.tension >= 5 and layout["stand_slots"] and i == 0 and layout["standing"]:
@@ -1027,7 +1031,7 @@ def illustrate_scene(
             if col is hero:
                 lights.append(((cx, info["bench_top"] - int(70 * sc)), int(h * 0.24), (92, 78, 70)))
         for k, (col, fx) in enumerate(zip(layout["standing"], layout["stand_slots"])):
-            cx = int(w * fx)
+            cx = int(w * fx) + int(4 * s * math.sin(_ANIM["phase"] * 0.8 + k + 1.5))
             ss_ = s * 1.2 * (1.1 if col is hero else 1.0)   # the heroine is a touch bigger and softly lit
             shoulder_y = ground - 120 * ss_
             hands = {"R": (cx + 28 * ss_, shoulder_y - 30 * ss_), "L": (cx - 22 * ss_, shoulder_y + 58 * ss_)}
@@ -1063,6 +1067,12 @@ def illustrate_scene(
                 pos = draw_fig(d, cx, ground, s, col, expression=face)
                 if "headlamp" in col.get("items", ()):
                     lights.append(((pos["head"][0], pos["head"][1] - int(10 * s)), int(h * 0.2), (255, 246, 210)))
+            continue
+        if setting == "compare":   # first character stands under the left column, the vendor under the right
+            side = info["right_x"] if "apron" in col.get("items", ()) else info["left_x"]
+            if subject_x is None:
+                subject_x = side / w
+            draw_fig(d, side, ground, s * 1.1, col, expression=face)
             continue
         if setting == "chicken_cart":
             if "apron" in col.get("items", ()) and not cook_placed:
@@ -1104,7 +1114,7 @@ def illustrate_scene(
             hands = {"L": (x - 4 * s, desk_top - 6), "R": (x + 38 * s, desk_top - 6)}
         if subject_x is None:
             subject_x = x / w
-        scale_ = s * (1.1 if seat else (1.3 if setting == "alley" else (1.5 if setting in ("mall", "market") else 1.0)))
+        scale_ = s * (1.1 if seat else (1.3 if setting == "alley" else (1.5 if setting in ("mall", "market") else (1.35 if setting == "bts" else 1.0))))
         wk = None
         if "walking" in props and seat is None and _ANIM["prog"] is not None:   # really crosses the frame
             x = int(w * (0.14 + 0.72 * _ANIM["prog"]) - i * 0.07 * w)

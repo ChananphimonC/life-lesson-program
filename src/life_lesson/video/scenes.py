@@ -52,6 +52,7 @@ class Scene:
     ref_palette: tuple = ()
     props: tuple = ()
     speaker: str | None = None
+    compare: dict | None = None
 
     @property
     def duration_s(self) -> float:
@@ -78,7 +79,7 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
             continue
         groups.append(
             {"start": start, "title": title, "time_label": block.time_label, "place": block.setting,
-             "cue": block.visual_cue, "moods": [], "cues": [], "settings": [], "speaker": block.speaker}
+             "cue": block.visual_cue, "moods": [], "cues": [], "settings": [], "speaker": block.speaker, "compare": block.compare}
         )
     if not groups:
         return []
@@ -124,7 +125,7 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
             for c in present
         )
         scenes.append(Scene(i, g["start"], end, g["title"], g["time_label"], g["cue"], mood,
-                            setting, looks, tuple(c.name for c in present), recipe.id, (), scene_props, g["speaker"]))
+                            setting, looks, tuple(c.name for c in present), recipe.id, (), scene_props, g["speaker"], g["compare"]))
     return scenes
 
 
@@ -349,7 +350,7 @@ def assemble_scene_video(
                             characters=[dict(look) for look in scene.looks],
                             seed=f"{scene.index}-{scene.title}", out_path=png,
                             font_path=font_path, reference_palette=scene.ref_palette, props=scene.props,
-                            speaker=scene.speaker, focus_out=focus,
+                            speaker=scene.speaker, focus_out=focus, compare=scene.compare,
                             anim={"phase": key[0], "breath": _BREATH[key[0]], "blink": key[1], "mouth": key[2], "prog": prog},
                         )
                         frames.append(png)

@@ -103,13 +103,47 @@ def pick_teaser_window(
 
 # -- captions -----------------------------------------------------------------
 
+_LEADING = "เแโใไ"                      # vowels written BEFORE their consonant: never leave one at a line end
+_NO_START = "ะาำัิีึืฺุู็่้๊๋์ํๅๆฯ"       # vowels/tone marks/ๆ can't begin a caption
+
+
+def _safe_cut(part: str, max_chars: int) -> int:
+    """Where to break an unspaced Thai run: before a syllable-start (consonant or leading vowel),
+    preferring a leading vowel (เ แ โ ไ ใ), never orphaning a vowel/tone mark or a leading vowel."""
+    try:   # real word boundaries when pythainlp is installed (pip install pythainlp)
+        from pythainlp.tokenize import word_tokenize
+        acc = 0
+        cuts = []
+        for tok in word_tokenize(part, keep_whitespace=False):
+            acc += len(tok)
+            cuts.append(acc)
+        ok = [c for c in cuts if max_chars // 2 < c <= max_chars]
+        if ok:
+            return ok[-1]
+    except Exception:  # noqa: BLE001 -- optional dependency; fall back to the syllable rule below
+        pass
+    best = None
+    for i in range(max_chars, max(max_chars // 2, 1), -1):
+        if i >= len(part):
+            continue
+        nxt, prev = part[i], part[i - 1]
+        if nxt in _NO_START or prev in _LEADING:
+            continue
+        if nxt in _LEADING:
+            return i
+        if best is None and "ก" <= nxt <= "ฮ":
+            best = i
+    return best or max_chars
+
+
 def caption_chunks(text: str, start_ms: int, end_ms: int, max_chars: int = 26) -> list[tuple[str, int, int]]:
     """Split narration into short on-screen captions, timed by character count."""
     pieces: list[str] = []
     for part in text.replace("\n", " ").split():
         while len(part) > max_chars:
-            pieces.append(part[:max_chars])
-            part = part[max_chars:]
+            cut = _safe_cut(part, max_chars)
+            pieces.append(part[:cut])
+            part = part[cut:]
         if part:
             pieces.append(part)
     chunks: list[str] = []

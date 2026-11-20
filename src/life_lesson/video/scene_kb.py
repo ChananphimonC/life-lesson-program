@@ -52,6 +52,17 @@ RECIPES: tuple[SceneRecipe, ...] = (
         search_query="thai home kitchen boiling whole chicken big pot ginger coriander root steam",
     ),
     SceneRecipe(
+        id="sky_train", setting="bts",
+        keywords=("รถไฟฟ้า", "บีทีเอส", "bts", "สถานีรถไฟฟ้า", "skytrain"),
+        search_query="bangkok bts sky train interior morning commuters",
+    ),
+    SceneRecipe(
+        id="side_by_side", setting="compare",
+        keywords=("เปรียบเทียบ", "เทียบตัวเลข", "สองคอลัมน์", "แท่งกราฟ", "เทียบรายได้"),
+        role_words=("แม่ค้า", "พ่อค้า"), wardrobe=("apron",), sleeve="short",
+        search_query="two column comparison infographic hours and income",
+    ),
+    SceneRecipe(
         id="wet_market", setting="market",
         keywords=("ตลาดสด", "ตลาดเช้า", "ตลาด", "ชั่งไก่", "แผงไก่", "wet market"),
         role_words=("แม่ค้า", "พ่อค้า", "คนขาย"), wardrobe=("apron",), sleeve="short",

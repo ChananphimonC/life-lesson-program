@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field
 Light = Literal["bright", "dim", "dark", "golden", "neon", "flicker"]
 Weather = Literal["clear", "rain", "storm", "fog", "wind"]
 Color = Literal["warm", "cool", "teal", "amber", "mono", "green"]
-Voice = Literal["calm", "hushed", "warm", "wistful", "tense", "urgent"]
+Voice = Literal["calm", "hushed", "warm", "wistful", "tense", "urgent", "natural", "soft"]
 Sound = Literal["rain", "thunder", "wind", "waves", "room_tone", "heartbeat", "clock", "engine", "silence"]
 
 
@@ -35,6 +35,10 @@ VOICE_DIRECTIVES: dict[str, str] = {
     "hushed": "Say in a close, hushed, almost whispered voice, slowly",
     "warm": "Say warmly and gently",
     "wistful": "Say softly, with quiet wistfulness",
+    # added for everyday (non-horror) scenes: clearly voiced, never whispered or husky.
+    # The older entries above stay byte-identical because the TTS disk cache is keyed on this text.
+    "natural": "Say in a natural, clear, friendly storytelling voice, fully voiced, never whispered or raspy",
+    "soft": "Say softly and clearly, with a gentle ending, fully voiced, not breathy and not husky",
     "tense": "Say in a low, controlled, tense voice, a little faster",
     "urgent": "Say urgently but without shouting, with short breaths",
 }

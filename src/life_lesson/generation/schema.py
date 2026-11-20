@@ -27,10 +27,11 @@ class ScriptBlock(BaseModel):
     chapter_title: str | None = None
     visual_cue: str | None = None
     time_label: str | None = None
+    compare: dict | None = None  # for setting=compare: {left,right,rows:[{label,left,right,left_text,right_text}],note}
     speaker: str | None = None  # character whose line dominates this block: gets a talking close-up
     mood: BlockMood | None = None
     # Where the scene happens, so the illustrator can draw it (free, offline).
-    setting: Literal["room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen"] | None = None
+    setting: Literal["room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen", "bts", "compare"] | None = None
 
 
 class Fact(BaseModel):
@@ -77,6 +78,7 @@ class ScriptOutput(BaseModel):
     characters: list[Character] = Field(default_factory=list)
     summary: str | None = None
     subline: str | None = None  # <=30 Thai chars teaser for the cover's single sub-line
+    payoff: dict | None = None  # {"middle": what the viewer learns/feels at the midpoint, "ending": what they carry away}
     cover_block: int | None = None  # `sequence` of the block whose picture becomes the cover (default: the first)
 
     @field_validator("script_blocks")

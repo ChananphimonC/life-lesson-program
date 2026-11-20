@@ -182,3 +182,45 @@ def test_scene_things_really_move_between_steps():
     assert differs(fr("chicken_cart", 0, [cook], ("serving",)), fr("chicken_cart", 2, [cook], ("serving",)))
     a, b = fr("street", 0, [walker], ("walking",), prog=0.1), fr("street", 0, [walker], ("walking",), prog=0.9)
     assert differs(a, b)                                                     # the walker crosses the frame
+
+
+def test_bts_scrolls_and_compare_shows_both_columns():
+    from PIL import ImageChops
+    from life_lesson.video.illustrator import SETTINGS, character_colors, illustrate_scene
+
+    assert {"bts", "compare"} <= set(SETTINGS)
+    fa = character_colors("เสื้อสีฟ้า", None, name="ฟ้า")
+    vendor = character_colors("เสื้อสีเหลือง", None, name="ป้า", extra_items=("apron",))
+    mood = BlockMood(light="bright")
+    f = lambda ph: illustrate_scene((480, 270), setting="bts", mood=mood, characters=[fa], seed=1,
+                                    anim={"phase": ph, "breath": 0.0, "blink": False, "mouth": 0})
+    assert ImageChops.difference(f(0), f(3)).getbbox()          # the city slides past the window
+    img = illustrate_scene((480, 270), setting="compare", mood=mood, characters=[fa, vendor], seed=1)
+    left, right = img.crop((0, 0, 240, 270)), img.crop((240, 0, 480, 270))
+    assert ImageChops.difference(left, right).getbbox()
+    assert left.getpixel((5, 5)) != right.getpixel((5, 5))     # cool column vs warm column
+
+
+def test_every_setting_has_some_motion_between_steps():
+    """No scene is a still: stars/windows/waves/bus sway/etc. differ between animation steps."""
+    from PIL import ImageChops
+    from life_lesson.video.illustrator import SETTINGS, character_colors, illustrate_scene
+
+    fa = character_colors("เสื้อสีฟ้า", None, name="ฟ้า")
+    cook = character_colors("เสื้อสีเหลือง", None, name="ป้า", extra_items=("apron",))   # a stall with no cook is cold on purpose
+    mood = BlockMood(light="dark")
+    for st in SETTINGS:
+        f = lambda ph: illustrate_scene((320, 180), setting=st, mood=mood, characters=[cook if st == "food_stall" else fa], seed="m",
+                                        compare={"left": "A", "right": "B", "rows": [{"label": "x", "left": 1, "right": 2}]},
+                                        anim={"phase": ph, "breath": 0.0, "blink": False, "mouth": 0})
+        assert any(ImageChops.difference(f(0), f(k)).getbbox() for k in (1, 2, 3)), st
+
+
+def test_captions_never_orphan_a_thai_vowel_or_tone_mark():
+    from life_lesson.library.shorts import caption_chunks
+
+    text = "เธอเดินผ่านห้างสรรพสินค้าที่เปิดแอร์เย็นจัดแล้วซื้อขนมอย่างไม่ได้ตั้งใจถุงใหญ่กว่าที่คิด" * 2
+    for chunk, _, _ in caption_chunks(text, 0, 10000, 20):
+        assert chunk[0] not in "ะาำัิีึืุู็่้๊๋์ๆ", chunk
+        assert chunk[-1] not in "เแโใไ", chunk
+    assert "".join(c for c, _, _ in caption_chunks(text, 0, 10000, 20)).replace(" ", "") == text

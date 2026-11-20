@@ -20,7 +20,7 @@ def test_captions_are_the_script_text_exactly():
     got = "".join(t.replace(" ", "") for t, _, _ in cues)
     want = "".join(b.text.replace(" ", "").replace("\n", "") for b in SCRIPT.script_blocks)
     assert got == want
-    assert all(len(t) <= 30 for t, _, _ in cues)
+    assert all(len(t) <= 40 for t, _, _ in cues)
     assert all(a < b for _, a, b in cues) and all(cues[i][2] <= cues[i + 1][1] for i in range(len(cues) - 1))
 
 
