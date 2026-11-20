@@ -642,6 +642,15 @@ def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Ra
         lx, ly = int(w * 0.40), ground - 40
 
         def desk(dd):
+            if "bed" in props:   # waking up: bed with rumpled blanket, pillow and a glowing alarm clock
+                dd.rounded_rectangle([int(w * 0.04), ground - 70, int(w * 0.48), ground - 18], 10, fill=(116, 128, 168) if night else (150, 170, 210))
+                dd.rounded_rectangle([int(w * 0.05), ground - 86, int(w * 0.15), ground - 58], 12, fill=(236, 236, 240))                   # pillow
+                dd.polygon([(int(w * 0.18), ground - 70), (int(w * 0.48), ground - 70), (int(w * 0.46), ground - 44), (int(w * 0.20), ground - 48)], fill=(92, 104, 148) if night else (126, 146, 190))   # blanket
+                dd.rectangle([int(w * 0.04), ground - 18, int(w * 0.48), h], fill=(60, 44, 36))
+                dd.rectangle([int(w * 0.50), ground - 52, int(w * 0.56), ground], fill=(96, 70, 52))                                      # bedside table
+                dd.rectangle([int(w * 0.51), ground - 70, int(w * 0.55), ground - 52], fill=(40, 40, 48))                                 # alarm clock
+                dd.rectangle([int(w * 0.512), ground - 66, int(w * 0.548), ground - 58], fill=(255, 90, 80))
+                return
             dd.rectangle([int(w * 0.06), ground - 40, int(w * 0.46), ground - 22], fill=(96, 70, 52))
             dd.rectangle([int(w * 0.06), ground - 22, int(w * 0.46), h], fill=(60, 44, 36))
             dd.line([(lx, ly), (lx + 16, ly - 70), (lx - 14, ly - 120)], fill=(34, 34, 40), width=7)

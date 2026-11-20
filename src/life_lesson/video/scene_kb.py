@@ -157,6 +157,8 @@ def props_from_cue(cue_text: str | None) -> tuple[str, ...]:
         props.append("protagonist_seated")
     if any(k in text for k in ("ยื่นจาน", "ยกจาน", "เสิร์ฟ", "ตักข้าวให้")):
         props.append("serving")
+    if any(k in text for k in ("ขอบเตียง", "บนเตียง", "นอนคลุมผ้า", "นาฬิกาปลุก")):
+        props.append("bed")
     if "เดิน" in text:
         props.append("walking")
     if "เงา" in text:

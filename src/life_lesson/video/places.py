@@ -123,7 +123,7 @@ def chicken_cart(img, size, mood, rng, s, font_path, night, props=()):
         # steel box, wheels and price panel are drawn AFTER the vendor so she stands behind the cart
         dd.rectangle([cx0, counter_y, cx1, ground - int(30 * s)], fill=(196, 198, 204))
         dd.rectangle([cx0, counter_y, cx1, counter_y + int(10 * s)], fill=(228, 230, 236))
-        dd.rectangle([cx0, ground - int(40 * s), cx1, ground - int(8 * s)], fill=(104, 108, 120))      # skirt: hides the vendor's legs
+        dd.rectangle([cx0, ground - int(40 * s), cx1, ground - int(2 * s)], fill=(104, 108, 120))      # skirt: hides the vendor's legs
         for wx in (cx0 + int(38 * s), cx1 - int(38 * s)):
             dd.ellipse([wx - int(26 * s), ground - int(52 * s), wx + int(26 * s), ground + 4], fill=(24, 24, 28))
             dd.ellipse([wx - int(13 * s), ground - int(39 * s), wx + int(13 * s), ground - int(9 * s)], fill=(150, 150, 158))
