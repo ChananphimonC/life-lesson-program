@@ -28,7 +28,7 @@ def test_srt_format(tmp_path):
     starts, total = _timeline()
     out = write_srt(caption_cues(SCRIPT, starts, total), tmp_path / "s.srt").read_text(encoding="utf-8")
     assert out.startswith("1\n00:00:00,000 --> ")
-    assert "ฟ้าใส" in out and "ป้าหน่อย" in out
+    assert "ป้าหน่อย" in out and "คุณ" in out
 
 
 def test_caption_png_has_text_in_the_bottom_band():
