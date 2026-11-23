@@ -506,7 +506,7 @@ def bus_stop(img, size, mood, rng, s, font_path, night, props=()):
         d.rounded_rectangle([wx, by0 + int(bh * 0.1), wx + int(bw * 0.16), by0 + int(bh * 0.5)], int(6 * s), fill=(176, 214, 244))
         d.ellipse([wx + int(bw * 0.05), by0 + int(bh * 0.28), wx + int(bw * 0.11), by0 + int(bh * 0.42)], fill=(60, 70, 96))
     d.rounded_rectangle([bx + int(bw * 0.03), by0 + int(bh * 0.04), bx + int(bw * 0.2), by0 + int(bh * 0.1)], int(3 * s), fill=(20, 24, 32))   # destination board
-    _text(d, (bx + int(bw * 0.04), by0 + int(bh * 0.03)), "515 ศาลายา", font_path, 13 * s, (255, 200, 60))
+    _text(d, (bx + int(bw * 0.04), by0 + int(bh * 0.03)), "547 นครปฐม", font_path, 13 * s, (255, 200, 60))
     for wx in (bx + int(bw * 0.2), bx + int(bw * 0.78)):
         d.ellipse([wx - int(30 * s), by1 - int(30 * s), wx + int(30 * s), by1 + int(30 * s)], fill=(22, 22, 26))
         d.ellipse([wx - int(14 * s), by1 - int(14 * s), wx + int(14 * s), by1 + int(14 * s)], fill=(150, 150, 158))
@@ -525,7 +525,7 @@ def bus_stop(img, size, mood, rng, s, font_path, night, props=()):
     px = int(w * 0.34)
     d.rectangle([px - 4, int(h * 0.50), px + 4, int(h * 0.86)], fill=(60, 64, 74))
     d.rounded_rectangle([px - int(30 * s), int(h * 0.46), px + int(30 * s), int(h * 0.53)], int(5 * s), fill=(220, 40, 50))
-    _text(d, (px - int(26 * s), int(h * 0.455)), "515", font_path, 22 * s, (255, 255, 255))
+    _text(d, (px - int(26 * s), int(h * 0.455)), "547", font_path, 22 * s, (255, 255, 255))
     lights.append(((px, int(h * 0.50)), int(h * 0.1), (255, 220, 160)))
     info.update(ground=ground, cook_x=int(w * 0.5))
     return img, ground, lights, fg, info
