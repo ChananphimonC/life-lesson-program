@@ -268,3 +268,14 @@ def test_side_walker_strides_and_people_cast_shadows():
     empty = illustrate_scene((480, 270), setting="office", mood=mood, characters=[], seed=1)
     full = illustrate_scene((480, 270), setting="office", mood=mood, characters=[walker], seed=1)
     assert ImageChops.difference(empty, full).getbbox()
+
+
+def test_side_walker_hair_flows_and_bag_is_carried():
+    from PIL import ImageChops
+    from life_lesson.video.illustrator import character_colors, illustrate_scene
+
+    walker = character_colors("เสื้อสีฟ้า", None, name="น้ำ", hair="ผมหางม้า สีดำ", gender="หญิง")
+    mood = BlockMood(light="bright")
+    f = lambda props: illustrate_scene((480, 270), setting="street", mood=mood, characters=[walker], seed=1, props=props,
+                                       anim={"phase": 2, "breath": 0.0, "blink": False, "mouth": 0, "prog": 0.5})
+    assert ImageChops.difference(f(("walking",)), f(("walking", "carrying"))).getbbox()   # the shopping bag appears in her hand

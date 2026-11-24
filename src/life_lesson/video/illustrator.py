@@ -413,7 +413,25 @@ def _knee(hip, foot, upper, lower, forward=1):
     return (hip[0] + ux * a + nx * hh, hip[1] + uy * a + ny * hh)
 
 
-def _draw_walker_side(d, x, ground_y, s, colors, phase, expression="neutral"):
+def _flow_hair(d, x0, y0, length, width, s, sway, phase, hair):
+    """A lock of hair that falls from (x0, y0), swings with the stride and tapers to a tip, with highlight strands."""
+    left, right = [], []
+    steps = 9
+    for k in range(steps + 1):
+        t = k / steps
+        wv = 1.6 * s * math.sin(t * 6 + phase)
+        cx = x0 - 5 * s * t + sway * t * t + wv
+        wd = width * (1 - 0.82 * t ** 1.6) / 2
+        left.append((cx - wd, y0 + length * t))
+        right.append((cx + wd, y0 + length * t))
+    d.polygon(left + right[::-1], fill=hair)
+    light = tuple(min(255, c + 30) for c in hair)
+    for f in (0.3, 0.62):
+        pts = [((l[0] * (1 - f) + r[0] * f), l[1]) for l, r in zip(left[:-2], right[:-2])]
+        d.line(pts, fill=light, width=max(1, int(1.3 * s)))
+
+
+def _draw_walker_side(d, x, ground_y, s, colors, phase, expression="neutral", carry=False):
     """Profile (side-on) walking figure facing right: alternating stride, bent knees, opposite arm swing,
     nose in profile, hair/ponytail swinging behind. Used when someone crosses the frame."""
     outfit, hair, skin = colors["outfit"], colors["hair"], colors["skin"]
@@ -455,36 +473,40 @@ def _draw_walker_side(d, x, ground_y, s, colors, phase, expression="neutral"):
     _limb(d, e, hnd, 10 * s, skin)
     if "laptop_bag" in items:
         d.rounded_rectangle([hnd[0] - 6 * s, hnd[1], hnd[0] + 24 * s, hnd[1] + 30 * s], 4 * s, fill=(70, 78, 98), outline=(40, 44, 58))
+    if carry:   # a shopping bag swinging from the near hand
+        d.rounded_rectangle([hnd[0] - 12 * s, hnd[1] + 8 * s, hnd[0] + 14 * s, hnd[1] + 44 * s], 4 * s, fill=(236, 98, 120), outline=(170, 60, 84), width=max(1, int(2 * s)))
+        d.arc([hnd[0] - 7 * s, hnd[1] - 2 * s, hnd[0] + 9 * s, hnd[1] + 16 * s], 180, 360, fill=(120, 40, 56), width=max(2, int(2.2 * s)))
     # head in profile
     d.rectangle([x - 4 * s, head_y + 14 * s, x + 6 * s, torso_top + 4 * s], fill=skin)
-    if style in ("long", "ponytail", "bun", "bob"):
-        sw = 4 * s * math.sin(th - 0.6)
-        if style == "ponytail":
-            d.polygon([(x - 10 * s, head_y - 8 * s), (x - 20 * s + sw, head_y + 40 * s), (x - 6 * s + sw, head_y + 52 * s), (x - 2 * s, head_y + 4 * s)], fill=hair)
-        elif style == "long":
-            d.polygon([(x - 14 * s, head_y - 10 * s), (x - 24 * s + sw, head_y + 62 * s), (x - 4 * s + sw, head_y + 66 * s), (x + 2 * s, head_y + 6 * s)], fill=hair)
+    sw = 5 * s * math.sin(th - 0.6)                         # hair swings behind with the stride
+    if style == "ponytail":
+        _flow_hair(d, x - 17 * s, head_y - 2 * s, 66 * s, 20 * s, s, sw, th, hair)
+    elif style == "long":
+        _flow_hair(d, x - 15 * s, head_y + 2 * s, 72 * s, 24 * s, s, sw, th, hair)
+    elif style == "bob":
+        _flow_hair(d, x - 15 * s, head_y + 2 * s, 28 * s, 20 * s, s, sw * 0.4, th, hair)
     d.ellipse([x - 16 * s, head_y - 19 * s, x + 16 * s, head_y + 19 * s], fill=skin)                                   # skull / face
     d.ellipse([x + 4 * s, head_y + 6 * s, x + 17 * s, head_y + 21 * s], fill=skin)                                    # chin + jaw line
     d.polygon([(x + 14 * s, head_y + 0 * s), (x + 20 * s, head_y + 6 * s), (x + 14 * s, head_y + 9 * s)], fill=skin)    # nose
     # hair in profile: it covers the whole crown, the back of the head and sweeps to a hairline above the brow
     d.ellipse([x - 21 * s, head_y - 28 * s, x + 15 * s, head_y - 2 * s], fill=hair)                                     # crown (no bald forehead)
-    d.polygon([(x - 21 * s, head_y - 14 * s), (x - 19 * s, head_y + 16 * s), (x - 4 * s, head_y + 14 * s),
-               (x - 2 * s, head_y - 2 * s), (x + 10 * s, head_y - 11 * s), (x + 4 * s, head_y - 24 * s)], fill=hair)  # back of head, ear covered
+    d.ellipse([x - 22 * s, head_y - 20 * s, x - 1 * s, head_y + 14 * s], fill=hair)                                    # rounded back of the head
+    d.polygon([(x - 6 * s, head_y + 8 * s), (x - 1 * s, head_y - 2 * s), (x + 10 * s, head_y - 11 * s), (x + 4 * s, head_y - 24 * s), (x - 12 * s, head_y - 22 * s)], fill=hair)   # joins the crown to the hairline, ear covered
     d.polygon([(x + 14 * s, head_y - 17 * s), (x + 17.5 * s, head_y - 11 * s), (x + 11 * s, head_y - 12.5 * s), (x + 5 * s, head_y - 15 * s)], fill=hair)   # fringe stays above the brow
     d.arc([x - 15 * s, head_y - 26 * s, x + 6 * s, head_y - 8 * s], 200, 330, fill=tuple(min(255, c + 36) for c in hair), width=max(1, int(2 * s)))  # shine
     if style == "bun":
         d.ellipse([x - 20 * s, head_y - 36 * s, x - 5 * s, head_y - 21 * s], fill=hair)
     if style not in ("long", "ponytail", "bob"):
         d.ellipse([x - 5 * s, head_y + 1 * s, x + 2 * s, head_y + 8 * s], fill=tuple(max(0, c - 14) for c in skin))    # ear (hidden under long hair)
-    ink_, brow_ = (44, 32, 30), (66, 46, 38)
+    ink_ = (44, 32, 30)
     d.ellipse([x + 6.5 * s, head_y - 3.4 * s, x + 12.5 * s, head_y + 1.4 * s], fill=(250, 247, 242))                    # eye white (almond, in profile)
     d.ellipse([x + 8.6 * s, head_y - 3.0 * s, x + 12.2 * s, head_y + 1.2 * s], fill=(78, 52, 40))                       # brown iris looking ahead
     d.ellipse([x + 10 * s, head_y - 2.2 * s, x + 12 * s, head_y + 0.2 * s], fill=(24, 18, 18))                          # pupil
     d.ellipse([x + 10.6 * s, head_y - 2.8 * s, x + 11.8 * s, head_y - 1.6 * s], fill=(255, 255, 255))                   # shine
-    d.arc([x + 6 * s, head_y - 4.8 * s, x + 13 * s, head_y + 0.4 * s], 205, 330, fill=ink_, width=max(1, int(1.1 * s)))   # upper lid
+    d.arc([x + 6 * s, head_y - 4.8 * s, x + 13 * s, head_y + 0.4 * s], 215, 320, fill=(96, 70, 60), width=max(1, int(1.0 * s)))   # a light upper lid
     if colors.get("female"):
-        d.line([(x + 12.2 * s, head_y - 2.4 * s), (x + 15 * s, head_y - 4.6 * s)], fill=ink_, width=max(1, int(1.2 * s)))   # lash
-    d.arc([x + 4.5 * s, head_y - 11 * s, x + 14 * s, head_y - 4 * s], 215, 325, fill=brow_, width=max(1, int(1.3 * s)))   # eyebrow, clear of the fringe
+        d.line([(x + 12.4 * s, head_y - 2.2 * s), (x + 14.2 * s, head_y - 3.4 * s)], fill=ink_, width=max(1, int(1.0 * s)))   # a short, soft lash
+    d.arc([x + 4.5 * s, head_y - 11.5 * s, x + 14.5 * s, head_y - 4.5 * s], 205, 330, fill=(52, 36, 30), width=max(2, int(1.9 * s)))   # eyebrow, clear of the fringe
     if colors.get("female"):
         d.ellipse([x + 6 * s, head_y + 4.5 * s, x + 11 * s, head_y + 9 * s], fill=(240, 176, 166))                      # blush
     mc = (196, 74, 86) if colors.get("female") else ink_
@@ -1301,7 +1323,7 @@ def illustrate_scene(
             hands = {"L": (x - 27 * scale_, gy - 61 * scale_), "R": (rx, ry)}
         if wk is not None and _ANIM["prog"] is not None:   # crossing the frame: draw her side-on, a real stride
             _ground_shadow(d, x, gy, scale_, night_)
-            pos = _draw_walker_side(d, x, gy, scale_, col, wk, face)
+            pos = _draw_walker_side(d, x, gy, scale_, col, wk, face, carry="carrying" in props)
         else:
             pos = draw_fig(d, x, gy, scale_, col, sitting=seat is not None, expression=face, hands=hands, walk=wk)
         if coffee:       # paper cup in the hand: it travels up to the mouth and back
