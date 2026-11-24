@@ -207,7 +207,7 @@ def _breath_at(phase: float) -> float:
     return _BREATH[i] * (1 - f) + _BREATH[(i + 1) % 8] * f
 
 
-def anim_schedule(scene: Scene, steps: int, fps: int = ANIM_FPS) -> list[tuple[float, bool, int]]:
+def anim_schedule(scene: Scene, steps: int, fps: int = ANIM_FPS, lip: list[int] | None = None) -> list[tuple[float, bool, int]]:
     """Per-step (phase, blink, mouth). `phase` advances 0.5 per step (so motion keeps its speed at 12 steps/s) and
     drives breathing, the cook's stir-fry, the walking cycle and flames; the speaker's mouth works open / half /
     closed on whole beats while the line is being said."""
@@ -216,7 +216,13 @@ def anim_schedule(scene: Scene, steps: int, fps: int = ANIM_FPS) -> list[tuple[f
     for i in range(steps):
         ph = (i * 6 / fps) % 8                 # same motion speed whatever the step rate
         blink = i % (fps * 4) == int(fps * 3.5)
-        out.append((ph, blink, mouth[int(ph) % 8] if scene.speaker else 0))
+        if not scene.speaker:
+            m = 0
+        elif lip is not None:
+            m = lip[i] if i < len(lip) else 0      # driven by the real voice
+        else:
+            m = mouth[int(ph) % 8]
+        out.append((ph, blink, m))
     return out
 
 
@@ -325,6 +331,7 @@ def assemble_scene_video(
     visual_mode: str = "stock",
     captions: list[tuple[str, int, int]] | None = None,
     anim_fps: int = ANIM_FPS,
+    lip_audio: Path | None = None,
 ) -> Path:
     if not scenes:
         raise VideoAssemblyError("No scenes to assemble")
@@ -341,7 +348,11 @@ def assemble_scene_video(
             focus: dict = {}
             if illustrated:
                 steps_n = max(2, int(scene.duration_s * anim_fps) + 1)
-                schedule = anim_schedule(scene, steps_n, anim_fps)
+                lip = None
+                if scene.speaker and lip_audio is not None:
+                    from life_lesson.video.lipsync import mouth_levels
+                    lip = mouth_levels(lip_audio, scene.start_ms, scene.end_ms, anim_fps)
+                schedule = anim_schedule(scene, steps_n, anim_fps, lip)
                 variants: dict[tuple, int] = {}
                 frames: list[Path] = []
                 order: list[int] = []

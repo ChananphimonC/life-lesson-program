@@ -127,8 +127,10 @@ def chicken_cart(img, size, mood, rng, s, font_path, night, props=()):
         for wx in (cx0 + int(38 * s), cx1 - int(38 * s)):
             dd.ellipse([wx - int(26 * s), ground - int(52 * s), wx + int(26 * s), ground + 4], fill=(24, 24, 28))
             dd.ellipse([wx - int(13 * s), ground - int(39 * s), wx + int(13 * s), ground - int(9 * s)], fill=(150, 150, 158))
-        _text(dd, (cx0 + int((cx1 - cx0) * 0.42), counter_y + int(8 * s)), "ธรรมดา 50 บาท", font_path, 18 * s, (176, 36, 40))
-        _text(dd, (cx0 + int((cx1 - cx0) * 0.42), counter_y + int(30 * s)), "พิเศษ 60 บาท", font_path, 18 * s, (176, 36, 40))
+        bx0_, by0_ = int(w * 0.02), counter_y - int(150 * s)        # price board hangs above the motorbike, clear of caption + vendor
+        dd.rounded_rectangle([bx0_, by0_, bx0_ + int(150 * s), by0_ + int(70 * s)], int(8 * s), fill=(252, 244, 214), outline=(176, 36, 40), width=max(2, int(3 * s)))
+        _text(dd, (bx0_ + int(12 * s), by0_ + int(6 * s)), "ธรรมดา 50 บาท", font_path, 17 * s, (176, 36, 40))
+        _text(dd, (bx0_ + int(12 * s), by0_ + int(36 * s)), "พิเศษ 60 บาท", font_path, 17 * s, (176, 36, 40))
 
     fg.append(cart_front)
 
@@ -245,9 +247,9 @@ def mall(img, size, mood, rng, s, font_path, night, props=()):
             x0 = int(w * i / n) + int(30 * s)
             d.rounded_rectangle([x0, int(h * 0.285), x0 + int(60 * s), int(h * 0.31)], int(4 * s), fill=(255, 250, 200))
     from life_lesson.video.illustrator import _draw_character, character_colors
-    for k, base in enumerate((0.12, 0.36, 0.80)):                                                           # shoppers strolling past the windows
+    for k, base in enumerate((0.08, 0.22, 0.90)):                                                           # shoppers strolling past the windows
         col = character_colors(["เสื้อสีม่วง", "เสื้อสีเขียว", "เสื้อสีแดง"][k], None, name=f"mall{k}")
-        px = int(w * ((base + 0.012 * ph * (1 if k % 2 else -1)) % 1.0))
+        px = int(w * (base + 0.004 * ph * (1 if k % 2 else -1)))
         _draw_character(d, px, ground - int(14 * s), s * 0.9, col, walk=(ph + 3 * k) % 8)
     for x in (0.05, 0.95):                                                                           # planters
         px = int(w * x)

@@ -1096,7 +1096,7 @@ def illustrate_scene(
             side = info["right_x"] if "apron" in col.get("items", ()) else info["left_x"]
             if subject_x is None:
                 subject_x = side / w
-            draw_fig(d, side, ground, s * 1.1, col, expression=face)
+            draw_fig(d, side, ground, s * 1.25, col, expression=face)
             continue
         if setting == "chicken_cart":
             if "apron" in col.get("items", ()) and not cook_placed:

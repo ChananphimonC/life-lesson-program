@@ -138,7 +138,7 @@ def run_pipeline(
             scenes, reference_credits = _gather_references(settings, scenes)
             audio_path = _master(conn, settings, episode_id, narration_path, scenes, duration_ms)
             cues = caption_cues(script, block_starts_ms, duration_ms) if spec.name != "short" else None
-            video_path = _assemble_video(conn, settings, episode_id, audio_path, spec, scenes, cues)
+            video_path = _assemble_video(conn, settings, episode_id, audio_path, spec, scenes, cues, narration_path)
             publish_dir = _write_publish_bundle(
                 settings, episode_id, script, spec, block_starts_ms, duration_ms, scenes, video_path,
                 extra_credits=reference_credits,
@@ -376,6 +376,7 @@ def _assemble_video(
     spec: FormatSpec,
     scenes: list[Scene],
     captions: list | None = None,
+    voice_path: Path | None = None,
 ) -> Path:
     output_path = settings.video_output_dir / f"{episode_id}.mp4"
     needs_scenes = (
@@ -395,7 +396,8 @@ def _assemble_video(
             font_path=settings.thai_font_path,
             visual_mode=settings.visual_mode,
             captions=captions,
-            anim_fps=6 if settings.preview_scale < 1 else 12,   # previews stay fast; real renders get 12 poses/s
+            anim_fps=6 if settings.preview_scale < 1 else 12,
+            lip_audio=voice_path,   # previews stay fast; real renders get 12 poses/s
         )
     else:
         assemble_video(
