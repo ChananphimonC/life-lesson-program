@@ -46,3 +46,10 @@ def test_bus_story_cues_pick_bus_stop_and_arrival():
     assert retrieve_recipe("น้ำฝนรอรถเมล์ไฟฟ้าสีน้ำเงินที่ป้ายรถเมล์").setting == "bus_stop"
     assert "arriving" in props_from_cue("รถเมล์เข้าป้ายแล้วจอด")
     assert "passengers_awake" in props_from_cue("ผู้โดยสารเล่นโทรศัพท์ทั้งคัน")
+
+
+def test_riding_and_home_front_cues():
+    from life_lesson.video.scene_kb import props_from_cue, retrieve_recipe
+
+    assert "riding" in props_from_cue("ออกจากสถานีช่องนนทรี")
+    assert retrieve_recipe("หน้าบ้านมีก้อนหินก้อนใหญ่ ปั๊มน้ำบุบ").setting == "home_front"

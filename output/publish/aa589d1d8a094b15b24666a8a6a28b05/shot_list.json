@@ -1,0 +1,395 @@
+[
+  {
+    "index": 0,
+    "start_ms": 0,
+    "end_ms": 24409,
+    "title": "ขอโทษค่ะ",
+    "time_label": "18:40",
+    "visual_cue": "น้ำฝนเซไปชนคนในรถเมล์ที่เบรกแรง กอดโน้ตบุ๊กแน่น สีหน้าตกใจ ผู้โดยสารก้มเล่นโทรศัพท์",
+    "mood": {
+      "light": "dim",
+      "weather": "clear",
+      "color": "cool",
+      "tension": 4,
+      "voice": "natural",
+      "sounds": [
+        "engine"
+      ]
+    },
+    "setting": "bus",
+    "character_names": [
+      "น้ำฝน"
+    ],
+    "recipe_id": "city_bus",
+    "ref_palette": [],
+    "props": [
+      "passengers_awake"
+    ],
+    "speaker": null,
+    "compare": null,
+    "signs": null
+  },
+  {
+    "index": 1,
+    "start_ms": 24409,
+    "end_ms": 51075,
+    "title": "สามชั่วโมงก่อน",
+    "time_label": "17:00",
+    "visual_cue": "น้ำฝนในออฟฟิศย่านช่องนนทรีถือโน้ตบุ๊กเครื่องใหม่ กำลังจะกลับบ้าน แสงเย็นส่องผ่านหน้าต่าง",
+    "mood": {
+      "light": "golden",
+      "weather": "clear",
+      "color": "warm",
+      "tension": 1,
+      "voice": "natural",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "office",
+    "character_names": [
+      "น้ำฝน"
+    ],
+    "recipe_id": "office_floor",
+    "ref_palette": [],
+    "props": [],
+    "speaker": null,
+    "compare": null,
+    "signs": null
+  },
+  {
+    "index": 2,
+    "start_ms": 51075,
+    "end_ms": 74411,
+    "title": "สายจากแม่",
+    "time_label": "17:10",
+    "visual_cue": "น้ำฝนยืนหน้าตึกคุยโทรศัพท์กับแม่ สีหน้าตกใจ ถือโน้ตบุ๊ก",
+    "mood": {
+      "light": "golden",
+      "weather": "clear",
+      "color": "amber",
+      "tension": 3,
+      "voice": "natural",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "street",
+    "character_names": [
+      "น้ำฝน",
+      "แม่"
+    ],
+    "recipe_id": "city_roof",
+    "ref_palette": [],
+    "props": [],
+    "speaker": null,
+    "compare": null,
+    "signs": null
+  },
+  {
+    "index": 3,
+    "start_ms": 74411,
+    "end_ms": 99241,
+    "title": "รถไฟฟ้า ช่องนนทรี",
+    "time_label": "17:35",
+    "visual_cue": "น้ำฝนยืนเกาะเสาในรถไฟฟ้าที่แน่น ออกจากสถานีช่องนนทรี แบกเป้ หิ้วถุงใส่โน้ตบุ๊ก ผู้โดยสารก้มเล่นโทรศัพท์ มือกุมท้องน้อย",
+    "mood": {
+      "light": "bright",
+      "weather": "clear",
+      "color": "cool",
+      "tension": 3,
+      "voice": "natural",
+      "sounds": [
+        "engine",
+        "room_tone"
+      ]
+    },
+    "setting": "bts",
+    "character_names": [
+      "น้ำฝน"
+    ],
+    "recipe_id": "sky_train",
+    "ref_palette": [],
+    "props": [
+      "passengers_awake",
+      "riding"
+    ],
+    "speaker": null,
+    "compare": null,
+    "signs": {
+      "from": "ช่องนนทรี",
+      "to": "บางหว้า"
+    }
+  },
+  {
+    "index": 4,
+    "start_ms": 99241,
+    "end_ms": 120737,
+    "title": "ป้ายรถเมล์ บางหว้า",
+    "time_label": "18:05",
+    "visual_cue": "น้ำฝนรอรถเมล์ไฟฟ้าสีน้ำเงินสาย 547 ที่ป้ายรถเมล์ข้างสถานีบางหว้า รถเมล์เข้าป้ายแล้วจอด ไฟเบรกกะพริบ",
+    "mood": {
+      "light": "golden",
+      "weather": "clear",
+      "color": "warm",
+      "tension": 3,
+      "voice": "natural",
+      "sounds": [
+        "engine"
+      ]
+    },
+    "setting": "bus_stop",
+    "character_names": [
+      "น้ำฝน"
+    ],
+    "recipe_id": "bus_stop",
+    "ref_palette": [],
+    "props": [
+      "arriving"
+    ],
+    "speaker": null,
+    "compare": null,
+    "signs": {
+      "stop": "บางหว้า"
+    }
+  },
+  {
+    "index": 5,
+    "start_ms": 120737,
+    "end_ms": 142400,
+    "title": "กลางรถ",
+    "time_label": "18:15",
+    "visual_cue": "น้ำฝนยืนเกาะที่จับกลางรถเมล์ไฟฟ้าที่แน่น ผู้โดยสารก้มหน้าเล่นโทรศัพท์ทั้งคัน แอร์ไม่เย็น ถือโน้ตบุ๊กแนบอก",
+    "mood": {
+      "light": "dim",
+      "weather": "clear",
+      "color": "cool",
+      "tension": 3,
+      "voice": "natural",
+      "sounds": [
+        "engine",
+        "room_tone"
+      ]
+    },
+    "setting": "bus",
+    "character_names": [
+      "น้ำฝน"
+    ],
+    "recipe_id": "bus_stop",
+    "ref_palette": [],
+    "props": [
+      "passengers_awake"
+    ],
+    "speaker": null,
+    "compare": null,
+    "signs": null
+  },
+  {
+    "index": 6,
+    "start_ms": 142400,
+    "end_ms": 168983,
+    "title": "รู้งี้",
+    "time_label": "18:50",
+    "visual_cue": "เปรียบเทียบสองคอลัมน์ ที่เตรียมมากับที่ควรพกถ้ารู้ก่อน คะแนนความสบายและความมั่นใจ แท่งกราฟ น้ำฝน",
+    "mood": {
+      "light": "bright",
+      "weather": "clear",
+      "color": "cool",
+      "tension": 2,
+      "voice": "natural",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "compare",
+    "character_names": [
+      "น้ำฝน"
+    ],
+    "recipe_id": "side_by_side",
+    "ref_palette": [],
+    "props": [],
+    "speaker": null,
+    "compare": {
+      "left": "ที่เตรียมมาจริง",
+      "right": "ถ้ารู้งี้ จะพกมา",
+      "note": "* คะแนนสมมติของเรื่อง ไม่ใช่ผลวิจัย",
+      "rows": [
+        {
+          "label": "ความสบายตอนยืนนาน (เต็มสิบ)",
+          "left": 4,
+          "right": 8,
+          "left_text": "4 (ผ้าอนามัยธรรมดา)",
+          "right_text": "8 (แบบกางเกง)"
+        },
+        {
+          "label": "ความมั่นใจตอนรถเบรก (เต็มสิบ)",
+          "left": 3,
+          "right": 8,
+          "left_text": "3 (ไม่มียาดม)",
+          "right_text": "8 (มียาดมไว้ในกระเป๋า)"
+        }
+      ]
+    },
+    "signs": null
+  },
+  {
+    "index": 7,
+    "start_ms": 168983,
+    "end_ms": 182486,
+    "title": "ยายสุข",
+    "time_label": "19:05",
+    "visual_cue": "คุณยายสุขนั่งอยู่ตรงหน้า น้ำฝนยืนอยู่ ยายเงยหน้าชวนให้ช่วยถือโน้ตบุ๊ก ผู้โดยสารก้มเล่นโทรศัพท์",
+    "mood": {
+      "light": "dim",
+      "weather": "clear",
+      "color": "warm",
+      "tension": 3,
+      "voice": "warm",
+      "sounds": [
+        "engine",
+        "room_tone"
+      ]
+    },
+    "setting": "bus",
+    "character_names": [
+      "น้ำฝน",
+      "ยายสุข"
+    ],
+    "recipe_id": "city_bus",
+    "ref_palette": [],
+    "props": [
+      "passengers_awake"
+    ],
+    "speaker": "ยายสุข",
+    "compare": null,
+    "signs": null
+  },
+  {
+    "index": 8,
+    "start_ms": 182486,
+    "end_ms": 206662,
+    "title": "พี่กระเป๋า",
+    "time_label": "19:15",
+    "visual_cue": "พี่หนุ่มกระเป๋ารถเมล์เดินเก็บตั๋ว พูดกับน้ำฝนที่ยืนเกาะที่จับ ผู้โดยสารก้มเล่นโทรศัพท์",
+    "mood": {
+      "light": "dim",
+      "weather": "clear",
+      "color": "cool",
+      "tension": 3,
+      "voice": "natural",
+      "sounds": [
+        "engine"
+      ]
+    },
+    "setting": "bus",
+    "character_names": [
+      "น้ำฝน",
+      "พี่หนุ่ม"
+    ],
+    "recipe_id": "city_bus",
+    "ref_palette": [],
+    "props": [
+      "passengers_awake",
+      "walking"
+    ],
+    "speaker": "พี่หนุ่ม",
+    "compare": null,
+    "signs": null
+  },
+  {
+    "index": 9,
+    "start_ms": 206662,
+    "end_ms": 228328,
+    "title": "เบาลงหนึ่งข้าง",
+    "time_label": "19:30",
+    "visual_cue": "น้ำฝนเกาะที่จับด้วยสองมือ ยายสุขถือโน้ตบุ๊กอยู่บนตัก โทรศัพท์ในมือน้ำฝนสั่น ผู้โดยสารก้มเล่นโทรศัพท์",
+    "mood": {
+      "light": "dim",
+      "weather": "clear",
+      "color": "warm",
+      "tension": 2,
+      "voice": "warm",
+      "sounds": [
+        "engine",
+        "room_tone"
+      ]
+    },
+    "setting": "bus",
+    "character_names": [
+      "น้ำฝน",
+      "ยายสุข"
+    ],
+    "recipe_id": "island_camp",
+    "ref_palette": [],
+    "props": [
+      "passengers_awake"
+    ],
+    "speaker": null,
+    "compare": null,
+    "signs": null
+  },
+  {
+    "index": 10,
+    "start_ms": 228328,
+    "end_ms": 265994,
+    "title": "ป้ายศาลายา",
+    "time_label": "20:10",
+    "visual_cue": "น้ำฝนลงจากรถที่ป้ายศาลายา ยายสุขส่งโน้ตบุ๊กคืนให้พร้อมลูกอม รถเมล์สีน้ำเงินวิ่งออกไป น้ำฝนเดินเข้าซอยพร้อมคุยโทรศัพท์กับแม่",
+    "mood": {
+      "light": "dark",
+      "weather": "clear",
+      "color": "amber",
+      "tension": 2,
+      "voice": "soft",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "street",
+    "character_names": [
+      "น้ำฝน",
+      "ยายสุข",
+      "แม่"
+    ],
+    "recipe_id": "city_bus",
+    "ref_palette": [],
+    "props": [
+      "walking"
+    ],
+    "speaker": null,
+    "compare": null,
+    "signs": null
+  },
+  {
+    "index": 11,
+    "start_ms": 265994,
+    "end_ms": 304277,
+    "title": "ก้อนหิน",
+    "time_label": "20:30",
+    "visual_cue": "น้ำฝนเดินถึงหน้าบ้านตอนกลางคืน พื้นเปียก ก้อนหินก้อนใหญ่ตรงทางลาด ปั๊มน้ำบุบมีน้ำหยด น้าชายนั่งเก้าอี้พลาสติก แม่ถือไฟฉายยืนที่หน้าประตู",
+    "mood": {
+      "light": "dark",
+      "weather": "clear",
+      "color": "warm",
+      "tension": 2,
+      "voice": "soft",
+      "sounds": [
+        "room_tone"
+      ]
+    },
+    "setting": "home_front",
+    "character_names": [
+      "น้ำฝน",
+      "แม่",
+      "น้าชาย"
+    ],
+    "recipe_id": "home_front",
+    "ref_palette": [],
+    "props": [
+      "walking"
+    ],
+    "speaker": null,
+    "compare": null,
+    "signs": null
+  }
+]

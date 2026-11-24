@@ -53,6 +53,7 @@ class Scene:
     props: tuple = ()
     speaker: str | None = None
     compare: dict | None = None
+    signs: dict | None = None
 
     @property
     def duration_s(self) -> float:
@@ -79,7 +80,7 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
             continue
         groups.append(
             {"start": start, "title": title, "time_label": block.time_label, "place": block.setting,
-             "cue": block.visual_cue, "moods": [], "cues": [], "settings": [], "speaker": block.speaker, "compare": block.compare}
+             "cue": block.visual_cue, "moods": [], "cues": [], "settings": [], "speaker": block.speaker, "compare": block.compare, "signs": block.signs}
         )
     if not groups:
         return []
@@ -125,7 +126,7 @@ def plan_scenes(script: ScriptOutput, block_starts_ms: list[int], total_ms: int)
             for c in present
         )
         scenes.append(Scene(i, g["start"], end, g["title"], g["time_label"], g["cue"], mood,
-                            setting, looks, tuple(c.name for c in present), recipe.id, (), scene_props, g["speaker"], g["compare"]))
+                            setting, looks, tuple(c.name for c in present), recipe.id, (), scene_props, g["speaker"], g["compare"], g["signs"]))
     return scenes
 
 
@@ -336,7 +337,7 @@ def assemble_scene_video(
                 variants: dict[tuple, int] = {}
                 frames: list[Path] = []
                 order: list[int] = []
-                walking = "walking" in scene.props or "arriving" in scene.props
+                walking = any(k in scene.props for k in ("walking", "arriving", "riding"))
                 for step_i, (phase, blink, mouth) in enumerate(schedule):
                     prog = step_i / max(1, len(schedule) - 1) if walking else None
                     key = (phase, blink, mouth, step_i if walking else 0)
@@ -350,7 +351,7 @@ def assemble_scene_video(
                             characters=[dict(look) for look in scene.looks],
                             seed=f"{scene.index}-{scene.title}", out_path=png,
                             font_path=font_path, reference_palette=scene.ref_palette, props=scene.props,
-                            speaker=scene.speaker, focus_out=focus, compare=scene.compare,
+                            speaker=scene.speaker, focus_out=focus, compare=scene.compare, signs=scene.signs,
                             anim={"phase": key[0], "breath": _BREATH[key[0]], "blink": key[1], "mouth": key[2], "prog": prog},
                         )
                         frames.append(png)

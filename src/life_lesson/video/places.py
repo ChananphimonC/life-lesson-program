@@ -389,14 +389,30 @@ def bts(img, size, mood, rng, s, font_path, night, props=()):
         x = int(w * (i + 0.5) / 6)
         d.rectangle([x - int(50 * s), int(h * 0.02), x + int(50 * s), int(h * 0.045)], fill=(255, 252, 240))
         lights.append(((x, int(h * 0.04)), int(h * 0.14), (255, 250, 230)))
-    # route strip with stations; the next station blinks
-    ry = int(h * 0.09)
-    d.rounded_rectangle([int(w * 0.18), ry, int(w * 0.82), ry + int(34 * s)], int(8 * s), fill=(40, 44, 56))
-    d.line([(int(w * 0.21), ry + int(17 * s)), (int(w * 0.79), ry + int(17 * s))], fill=(120, 200, 140), width=max(3, int(4 * s)))
+    # route strip in Silom-line dark green; code badges + names at both ends, a dot rides the line
+    sg = _ANIM.get("signs") or {}
+    GREEN = (0, 104, 71)
+    ry = int(h * 0.075)
+    d.rounded_rectangle([int(w * 0.12), ry, int(w * 0.88), ry + int(52 * s)], int(8 * s), fill=(250, 250, 248), outline=GREEN, width=max(3, int(4 * s)))
+    x0, x1 = int(w * 0.30), int(w * 0.70)
+    d.line([(x0, ry + int(26 * s)), (x1, ry + int(26 * s))], fill=GREEN, width=max(5, int(7 * s)))
     for i in range(9):
-        sx = int(w * (0.21 + 0.58 * i / 8))
-        on = i == (_ANIM["phase"] // 4) % 2 + 4
-        d.ellipse([sx - int(7 * s), ry + int(10 * s), sx + int(7 * s), ry + int(24 * s)], fill=(255, 220, 90) if on else (240, 240, 244), outline=(30, 30, 36))
+        sx = int(x0 + (x1 - x0) * i / 8)
+        d.ellipse([sx - int(5 * s), ry + int(21 * s), sx + int(5 * s), ry + int(31 * s)], fill=(255, 255, 255), outline=GREEN, width=max(2, int(2 * s)))
+    prog = _ANIM["prog"] if _ANIM["prog"] is not None else 0.0
+    px = int(x0 + (x1 - x0) * min(1.0, prog))
+    on = (_ANIM["phase"] % 2) == 0
+    d.ellipse([px - int(9 * s), ry + int(17 * s), px + int(9 * s), ry + int(35 * s)], fill=(255, 200, 40) if on else (255, 150, 40), outline=(30, 30, 36), width=max(1, int(2 * s)))
+    for side, key in ((0, "from"), (1, "to")):
+        if not sg.get(key):
+            continue
+        bx = int(w * 0.125) if side == 0 else int(w * 0.875) - int(40 * s)
+        d.rounded_rectangle([bx, ry + int(6 * s), bx + int(40 * s), ry + int(46 * s)], int(6 * s), fill=GREEN)
+        _text(d, (bx + int(5 * s), ry + int(12 * s)), sg.get(key + "_code", ""), font_path, 18 * s, (255, 255, 255))
+        nx = bx + int(46 * s) if side == 0 else bx - int(len(sg[key]) * 10 * s) - int(6 * s)
+        _text(d, (nx, ry + int(4 * s)), sg[key], font_path, 17 * s, (20, 70, 50))
+        if sg.get(key + "_en"):
+            _text(d, (nx, ry + int(26 * s)), sg[key + "_en"], font_path, 12 * s, (60, 100, 80))
     # windows with a scrolling skyline
     wy0, wy1 = int(h * 0.20), int(h * 0.52)
     top, bottom = _sky_colors(mood)
@@ -527,5 +543,64 @@ def bus_stop(img, size, mood, rng, s, font_path, night, props=()):
     d.rounded_rectangle([px - int(30 * s), int(h * 0.46), px + int(30 * s), int(h * 0.53)], int(5 * s), fill=(220, 40, 50))
     _text(d, (px - int(26 * s), int(h * 0.455)), "547", font_path, 22 * s, (255, 255, 255))
     lights.append(((px, int(h * 0.50)), int(h * 0.1), (255, 220, 160)))
+    stop = (_ANIM.get("signs") or {}).get("stop")
+    if stop:   # BTS station board: dark-green Silom-line sign, code badge, Thai + English name
+        sgn = _ANIM.get("signs") or {}
+        d.rounded_rectangle([sx0, int(h * 0.30), sx1 + int(20 * s), int(h * 0.42)], int(8 * s), fill=(0, 104, 71), outline=(250, 250, 248), width=max(2, int(3 * s)))
+        d.rounded_rectangle([sx0 + int(8 * s), int(h * 0.315), sx0 + int(58 * s), int(h * 0.405)], int(6 * s), fill=(250, 250, 248))
+        _text(d, (sx0 + int(12 * s), int(h * 0.33)), sgn.get("stop_code", ""), font_path, 22 * s, (0, 104, 71))
+        _text(d, (sx0 + int(66 * s), int(h * 0.308)), "สถานี" + stop, font_path, 22 * s, (255, 255, 255))
+        if sgn.get("stop_en"):
+            _text(d, (sx0 + int(66 * s), int(h * 0.36)), "BTS " + sgn["stop_en"], font_path, 15 * s, (200, 240, 220))
+    info.update(ground=ground, cook_x=int(w * 0.5))
+    return img, ground, lights, fg, info
+
+
+def home_front(img, size, mood, rng, s, font_path, night, props=()):
+    """The front of a Thai house at night: gate, concrete driveway ramp with a freshly drilled cut, a big rock left on it,
+    a dented water pump on the wall dripping, wet ground with puddles, a flashlight beam that sweeps."""
+    w, h = size
+    d = ImageDraw.Draw(img)
+    ground = int(h * 0.88)
+    lights, fg, info = [], [], {}
+    top, bottom = _sky_colors(mood)
+    img.paste(_gradient((w, ground), top, bottom), (0, 0))
+    d = ImageDraw.Draw(img)
+    wall = (70, 66, 74) if night else (214, 204, 186)
+    d.rectangle([int(w * 0.30), int(h * 0.20), w, ground], fill=wall)                                          # house wall
+    d.polygon([(int(w * 0.28), int(h * 0.20)), (int(w * 0.65), int(h * 0.06)), (w, int(h * 0.06)), (w, int(h * 0.20))], fill=(96, 56, 52) if night else (176, 96, 80))   # roof
+    d.rectangle([int(w * 0.70), int(h * 0.34), int(w * 0.92), int(h * 0.62)], fill=(250, 214, 140) if night else (180, 200, 220))   # lit window
+    d.rectangle([int(w * 0.70), int(h * 0.34), int(w * 0.92), int(h * 0.62)], outline=(40, 34, 40), width=max(3, int(4 * s)))
+    lights.append(((int(w * 0.81), int(h * 0.48)), int(h * 0.22), (255, 214, 140)))
+    d.rectangle([0, int(h * 0.50), int(w * 0.30), ground], fill=(44, 46, 56) if night else (150, 150, 154))      # neighbour's wall / gate
+    for k in range(0, int(w * 0.30), int(26 * s)):
+        d.line([(k, int(h * 0.50)), (k, ground)], fill=(34, 36, 44) if night else (120, 120, 126), width=3)
+    # ground: driveway ramp (concrete) + wet road
+    d.rectangle([0, ground, w, h], fill=(52, 54, 62) if night else (130, 128, 124))
+    d.polygon([(int(w * 0.30), ground), (int(w * 0.78), ground), (int(w * 0.86), int(h * 0.97)), (int(w * 0.24), int(h * 0.97))], fill=(120, 120, 126) if night else (176, 174, 168))
+    d.polygon([(int(w * 0.40), ground + int(8 * s)), (int(w * 0.50), ground + int(8 * s)), (int(w * 0.52), int(h * 0.95)), (int(w * 0.38), int(h * 0.95))], fill=(84, 82, 88))   # drilled cut in the concrete
+    # water pump on the wall (dented) with drips
+    pxm, pym = int(w * 0.40), int(h * 0.66)
+    d.rounded_rectangle([pxm - int(30 * s), pym - int(40 * s), pxm + int(30 * s), pym + int(30 * s)], int(8 * s), fill=(40, 90, 150), outline=(20, 50, 90), width=max(2, int(3 * s)))
+    d.ellipse([pxm - int(18 * s), pym - int(12 * s), pxm + int(10 * s), pym + int(14 * s)], fill=(28, 70, 120))                    # the dent
+    d.line([(pxm + int(30 * s), pym - int(10 * s)), (pxm + int(48 * s), pym - int(30 * s))], fill=(190, 192, 200), width=max(4, int(6 * s)))   # pipe stub
+    ph = _ANIM["phase"]
+    for k in range(3):                                                                                       # drips fall and restart
+        yy = pym + int(30 * s) + ((ph * 5 + k * 9) % 24) * int(3 * s)
+        d.ellipse([pxm + int((-8 + 8 * k) * s) - int(2 * s), yy - int(4 * s), pxm + int((-8 + 8 * k) * s) + int(2 * s), yy + int(4 * s)], fill=(150, 200, 240))
+    # puddles with a shimmer
+    for k, (fx, fy, fw) in enumerate(((0.34, 0.93, 0.16), (0.58, 0.95, 0.20), (0.18, 0.96, 0.12))):
+        shim = 3 * s * math.sin(ph * 1.3 + k)
+        d.ellipse([int(w * fx), int(h * fy) + shim, int(w * (fx + fw)), int(h * (fy + 0.035)) + shim], fill=(70, 86, 120) if night else (150, 176, 204))
+    # the big rock left by the plumber
+    rx, ry_ = int(w * 0.62), int(h * 0.93)
+    d.polygon([(rx - int(60 * s), ry_), (rx - int(48 * s), ry_ - int(46 * s)), (rx - int(10 * s), ry_ - int(70 * s)), (rx + int(30 * s), ry_ - int(58 * s)), (rx + int(62 * s), ry_ - int(14 * s)), (rx + int(54 * s), ry_)],
+              fill=(110, 108, 112), outline=(60, 58, 62))
+    d.polygon([(rx - int(10 * s), ry_ - int(70 * s)), (rx + int(30 * s), ry_ - int(58 * s)), (rx + int(20 * s), ry_ - int(34 * s)), (rx - int(24 * s), ry_ - int(44 * s))], fill=(142, 140, 146))   # lit top face
+    # flashlight beam sweeping slowly (mum at the gate)
+    bx, by = int(w * 0.74), int(h * 0.74)
+    sweep = 0.12 * math.sin(ph * 0.8)
+    for reach, a in ((0.45, 0.5), (0.32, 0.9)):
+        lights.append(((int(bx - w * reach * (0.7 + sweep)), int(by + h * 0.10)), int(h * 0.14), (255, 244, 200)))
     info.update(ground=ground, cook_x=int(w * 0.5))
     return img, ground, lights, fg, info

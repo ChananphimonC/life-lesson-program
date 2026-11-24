@@ -27,11 +27,12 @@ class ScriptBlock(BaseModel):
     chapter_title: str | None = None
     visual_cue: str | None = None
     time_label: str | None = None
+    signs: dict | None = None    # on-screen place names, e.g. {"from": "ช่องนนทรี", "to": "บางหว้า", "stop": "บางหว้า"}
     compare: dict | None = None  # for setting=compare: {left,right,rows:[{label,left,right,left_text,right_text}],note}
     speaker: str | None = None  # character whose line dominates this block: gets a talking close-up
     mood: BlockMood | None = None
     # Where the scene happens, so the illustrator can draw it (free, offline).
-    setting: Literal["room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen", "bts", "compare", "bus_stop"] | None = None
+    setting: Literal["room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen", "bts", "compare", "bus_stop", "home_front"] | None = None
 
 
 class Fact(BaseModel):

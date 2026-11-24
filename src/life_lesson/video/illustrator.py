@@ -23,7 +23,7 @@ from life_lesson.generation.atmosphere import BlockMood
 from life_lesson.publish.fonts import find_thai_font
 from life_lesson.video.scene_kb import SceneRecipe
 
-SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen", "bts", "compare", "bus_stop")
+SETTINGS = ("room", "office", "street", "city", "sea", "island", "forest", "night_sky", "food_stall", "alley", "bus", "chicken_cart", "market", "mall", "kitchen", "bts", "compare", "bus_stop", "home_front")
 
 _COLOR_WORDS = {
     "เหลือง": (240, 196, 40), "yellow": (240, 196, 40), "แดง": (206, 52, 48), "red": (206, 52, 48),
@@ -63,7 +63,7 @@ _ITEM_WORDS = {
     "towel": ("ผ้าขนหนู", "ผ้าเช็ดมือ", "towel"),
     "headlamp": ("ไฟคาดหัว", "headlamp"),
     "earbuds": ("หูฟัง", "earbuds"),
-    "collar": ("คอปก", "collar"),
+    "collar": ("คอปก", "เชิ้ต", "เบลาส์", "โปโล", "collar"),
     "bow": ("โบว์", "ผูกโบ", "bow"),
     "waist_wrap": ("ผูกเอว", "waist"),
     "skirt_white": ("กระโปรงสีขาว", "กระโปรงขาว"),
@@ -123,7 +123,7 @@ def character_colors(
     if sleeve is None:
         sleeve = "short" if any(w in (outfit or "").lower() for w in _SHORT_SLEEVE_WORDS) else "long"
     return {"name": name, "outfit": main, "hair": hair_rgb, "skin": skin, "accent": accent, "items": items, "sleeve": sleeve,
-            "hair_style": style or "short", "female": female, "older": older}
+            "hair_style": style or ("long" if female else "short"), "female": female, "older": older}
 
 
 # -- drawing helpers ---------------------------------------------------------
@@ -431,6 +431,10 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
     if "collar" in items:  # white blouse collar
         d.polygon([(x - 4 * s, torso_top + 1 * s), (x - 17 * s, torso_top + 4 * s), (x - 10 * s, torso_top + 17 * s)], fill=(250, 250, 248), outline=(214, 214, 210))
         d.polygon([(x + 4 * s, torso_top + 1 * s), (x + 17 * s, torso_top + 4 * s), (x + 10 * s, torso_top + 17 * s)], fill=(250, 250, 248), outline=(214, 214, 210))
+    if "collar" in items and "bow" not in items:   # button placket + cuffs on a shirt
+        for k in range(4):
+            d.ellipse([x - 1.5 * s, torso_top + (20 + k * 11) * s - 1.5 * s, x + 1.5 * s, torso_top + (20 + k * 11) * s + 1.5 * s], fill=(250, 250, 246), outline=(200, 200, 196))
+        d.line([(x, torso_top + 17 * s), (x, torso_bot - 4 * s)], fill=tuple(max(0, c - 26) for c in outfit), width=max(1, int(1.2 * s)))
     if "bow" in items:     # ribbon bow at the neck
         bc = (250, 250, 248) if sum(outfit) < 600 else (210, 70, 90)
         d.polygon([(x, torso_top + 12 * s), (x - 13 * s, torso_top + 5 * s), (x - 13 * s, torso_top + 19 * s)], fill=bc)
@@ -490,14 +494,22 @@ def _draw_character(d, x, ground_y, s, colors, sitting=False, expression="neutra
         d.ellipse([x - 26 * s, head_y - 26 * s, x + 26 * s, head_y + 24 * s], fill=outfit)
         d.polygon([(x - 26 * s, head_y + 4 * s), (x + 26 * s, head_y + 4 * s), (x + 20 * s, torso_top + 8 * s), (x - 20 * s, torso_top + 8 * s)], fill=outfit)
     d.rectangle([x - 5 * s, head_y + 16 * s, x + 5 * s, head_y + 28 * s], fill=skin)
+    d.rectangle([x - 5 * s, head_y + 16 * s, x + 5 * s, head_y + 21 * s], fill=tuple(max(0, c - 22) for c in skin))     # shadow under the chin
+    for sign_ in (-1, 1):                                                                                            # ears (+ small earrings for women)
+        d.ellipse([x + sign_ * 17 * s - 3.4 * s, head_y - 2 * s, x + sign_ * 17 * s + 3.4 * s, head_y + 8 * s], fill=tuple(max(0, c - 12) for c in skin))
+        if colors.get("female"):
+            d.ellipse([x + sign_ * 17 * s - 1.6 * s, head_y + 8 * s, x + sign_ * 17 * s + 1.6 * s, head_y + 11 * s], fill=(250, 214, 120))
     d.ellipse([x - 17 * s, head_y - 18 * s, x + 17 * s, head_y + 20 * s], fill=skin)
     if "hood" not in items:
         if style in ("long", "bob", "curly"):  # side locks framing the face, over the shoulders
             ln = {"long": 52, "bob": 24, "curly": 30}[style]
             for sign in (-1, 1):
                 d.rounded_rectangle([x + sign * 19 * s - 6 * s, head_y - 8 * s, x + sign * 19 * s + 6 * s, head_y + ln * s], 6 * s, fill=hair)
-        if style == "ponytail":
-            d.ellipse([x + 14 * s, head_y - 14 * s, x + 34 * s, head_y + 30 * s], fill=hair)
+        if style == "ponytail":   # a long tail that swings with the breath
+            sw = 3 * s * math.sin(_ANIM["phase"] * 0.8)
+            d.ellipse([x + 12 * s, head_y - 14 * s, x + 34 * s, head_y + 24 * s], fill=hair)
+            d.polygon([(x + 16 * s, head_y + 10 * s), (x + 32 * s, head_y + 10 * s), (x + 36 * s + sw, head_y + 62 * s), (x + 22 * s + sw, head_y + 74 * s), (x + 14 * s + sw, head_y + 58 * s)], fill=hair)
+            d.line([(x + 26 * s, head_y + 20 * s), (x + 28 * s + sw, head_y + 62 * s)], fill=tuple(min(255, c + 28) for c in hair), width=max(1, int(1.6 * s)))
         d.pieslice([x - 19 * s, head_y - 24 * s, x + 19 * s, head_y + 14 * s], 180, 360, fill=hair)
         if style in ("long", "bob", "curly", "ponytail"):  # a glossy highlight and a parting
             d.arc([x - 14 * s, head_y - 22 * s, x + 6 * s, head_y - 4 * s], 200, 300, fill=tuple(min(255, c + 34) for c in hair), width=max(2, int(2.4 * s)))
@@ -631,7 +643,7 @@ def _scene_background(setting: str, size, mood: BlockMood | None, rng: random.Ra
     elif setting == "alley":
         img, ground, lights, fg, info = _alley(img, size, mood, rng, fig_s, night, props)
         d = ImageDraw.Draw(img)
-    elif setting in ("chicken_cart", "market", "mall", "kitchen", "bts", "compare", "bus_stop"):
+    elif setting in ("chicken_cart", "market", "mall", "kitchen", "bts", "compare", "bus_stop", "home_front"):
         from life_lesson.video import places   # lazy: places imports helpers from this module
         img, ground, lights, fg, info = getattr(places, setting)(img, size, mood, rng, fig_s, font_path, night, props)
         d = ImageDraw.Draw(img)
@@ -965,11 +977,13 @@ def illustrate_scene(
     focus_out: dict | None = None,
     anim: dict | None = None,
     compare: dict | None = None,
+    signs: dict | None = None,
 ) -> Image.Image:
     """Draw one scene. `characters` = list of dicts from `character_colors`."""
     _ANIM["phase"] = (anim or {}).get("phase", 0)
     _ANIM["prog"] = (anim or {}).get("prog")
     _ANIM["compare"] = compare
+    _ANIM["signs"] = signs
     if font_path is None:  # signs carry Thai text: find a font ourselves (best effort)
         try:
             font_path = find_thai_font()
@@ -1124,7 +1138,7 @@ def illustrate_scene(
             hands = {"L": (x - 4 * s, desk_top - 6), "R": (x + 38 * s, desk_top - 6)}
         if subject_x is None:
             subject_x = x / w
-        scale_ = s * (1.1 if seat else (1.3 if setting == "alley" else (1.5 if setting in ("mall", "market") else (1.35 if setting == "bts" else 1.0))))
+        scale_ = s * (1.1 if seat else (1.3 if setting == "alley" else (1.6 if setting in ("mall", "market") else (1.5 if setting == "bts" else (1.7 if setting == "bus_stop" else (1.55 if setting == "home_front" else 1.4))))))
         wk = None
         if "walking" in props and seat is None and _ANIM["prog"] is not None:   # really crosses the frame
             x = int(w * (0.14 + 0.72 * _ANIM["prog"]) - i * 0.07 * w)

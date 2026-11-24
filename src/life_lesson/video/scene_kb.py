@@ -57,6 +57,11 @@ RECIPES: tuple[SceneRecipe, ...] = (
         search_query="thai smile bus blue electric bus bus stop bangkok",
     ),
     SceneRecipe(
+        id="home_front", setting="home_front",
+        keywords=("หน้าบ้าน", "ก้อนหิน", "ปั๊มน้ำ", "ทางลาด", "ลานจอดรถ", "ซอยบ้าน", "home front"),
+        role_words=("แม่", "น้า"), search_query="thai house front driveway ramp big rock water pump wet ground night",
+    ),
+    SceneRecipe(
         id="sky_train", setting="bts",
         keywords=("รถไฟฟ้า", "บีทีเอส", "bts", "สถานีรถไฟฟ้า", "skytrain"),
         search_query="bangkok bts sky train interior morning commuters",
@@ -175,6 +180,8 @@ def props_from_cue(cue_text: str | None) -> tuple[str, ...]:
         props.append("serving")
     if any(k in text for k in ("ขอบเตียง", "บนเตียง", "นอนคลุมผ้า", "นาฬิกาปลุก")):
         props.append("bed")
+    if any(k in text for k in ("ออกจากสถานี", "รถไฟฟ้าวิ่ง", "ขึ้นรถไฟฟ้า")):
+        props.append("riding")
     if any(k in text for k in ("เข้าป้าย", "รถมาจอด", "รถเมล์มาถึง", "รอรถเมล์")):
         props.append("arriving")
     if "เดิน" in text:

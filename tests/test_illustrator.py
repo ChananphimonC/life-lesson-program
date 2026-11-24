@@ -238,3 +238,17 @@ def test_bus_stop_bus_rolls_in_and_new_items_draw():
     conductor = character_colors("เสื้อสีฟ้า กระเป๋ากระบอกตั๋ว", None, name="พี่")
     laptop = character_colors("เสื้อสีขาว ถุงใส่โน้ตบุ๊ก", None, name="น้ำ")
     assert "conductor_bag" in conductor["items"] and "laptop_bag" in laptop["items"] and "conductor_bag" not in plain["items"]
+
+
+def test_station_names_home_front_and_riding_dot():
+    from PIL import ImageChops
+    from life_lesson.video.illustrator import SETTINGS, illustrate_scene
+
+    assert "home_front" in SETTINGS
+    sg = {"from": "ช่องนนทรี", "to": "บางหว้า"}
+    f = lambda pr, signs: illustrate_scene((480, 270), setting="bts", mood=BlockMood(light="bright"), characters=[], seed=1,
+                                           props=("riding",), signs=signs, anim={"phase": 0, "breath": 0.0, "blink": False, "mouth": 0, "prog": pr})
+    assert ImageChops.difference(f(0.1, sg), f(0.9, sg)).getbbox()          # the dot rides along the route strip
+    assert ImageChops.difference(f(0.5, sg), f(0.5, None)).getbbox()        # station names are drawn when given
+    stop = lambda s_: illustrate_scene((480, 270), setting="bus_stop", mood=BlockMood(light="golden"), characters=[], seed=1, signs=s_)
+    assert ImageChops.difference(stop({"stop": "บางหว้า"}), stop(None)).getbbox()
