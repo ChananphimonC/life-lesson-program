@@ -99,6 +99,8 @@ def grade_filter(mood: BlockMood | None, illustrated: bool = False) -> str:
         parts.append("eq=brightness='if(lt(mod(t,7),0.12),0.45,0)':eval=frame")
     angle = f"PI/{2.8 + 0.7 * mood.tension:.1f}"
     parts.append(f"vignette={angle}")
+    if illustrated:
+        parts.append("noise=alls=3:allf=t")        # fine film grain: breaks up flat colour, reads as depth
     return ",".join(parts)
 
 

@@ -226,6 +226,28 @@ def anim_schedule(scene: Scene, steps: int, fps: int = ANIM_FPS, lip: list[int] 
     return out
 
 
+
+def _render_one(job: dict) -> dict:
+    focus: dict = {}
+    illustrate_scene(focus_out=focus, **job)
+    return focus
+
+
+def _render_frames(jobs: list[dict]) -> list[dict]:
+    """Draw the distinct animation frames of one scene, spread over all CPU cores (one frame is ~3 s at 1080p)."""
+    import os
+    from concurrent.futures import ProcessPoolExecutor
+
+    workers = min(os.cpu_count() or 1, 8, len(jobs))
+    if workers <= 1:
+        return [_render_one(j) for j in jobs]
+    try:
+        with ProcessPoolExecutor(max_workers=workers) as pool:
+            return list(pool.map(_render_one, jobs, chunksize=max(1, len(jobs) // (workers * 4))))
+    except Exception:  # noqa: BLE001 -- e.g. sandbox without fork: still render, just slower
+        return [_render_one(j) for j in jobs]
+
+
 def _animated_listing(frames: list[Path], steps: list[int], path: Path, fps: int = ANIM_FPS) -> Path:
     """ffmpeg concat list that plays frames[steps[i]] for 1/ANIM_FPS s each."""
     lines = []
@@ -347,16 +369,18 @@ def assemble_scene_video(
         for n, scene in enumerate(scenes):
             focus: dict = {}
             if illustrated:
-                steps_n = max(2, int(scene.duration_s * anim_fps) + 1)
+                walking = any(k in scene.props for k in ("walking", "arriving", "riding"))
+                fps_s = min(anim_fps, 8) if walking else anim_fps   # crossing the frame needs a new picture every step: cap the cost
+                steps_n = max(2, int(scene.duration_s * fps_s) + 1)
                 lip = None
                 if scene.speaker and lip_audio is not None:
                     from life_lesson.video.lipsync import mouth_levels
-                    lip = mouth_levels(lip_audio, scene.start_ms, scene.end_ms, anim_fps)
-                schedule = anim_schedule(scene, steps_n, anim_fps, lip)
+                    lip = mouth_levels(lip_audio, scene.start_ms, scene.end_ms, fps_s)
+                schedule = anim_schedule(scene, steps_n, fps_s, lip)
                 variants: dict[tuple, int] = {}
                 frames: list[Path] = []
                 order: list[int] = []
-                walking = any(k in scene.props for k in ("walking", "arriving", "riding"))
+                jobs: list[dict] = []
                 for step_i, (phase, blink, mouth) in enumerate(schedule):
                     prog = step_i / max(1, len(schedule) - 1) if walking else None
                     key = (phase, blink, mouth, step_i if walking else 0)
@@ -364,18 +388,20 @@ def assemble_scene_video(
                         variants[key] = len(frames)
                         png = tmp_dir / f"art{scene.index:03d}_{len(frames)}.png"
                         # drawn 1.2x larger than the frame so the camera push-in stays sharp
-                        illustrate_scene(
-                            (int(width * 1.2), int(height * 1.2)),
+                        jobs.append(dict(
+                            size=(int(width * 1.2), int(height * 1.2)),
                             setting=scene.setting, mood=scene.mood,
                             characters=[dict(look) for look in scene.looks],
                             seed=f"{scene.index}-{scene.title}", out_path=png,
                             font_path=font_path, reference_palette=scene.ref_palette, props=scene.props,
-                            speaker=scene.speaker, focus_out=focus, compare=scene.compare, signs=scene.signs,
+                            speaker=scene.speaker, compare=scene.compare, signs=scene.signs,
                             anim={"phase": key[0], "breath": _breath_at(key[0]), "blink": key[1], "mouth": key[2], "prog": prog},
-                        )
+                        ))
                         frames.append(png)
                     order.append(variants[key])
-                clip = _animated_listing(frames, order, tmp_dir / f"anim{scene.index:03d}.txt", anim_fps)
+                for f in _render_frames(jobs):
+                    focus.update(f)
+                clip = _animated_listing(frames, order, tmp_dir / f"anim{scene.index:03d}.txt", fps_s)
             else:
                 clip = chosen[n]
             card = None

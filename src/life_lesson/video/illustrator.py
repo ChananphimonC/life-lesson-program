@@ -16,7 +16,7 @@ import random
 import re
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import ImageChops, Image, ImageDraw, ImageFilter, ImageFont
 
 from life_lesson.errors import PipelineError
 from life_lesson.generation.atmosphere import BlockMood
@@ -117,7 +117,7 @@ def character_colors(
     if older:  # grey creeping into the hair
         hair_rgb = _lerp(hair_rgb, (150, 150, 156), 0.55)
     female = (gender or "").strip().lower() in ("หญิง", "female", "f") or (not gender and style in ("long", "ponytail", "bun"))
-    skin = [(236, 200, 170), (214, 170, 130), (190, 140, 100)][h[1] % 3]
+    skin = [(248, 222, 198), (240, 208, 178), (228, 190, 154)][h[1] % 3]
     accent = (240, 196, 40) if sum(main) < 380 else (206, 52, 48)
     items = tuple(sorted(items_from_text(outfit) | set(extra_items)))
     if sleeve is None:
@@ -228,6 +228,38 @@ def _lamp_post(img, d, x, base_y, h, night):
     return None
 
 
+
+_RIM = {"bright": (255, 255, 250), "golden": (255, 226, 170), "neon": (210, 160, 255)}
+
+
+def _shade_layer(layer: Image.Image, mood: BlockMood | None) -> Image.Image:
+    """Give flat figures volume: light rim on the lit (top-left) edge, shadow on the far (bottom-right) edge,
+    and a soft ground occlusion toward the feet. Works only inside the figures' bounding box (cheap)."""
+    bbox = layer.getchannel("A").getbbox()
+    if not bbox:
+        return layer
+    pad = 8
+    box = (max(0, bbox[0] - pad), max(0, bbox[1] - pad), min(layer.size[0], bbox[2] + pad), min(layer.size[1], bbox[3] + pad))
+    part = layer.crop(box)
+    a = part.getchannel("A")
+    k = max(2, int(part.size[1] * 0.012))
+    lit = ImageChops.subtract(a, ImageChops.offset(a, k, k)).filter(ImageFilter.GaussianBlur(k * 0.8))
+    far = ImageChops.subtract(a, ImageChops.offset(a, -k, -k)).filter(ImageFilter.GaussianBlur(k * 0.9))
+    rgb = part.convert("RGB")
+    tint = _RIM.get(mood.light if mood else "dim", (150, 180, 255))
+    lit_img = Image.blend(rgb, Image.new("RGB", rgb.size, tint), 0.5)
+    dark_img = rgb.point(lambda v: int(v * 0.58))
+    rgb = Image.composite(lit_img, rgb, lit.point(lambda v: min(255, v * 2)))
+    rgb = Image.composite(dark_img, rgb, far.point(lambda v: min(255, int(v * 2.2))))
+    ao = Image.linear_gradient("L").resize(part.size)                                  # 0 at top -> 255 at feet
+    rgb = Image.composite(rgb.point(lambda v: int(v * 0.80)), rgb, ao.point(lambda v: max(0, v - 150) * 2))
+    part = rgb.convert("RGBA")
+    part.putalpha(a)
+    out = layer.copy()
+    out.paste(part, box[:2])
+    return out
+
+
 def expression_for(mood: BlockMood | None) -> str:
     """Face that matches the scene's feeling (tension + narrator voice)."""
     if mood is None:
@@ -244,52 +276,53 @@ def expression_for(mood: BlockMood | None) -> str:
 
 
 def _draw_face(d, x, head_y, s, expression: str, female: bool = False, talking: bool = False, older: bool = False):
-    ink = (34, 28, 30)
-    ey = head_y - 1 * s
+    ink = (44, 32, 30)
+    brow = (66, 46, 38)
+    ey = head_y - 0.5 * s
     wide = expression == "wide"
     if expression == "asleep":
         for sign in (-1, 1):
-            cx = x + sign * 7.5 * s
-            d.arc([cx - 4.2 * s, ey - 4 * s, cx + 4.2 * s, ey + 3 * s], 10, 170, fill=ink, width=max(2, int(1.8 * s)))
+            cx = x + sign * 7.2 * s
+            d.arc([cx - 3.8 * s, ey - 3.4 * s, cx + 3.8 * s, ey + 2.6 * s], 15, 165, fill=ink, width=max(2, int(1.6 * s)))
     for sign in (-1, 1) if expression != "asleep" else ():
-        cx = x + sign * 7.5 * s
-        rw, rh = (5.0, 5.8) if wide else (3.8, 4.4)
-        d.ellipse([cx - rw * s, ey - rh * s, cx + rw * s, ey + rh * s], fill=(252, 250, 246))
-        look = 0.8 * s * sign * -0.0  # looking straight at the viewer
-        pr = 2.3 * s if not wide else 1.9 * s
-        d.ellipse([cx - pr + look, ey - pr, cx + pr + look, ey + pr], fill=ink)
-        d.ellipse([cx + 0.2 * s, ey - 1.6 * s, cx + 1.6 * s, ey - 0.2 * s], fill=(255, 255, 255))       # eye shine = alive
-        if female:   # a defined upper lid
-            d.arc([cx - 4.8 * s, ey - 5.6 * s, cx + 4.8 * s, ey + 1.5 * s], 200, 340, fill=ink, width=max(2, int(1.7 * s)))
-        # eyebrow: outer end at sign*13, inner end at sign*3
-        outer, inner = (x + sign * 13 * s, x + sign * 3 * s)
-        by = ey - (9.5 if wide else 8.5) * s
+        cx = x + sign * 7.2 * s
+        # almond eye: a soft lens shape (never a big round stare), brown iris with a shine
+        rw, rh = (3.9, 3.0) if wide else (3.6, 2.4)
+        d.ellipse([cx - rw * s, ey - rh * s, cx + rw * s, ey + rh * s], fill=(250, 247, 242))
+        ir = 1.85 * s if not wide else 1.7 * s
+        d.ellipse([cx - ir, ey - ir * 1.05, cx + ir, ey + ir * 1.05], fill=(78, 52, 40))
+        d.ellipse([cx - ir * 0.5, ey - ir * 0.55, cx + ir * 0.5, ey + ir * 0.55], fill=(24, 18, 18))
+        d.ellipse([cx + 0.1 * s, ey - 1.5 * s, cx + 1.2 * s, ey - 0.4 * s], fill=(255, 255, 255))           # eye shine
+        d.arc([cx - 4.1 * s, ey - 3.4 * s, cx + 4.1 * s, ey + 1.2 * s], 198, 342, fill=ink, width=max(1, int(1.3 * s)))   # upper lid
+        # eyebrow: thin, softly curved; outer end at sign*12.5, inner end at sign*3
+        outer, inner = (x + sign * 12.5 * s, x + sign * 3.2 * s)
+        by = ey - 6.8 * s
         if expression in ("worried", "wide"):
-            o_y, i_y = by + 2.5 * s, by - 2.5 * s      # inner ends raised: worry
+            o_y, i_y = by + 1.6 * s, by - 1.6 * s
         elif expression == "soft":
-            o_y, i_y = by + 1.5 * s, by - 0.8 * s
+            o_y, i_y = by + 1.0 * s, by - 0.5 * s
         elif expression == "smile":
-            o_y, i_y = by + 0.5 * s, by - 0.5 * s
+            o_y, i_y = by + 0.4 * s, by - 0.4 * s
         else:
-            o_y, i_y = by, by
-        d.line([(outer, o_y), (inner, i_y)], fill=ink, width=max(2, int(1.8 * s)))
+            o_y, i_y = by + 0.3 * s, by - 0.2 * s
+        mid = ((outer + inner) / 2, (o_y + i_y) / 2 - 1.1 * s)                        # a gentle arch
+        d.line([(outer, o_y), mid, (inner, i_y)], fill=brow, width=max(1, int(1.2 * s)), joint="curve")
     if female and expression != "asleep":   # lashes at the outer corners + soft cheeks
         for sign in (-1, 1):
-            cx = x + sign * 7.5 * s
-            ox = cx + sign * 3.6 * s
-            d.line([(ox, ey - 3.2 * s), (ox + sign * 3.6 * s, ey - 6.2 * s)], fill=ink, width=max(2, int(1.6 * s)))
-            d.line([(ox, ey - 1.6 * s), (ox + sign * 4.2 * s, ey - 3.0 * s)], fill=ink, width=max(2, int(1.4 * s)))
+            cx = x + sign * 7.2 * s
+            ox = cx + sign * 3.3 * s
+            d.line([(ox, ey - 1.6 * s), (ox + sign * 2.6 * s, ey - 3.6 * s)], fill=ink, width=max(1, int(1.2 * s)))
             d.ellipse([x + sign * 12 * s - 3.2 * s, head_y + 5 * s, x + sign * 12 * s + 3.2 * s, head_y + 9.5 * s], fill=(238, 160, 150))
     my = head_y + 10 * s
     w = max(2, int(1.8 * s))
     d.arc([x - 2.2 * s, head_y + 3.5 * s, x + 2.2 * s, head_y + 8 * s], 20, 160, fill=(176, 120, 100), width=max(1, int(1.3 * s)))   # nose
     if older:   # age lines: forehead, crow's feet, smile lines
-        wr = (150, 108, 88)
+        wr = (206, 164, 136)
         for sign in (-1, 1):
             ox = x + sign * 13.2 * s
             d.line([(ox, ey - 0.5 * s), (ox + sign * 2.6 * s, ey - 2.2 * s)], fill=wr, width=max(1, int(1.1 * s)))
             d.line([(ox, ey + 1.2 * s), (ox + sign * 2.6 * s, ey + 2.4 * s)], fill=wr, width=max(1, int(1.1 * s)))
-            d.line([(x + sign * 8.4 * s, head_y + 5 * s), (x + sign * 6.6 * s, my + 4 * s)], fill=wr, width=max(1, int(1.2 * s)))
+            d.arc([x + sign * 8.2 * s - 2.2 * s, head_y + 4.6 * s, x + sign * 8.2 * s + 2.2 * s, my + 3.4 * s], 100 if sign > 0 else 260, 260 if sign > 0 else 80, fill=wr, width=max(1, int(1.0 * s)))   # soft smile line
     lip = (196, 74, 86) if female else ink
     if talking and expression != "asleep":   # the speaker: mouth open mid-word ("half" = between syllables)
         open_h = 6.4 if talking is True else 2.6
@@ -311,7 +344,7 @@ def _draw_face(d, x, head_y, s, expression: str, female: bool = False, talking: 
     elif expression == "wide":
         d.ellipse([x - 3.2 * s, my - 2 * s, x + 3.2 * s, my + 5 * s], fill=(120, 40, 44))
     else:
-        d.line([(x - 4 * s, my + 1 * s), (x + 4 * s, my + 1 * s)], fill=lip, width=w)
+        d.arc([x - 4.4 * s, my - 3.4 * s, x + 4.4 * s, my + 2.2 * s], 20, 160, fill=lip, width=w)   # a faint, friendly curve
 
 
 def _ik(shoulder, target, upper, fore):
@@ -1011,6 +1044,7 @@ def illustrate_scene(
     )
 
     night_ = _is_night(mood)
+    layer = Image.new("RGBA", img.size, (0, 0, 0, 0))   # everyone is drawn on their own layer, then lit and composited
     focus: dict = {}
 
     def draw_fig(d_, x_, gy_, s_, col_, **kw):
@@ -1041,7 +1075,7 @@ def illustrate_scene(
     hero = (characters or [None])[0]  # the first character is the heroine
     if layout is not None:  # bus: seated people on the bench, standers holding the poles
         face = expression_for(mood)
-        d = ImageDraw.Draw(img)
+        d = ImageDraw.Draw(layer)
         pretending = "passengers_awake" not in props and "protagonist_seated" not in props and (mood is None or mood.tension < 5)
         for i, (col, fx) in enumerate(zip(layout["seated"], layout["named_slots"])):
             cx = int(w * fx) + int(3 * s * math.sin(_ANIM["phase"] * 0.8 + i))   # the bus rocks: everyone sways a little
@@ -1073,7 +1107,7 @@ def illustrate_scene(
     customers = 0
     subject_x = bus_subject_x
     for i, col in enumerate(figs):
-        d = ImageDraw.Draw(img)
+        d = ImageDraw.Draw(layer)
         hands = None
         if setting == "food_stall":
             if "apron" in col.get("items", ()) and not cook_placed:
@@ -1154,9 +1188,11 @@ def illustrate_scene(
         focus_out.update(focus)
     if subject_out is not None:
         subject_out["x"] = subject_x if subject_x is not None else 0.5
-    d = ImageDraw.Draw(img)
+    d = ImageDraw.Draw(layer)
     for paint in fg:
         paint(d)
+    layer = _shade_layer(layer, mood)                       # volume: rim light, far-edge shadow, foot occlusion
+    img = Image.alpha_composite(img.convert("RGBA"), layer).convert("RGB")
     night = _is_night(mood)
     ph = _ANIM["phase"]
     for center, radius, color in lights:
