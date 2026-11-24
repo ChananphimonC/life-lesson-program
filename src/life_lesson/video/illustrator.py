@@ -470,16 +470,25 @@ def _draw_walker_side(d, x, ground_y, s, colors, phase, expression="neutral"):
     d.ellipse([x - 21 * s, head_y - 28 * s, x + 15 * s, head_y - 2 * s], fill=hair)                                     # crown (no bald forehead)
     d.polygon([(x - 21 * s, head_y - 14 * s), (x - 19 * s, head_y + 16 * s), (x - 4 * s, head_y + 14 * s),
                (x - 2 * s, head_y - 2 * s), (x + 10 * s, head_y - 11 * s), (x + 4 * s, head_y - 24 * s)], fill=hair)  # back of head, ear covered
-    d.polygon([(x + 14 * s, head_y - 14 * s), (x + 18 * s, head_y - 6 * s), (x + 12 * s, head_y - 8 * s), (x + 6 * s, head_y - 12 * s)], fill=hair)   # fringe over the brow
+    d.polygon([(x + 14 * s, head_y - 17 * s), (x + 17.5 * s, head_y - 11 * s), (x + 11 * s, head_y - 12.5 * s), (x + 5 * s, head_y - 15 * s)], fill=hair)   # fringe stays above the brow
     d.arc([x - 15 * s, head_y - 26 * s, x + 6 * s, head_y - 8 * s], 200, 330, fill=tuple(min(255, c + 36) for c in hair), width=max(1, int(2 * s)))  # shine
     if style == "bun":
         d.ellipse([x - 20 * s, head_y - 36 * s, x - 5 * s, head_y - 21 * s], fill=hair)
     if style not in ("long", "ponytail", "bob"):
         d.ellipse([x - 5 * s, head_y + 1 * s, x + 2 * s, head_y + 8 * s], fill=tuple(max(0, c - 14) for c in skin))    # ear (hidden under long hair)
-    d.ellipse([x + 7 * s, head_y - 3 * s, x + 12 * s, head_y + 1.5 * s], fill=(250, 247, 242))
-    d.ellipse([x + 9 * s, head_y - 2.6 * s, x + 12 * s, head_y + 1 * s], fill=(60, 40, 32))                            # eye looking ahead
-    d.arc([x + 6 * s, head_y - 6 * s, x + 13 * s, head_y + 1 * s], 200, 340, fill=(44, 32, 30), width=max(1, int(1.2 * s)))
-    d.arc([x + 5 * s, head_y + 8 * s, x + 14 * s, head_y + 14 * s], 20, 150, fill=(196, 74, 86) if colors.get("female") else (44, 32, 30), width=max(1, int(1.4 * s)))   # smile
+    ink_, brow_ = (44, 32, 30), (66, 46, 38)
+    d.ellipse([x + 6.5 * s, head_y - 3.4 * s, x + 12.5 * s, head_y + 1.4 * s], fill=(250, 247, 242))                    # eye white (almond, in profile)
+    d.ellipse([x + 8.6 * s, head_y - 3.0 * s, x + 12.2 * s, head_y + 1.2 * s], fill=(78, 52, 40))                       # brown iris looking ahead
+    d.ellipse([x + 10 * s, head_y - 2.2 * s, x + 12 * s, head_y + 0.2 * s], fill=(24, 18, 18))                          # pupil
+    d.ellipse([x + 10.6 * s, head_y - 2.8 * s, x + 11.8 * s, head_y - 1.6 * s], fill=(255, 255, 255))                   # shine
+    d.arc([x + 6 * s, head_y - 4.8 * s, x + 13 * s, head_y + 0.4 * s], 205, 330, fill=ink_, width=max(1, int(1.1 * s)))   # upper lid
+    if colors.get("female"):
+        d.line([(x + 12.2 * s, head_y - 2.4 * s), (x + 15 * s, head_y - 4.6 * s)], fill=ink_, width=max(1, int(1.2 * s)))   # lash
+    d.arc([x + 4.5 * s, head_y - 11 * s, x + 14 * s, head_y - 4 * s], 215, 325, fill=brow_, width=max(1, int(1.3 * s)))   # eyebrow, clear of the fringe
+    if colors.get("female"):
+        d.ellipse([x + 6 * s, head_y + 4.5 * s, x + 11 * s, head_y + 9 * s], fill=(240, 176, 166))                      # blush
+    mc = (196, 74, 86) if colors.get("female") else ink_
+    d.arc([x + 6 * s, head_y + 8 * s, x + 14 * s, head_y + 14 * s], 25, 150, fill=mc, width=max(2, int(1.6 * s)))      # smiling lips
     return {"head": (x, head_y), "L": hnd, "R": hnd}
 
 
