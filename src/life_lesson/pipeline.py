@@ -397,7 +397,8 @@ def _assemble_video(
             visual_mode=settings.visual_mode,
             captions=captions,
             anim_fps=6 if settings.preview_scale < 1 else 12,
-            lip_audio=voice_path,   # previews stay fast; real renders get 12 poses/s
+            lip_audio=voice_path,
+            look=settings.visual_look,   # previews stay fast; real renders get 12 poses/s
         )
     else:
         assemble_video(

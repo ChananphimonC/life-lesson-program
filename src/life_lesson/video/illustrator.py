@@ -1145,6 +1145,7 @@ def illustrate_scene(
     anim: dict | None = None,
     compare: dict | None = None,
     signs: dict | None = None,
+    look: str = "flat",
 ) -> Image.Image:
     """Draw one scene. `characters` = list of dicts from `character_colors`."""
     _ANIM["phase"] = (anim or {}).get("phase", 0)
@@ -1290,8 +1291,8 @@ def illustrate_scene(
                 sx = info["stools"][min(customers, len(info["stools"]) - 1)]
                 customers += 1
                 seat_top = info["stool_top"]
-                pos = draw_fig(d, sx, seat_top + int(22 * s), s, col, sitting=True, expression=face,
-                               hands={"L": (sx - 26 * s, seat_top - 40 * s), "R": (sx + 30 * s, seat_top - 46 * s)})
+                pos = draw_fig(d, sx, seat_top + int(22 * s * 1.2), s * 1.2, col, sitting=True, expression=face,
+                               hands={"L": (sx - 26 * s * 1.2, seat_top - 40 * s * 1.2), "R": (sx + 30 * s * 1.2, seat_top - 46 * s * 1.2)})
                 if subject_x is None:
                     subject_x = sx / w
             continue
@@ -1306,7 +1307,7 @@ def illustrate_scene(
             hands = {"L": (x - 4 * s, desk_top - 6), "R": (x + 38 * s, desk_top - 6)}
         if subject_x is None:
             subject_x = x / w
-        scale_ = s * (1.45 if seat == "sit" else (1.1 if seat else (1.3 if setting == "alley" else (1.7 if setting == "kitchen" else (1.6 if setting in ("mall", "market") else (1.5 if setting == "bts" else (1.7 if setting == "bus_stop" else (1.55 if setting == "home_front" else 1.4))))))))
+        scale_ = s * (1.45 if seat == "sit" else (1.1 if seat else (1.3 if setting == "alley" else (1.7 if setting == "kitchen" else (1.6 if setting in ("mall", "market") else (1.5 if setting == "bts" else (1.1 if setting == "bus_stop" else (1.35 if setting == "home_front" else 1.4))))))))
         wk = None
         if "walking" in props and seat is None and _ANIM["prog"] is not None:   # really crosses the frame
             x = int(w * (0.14 + 0.72 * _ANIM["prog"]) - i * 0.07 * w)
@@ -1369,6 +1370,9 @@ def illustrate_scene(
             img = _steam(img, info["ledge_steam"], s * 0.35, rng)
 
     img = img.resize(size, Image.LANCZOS)
+    if look == "filmic":
+        from life_lesson.video.filmic import filmic
+        img = filmic(img)
     if out_path is not None:
         out_path.parent.mkdir(parents=True, exist_ok=True)
         img.save(out_path)

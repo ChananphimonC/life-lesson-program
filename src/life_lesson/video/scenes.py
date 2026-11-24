@@ -354,6 +354,7 @@ def assemble_scene_video(
     captions: list[tuple[str, int, int]] | None = None,
     anim_fps: int = ANIM_FPS,
     lip_audio: Path | None = None,
+    look: str = "flat",
 ) -> Path:
     if not scenes:
         raise VideoAssemblyError("No scenes to assemble")
@@ -394,7 +395,7 @@ def assemble_scene_video(
                             characters=[dict(look) for look in scene.looks],
                             seed=f"{scene.index}-{scene.title}", out_path=png,
                             font_path=font_path, reference_palette=scene.ref_palette, props=scene.props,
-                            speaker=scene.speaker, compare=scene.compare, signs=scene.signs,
+                            speaker=scene.speaker, compare=scene.compare, signs=scene.signs, look=look,
                             anim={"phase": key[0], "breath": _breath_at(key[0]), "blink": key[1], "mouth": key[2], "prog": prog},
                         ))
                         frames.append(png)

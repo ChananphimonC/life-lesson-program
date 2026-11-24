@@ -279,3 +279,16 @@ def test_side_walker_hair_flows_and_bag_is_carried():
     f = lambda props: illustrate_scene((480, 270), setting="street", mood=mood, characters=[walker], seed=1, props=props,
                                        anim={"phase": 2, "breath": 0.0, "blink": False, "mouth": 0, "prog": 0.5})
     assert ImageChops.difference(f(("walking",)), f(("walking", "carrying"))).getbbox()   # the shopping bag appears in her hand
+
+
+def test_filmic_look_changes_picture_without_burning_highlights():
+    from PIL import ImageChops
+    from life_lesson.video.illustrator import illustrate_scene
+
+    flat = illustrate_scene((480, 270), setting="street", mood=BlockMood(light="bright"), characters=[], seed=1)
+    film = illustrate_scene((480, 270), setting="street", mood=BlockMood(light="bright"), characters=[], seed=1, look="filmic")
+    assert ImageChops.difference(flat, film).getbbox()
+    assert film.size == flat.size
+    # soft knee: no big clipped-white area appears that the flat drawing did not already have
+    white = lambda im: sum(1 for p in im.resize((96, 54)).getdata() if min(p) > 250)
+    assert white(film) <= white(flat) + 3

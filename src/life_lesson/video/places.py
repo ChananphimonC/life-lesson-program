@@ -513,7 +513,7 @@ def bus_stop(img, size, mood, rng, s, font_path, night, props=()):
     # the bus: eases in from the right
     prog = _ANIM["prog"] if _ANIM["prog"] is not None else 0.85
     t = 1 - (1 - min(1.0, prog * 1.15)) ** 2
-    bw, bh = int(w * 0.62), int(h * 0.30)
+    bw, bh = int(w * 0.64), int(h * 0.42)
     bx = int(w * 1.04 - (w * 1.04 - w * 0.34) * t)
     by1 = int(h * 0.805)
     by0 = by1 - bh
