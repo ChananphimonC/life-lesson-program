@@ -37,3 +37,24 @@ def test_caption_png_has_text_in_the_bottom_band():
     top = img.crop((0, 0, 640, 200)).getchannel("A").getbbox()
     bottom = img.crop((0, 280, 640, 360)).getchannel("A").getbbox()
     assert top is None and bottom is not None
+
+
+def test_captions_follow_the_speech_not_the_letters(tmp_path):
+    """Two captions of equal length; the voice talks, pauses for 1 s, talks again -> the 2nd caption starts after the pause."""
+    import math, struct, wave
+    from life_lesson.video.subtitles import _warp_to_speech
+    from life_lesson.video.lipsync import voiced_profile
+
+    rate = 16000
+    frames = bytearray()
+    for loud, secs in ((True, 1.0), (False, 1.0), (True, 1.0)):
+        for n in range(int(rate * secs)):
+            frames += struct.pack("<h", int(12000 * math.sin(n * 0.3)) if loud else 0)
+    p = tmp_path / "v.wav"
+    with wave.open(str(p), "wb") as w:
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate); w.writeframes(bytes(frames))
+    voiced = voiced_profile(p, 0, 3000, 20)
+    plain = [("กขคง", 0, 1500), ("จฉชซ", 1500, 3000)]            # by letters: the split lands mid-pause
+    warped = _warp_to_speech(plain, voiced, 0, 3000, 20)
+    assert warped[0][2] >= 900 and warped[1][1] >= 900            # boundary sits at the end of the first spoken part, not at 1.5 s
+    assert warped[1][1] != 1500 and warped[-1][2] == 3000

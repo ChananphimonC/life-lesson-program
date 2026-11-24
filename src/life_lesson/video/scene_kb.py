@@ -184,6 +184,10 @@ def props_from_cue(cue_text: str | None) -> tuple[str, ...]:
         props.append("riding")
     if any(k in text for k in ("เข้าป้าย", "รถมาจอด", "รถเมล์มาถึง", "รอรถเมล์")):
         props.append("arriving")
+    if "กาแฟ" in text:
+        props.append("coffee")
+    if any(k in text for k in ("ถุงขนม", "ถือถุง")):
+        props.append("carrying")
     if "เดิน" in text:
         props.append("walking")
     if "เงา" in text:

@@ -45,3 +45,11 @@ def mouth_levels(wav_path: Path | None, start_ms: int, end_ms: int, fps: int) ->
         r = max(v, rms[i - 1] * 0.6 if i else 0.0) / ref      # a little release so the mouth doesn't flutter
         out.append(1 if r > 0.55 else (2 if r > 0.22 else 0))
     return out
+
+
+def voiced_profile(wav_path: Path | None, start_ms: int, end_ms: int, win_ms: int = 20) -> list[bool] | None:
+    """True for each win_ms window that holds speech (loud enough); None when the audio is missing or silent."""
+    lv = mouth_levels(wav_path, start_ms, end_ms, max(1, 1000 // win_ms))
+    if lv is None:
+        return None
+    return [v != 0 for v in lv]

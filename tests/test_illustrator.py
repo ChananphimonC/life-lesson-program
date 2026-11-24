@@ -252,3 +252,19 @@ def test_station_names_home_front_and_riding_dot():
     assert ImageChops.difference(f(0.5, sg), f(0.5, None)).getbbox()        # station names are drawn when given
     stop = lambda s_: illustrate_scene((480, 270), setting="bus_stop", mood=BlockMood(light="golden"), characters=[], seed=1, signs=s_)
     assert ImageChops.difference(stop({"stop": "บางหว้า"}), stop(None)).getbbox()
+
+
+def test_side_walker_strides_and_people_cast_shadows():
+    from PIL import ImageChops
+    from life_lesson.video.illustrator import character_colors, illustrate_scene
+
+    walker = character_colors("เสื้อสีฟ้า", None, name="น้ำ", hair="ผมยาว สีดำ", gender="หญิง")
+    mood = BlockMood(light="bright")
+    f = lambda ph: illustrate_scene((480, 270), setting="street", mood=mood, characters=[walker], seed=1, props=("walking",),
+                                    anim={"phase": ph, "breath": 0.0, "blink": False, "mouth": 0, "prog": 0.5})
+    assert ImageChops.difference(f(0), f(2)).getbbox()          # legs/arms swap sides through the stride
+    assert ImageChops.difference(f(0), f(4)).getbbox()
+    # cast shadow: the wall/set right behind a person is darker than the same spot without anyone
+    empty = illustrate_scene((480, 270), setting="office", mood=mood, characters=[], seed=1)
+    full = illustrate_scene((480, 270), setting="office", mood=mood, characters=[walker], seed=1)
+    assert ImageChops.difference(empty, full).getbbox()

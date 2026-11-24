@@ -137,11 +137,11 @@ def run_pipeline(
             scenes = plan_scenes(script, block_starts_ms, duration_ms)
             scenes, reference_credits = _gather_references(settings, scenes)
             audio_path = _master(conn, settings, episode_id, narration_path, scenes, duration_ms)
-            cues = caption_cues(script, block_starts_ms, duration_ms) if spec.name != "short" else None
+            cues = caption_cues(script, block_starts_ms, duration_ms, voice_path=narration_path) if spec.name != "short" else None
             video_path = _assemble_video(conn, settings, episode_id, audio_path, spec, scenes, cues, narration_path)
             publish_dir = _write_publish_bundle(
                 settings, episode_id, script, spec, block_starts_ms, duration_ms, scenes, video_path,
-                extra_credits=reference_credits,
+                extra_credits=reference_credits, cues=cues,
             )
             thumb = publish_dir / "thumbnail.png"
             repo.update_episode_meta(
@@ -448,6 +448,7 @@ def _write_publish_bundle(
     scenes: list[Scene],
     video_path: Path,
     extra_credits: list[str] | None = None,
+    cues: list | None = None,
 ) -> Path:
     out_dir = settings.output_dir / "publish" / episode_id
     write_publish_bundle(
@@ -460,7 +461,7 @@ def _write_publish_bundle(
     )
     write_shot_list(scenes, out_dir / "shot_list.json")
     if spec.name != "short":
-        write_srt(caption_cues(script, block_starts_ms, duration_ms), out_dir / "subtitles.srt")
+        write_srt(cues if cues is not None else caption_cues(script, block_starts_ms, duration_ms), out_dir / "subtitles.srt")
 
     # Thumbnail PNG is best-effort: a missing Thai font must not sink an episode
     # whose video is already rendered; the JSON spec is always written.

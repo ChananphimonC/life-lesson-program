@@ -260,6 +260,26 @@ def _shade_layer(layer: Image.Image, mood: BlockMood | None) -> Image.Image:
     return out
 
 
+def _cast_shadow(base: Image.Image, layer: Image.Image, strength: float = 0.34) -> Image.Image:
+    """The people (and foreground objects) throw a soft shadow down-right onto the set behind them: the set reads as a
+    place with depth, and the figures stand in front of it instead of being stickers on it."""
+    bbox = layer.getchannel("A").getbbox()
+    if not bbox:
+        return base
+    h = base.size[1]
+    dx, dy, r = int(h * 0.016), int(h * 0.010), max(2, int(h * 0.007))
+    pad = r * 3 + dx + dy
+    box = (max(0, bbox[0] - pad), max(0, bbox[1] - pad), min(base.size[0], bbox[2] + pad), min(base.size[1], bbox[3] + pad))
+    a = layer.getchannel("A").crop(box)
+    sh = ImageChops.offset(a, dx, dy).filter(ImageFilter.GaussianBlur(r))
+    mask = sh.point(lambda v: int(v * strength))
+    region = base.crop(box)
+    dark = region.point(lambda v: int(v * 0.55))
+    out = base.copy()
+    out.paste(Image.composite(dark, region, mask), box[:2])
+    return out
+
+
 def expression_for(mood: BlockMood | None) -> str:
     """Face that matches the scene's feeling (tension + narrator voice)."""
     if mood is None:
@@ -378,6 +398,86 @@ def _ground_shadow(d, x, y, s, night):
     for i, grow in enumerate((1.0, 0.75, 0.5)):
         c = (int(40 * (1 - k)), int(36 * (1 - k)), int(44 * (1 - k)))
         d.ellipse([x - 40 * s * grow, y - 5 * s * grow, x + 40 * s * grow, y + 7 * s * grow], fill=c)
+
+
+def _knee(hip, foot, upper, lower, forward=1):
+    """Two-bone leg whose knee bends toward the walking direction (+x)."""
+    dx, dy = foot[0] - hip[0], foot[1] - hip[1]
+    dist = max(1e-6, min(math.hypot(dx, dy), upper + lower - 0.01))
+    a = (upper * upper - lower * lower + dist * dist) / (2 * dist)
+    hh = math.sqrt(max(upper * upper - a * a, 0.0))
+    ux, uy = dx / math.hypot(dx, dy or 1e-6), dy / math.hypot(dx, dy or 1e-6)
+    nx, ny = -uy, ux                                   # a normal to the hip->foot line
+    if nx * forward < 0:
+        nx, ny = -nx, -ny
+    return (hip[0] + ux * a + nx * hh, hip[1] + uy * a + ny * hh)
+
+
+def _draw_walker_side(d, x, ground_y, s, colors, phase, expression="neutral"):
+    """Profile (side-on) walking figure facing right: alternating stride, bent knees, opposite arm swing,
+    nose in profile, hair/ponytail swinging behind. Used when someone crosses the frame."""
+    outfit, hair, skin = colors["outfit"], colors["hair"], colors["skin"]
+    items = set(colors.get("items", ()))
+    dark = tuple(max(0, c - 55) for c in outfit)
+    th = 2 * math.pi * phase / 8
+    hip = (x, ground_y - 64 * s)
+    torso_top = ground_y - 126 * s
+    head_y = ground_y - 150 * s + abs(math.sin(th)) * -1.6 * s       # footfall bob
+    style = colors.get("hair_style", "short")
+    if "backpack" in items:
+        d.rounded_rectangle([x - 30 * s, torso_top + 4 * s, x - 8 * s, hip[1] - 4 * s], 8 * s, fill=(58, 62, 78))
+    # far leg + far arm (behind the body, a shade darker)
+    for k, shade in ((1, 0.78), (0, 1.0)):
+        ph = th + (math.pi if k else 0)
+        foot = (x + 24 * s * math.sin(ph), ground_y - 9 * s * max(0.0, math.cos(ph)) - 2 * s)
+        knee = _knee(hip, foot, 33 * s, 33 * s)
+        col = tuple(int(c * shade) for c in dark)
+        _limb(d, hip, knee, 13 * s, col)
+        _limb(d, knee, foot, 12 * s, col)
+        d.rounded_rectangle([foot[0] - 6 * s, foot[1] - 5 * s, foot[0] + 17 * s, foot[1] + 5 * s], 4 * s, fill=(36, 36, 44))   # shoe pointing forward
+        if k:   # far arm, drawn before the torso
+            sh = (x - 1 * s, torso_top + 12 * s)
+            hand = (x + 22 * s * math.sin(ph + math.pi), torso_top + 62 * s)
+            e, hnd = _ik(sh, hand, 29 * s, 29 * s)
+            _limb(d, sh, e, 11 * s, tuple(int(c * 0.8) for c in outfit))
+            _limb(d, e, hnd, 9.5 * s, tuple(int(c * 0.8) for c in skin))
+    d.rounded_rectangle([x - 13 * s, torso_top, x + 13 * s, hip[1] + 8 * s], 9 * s, fill=outfit)                     # torso in profile
+    if colors.get("female"):
+        d.ellipse([x + 5 * s, torso_top + 12 * s, x + 16 * s, torso_top + 25 * s], fill=outfit)                       # bust line
+    if "lanyard" in items:
+        d.line([(x + 6 * s, torso_top + 2 * s), (x + 10 * s, torso_top + 30 * s)], fill=(206, 60, 70), width=max(2, int(2 * s)))
+        d.rounded_rectangle([x + 6 * s, torso_top + 30 * s, x + 15 * s, torso_top + 44 * s], 2 * s, fill=(245, 245, 240))
+    # near arm swings opposite to the near leg
+    sh = (x + 1 * s, torso_top + 12 * s)
+    hand = (x + 22 * s * math.sin(th + math.pi), torso_top + 62 * s)
+    e, hnd = _ik(sh, hand, 29 * s, 29 * s)
+    _limb(d, sh, e, 12 * s, outfit)
+    _limb(d, e, hnd, 10 * s, skin)
+    if "laptop_bag" in items:
+        d.rounded_rectangle([hnd[0] - 6 * s, hnd[1], hnd[0] + 24 * s, hnd[1] + 30 * s], 4 * s, fill=(70, 78, 98), outline=(40, 44, 58))
+    # head in profile
+    d.rectangle([x - 4 * s, head_y + 14 * s, x + 6 * s, torso_top + 4 * s], fill=skin)
+    if style in ("long", "ponytail", "bun", "bob"):
+        sw = 4 * s * math.sin(th - 0.6)
+        if style == "ponytail":
+            d.polygon([(x - 10 * s, head_y - 8 * s), (x - 20 * s + sw, head_y + 40 * s), (x - 6 * s + sw, head_y + 52 * s), (x - 2 * s, head_y + 4 * s)], fill=hair)
+        elif style == "long":
+            d.polygon([(x - 14 * s, head_y - 10 * s), (x - 24 * s + sw, head_y + 62 * s), (x - 4 * s + sw, head_y + 66 * s), (x + 2 * s, head_y + 6 * s)], fill=hair)
+    d.ellipse([x - 16 * s, head_y - 19 * s, x + 16 * s, head_y + 19 * s], fill=skin)                                   # skull / face
+    d.ellipse([x + 4 * s, head_y + 6 * s, x + 17 * s, head_y + 21 * s], fill=skin)                                    # chin + jaw line
+    d.polygon([(x + 14 * s, head_y + 0 * s), (x + 20 * s, head_y + 6 * s), (x + 14 * s, head_y + 9 * s)], fill=skin)    # nose
+    d.ellipse([x - 19 * s, head_y - 22 * s, x + 6 * s, head_y + 13 * s], fill=hair)                                   # back of the head is hair
+    d.pieslice([x - 18 * s, head_y - 25 * s, x + 14 * s, head_y + 5 * s], 188, 335, fill=hair)                         # crown, ends in a soft fringe
+    d.line([(x - 12 * s, head_y - 18 * s), (x + 2 * s, head_y - 20 * s)], fill=tuple(min(255, c + 34) for c in hair), width=max(1, int(1.8 * s)))   # shine
+    if style == "bun":
+        d.ellipse([x - 18 * s, head_y - 34 * s, x - 4 * s, head_y - 20 * s], fill=hair)
+    if style not in ("long", "ponytail", "bob"):
+        d.ellipse([x - 5 * s, head_y + 1 * s, x + 2 * s, head_y + 8 * s], fill=tuple(max(0, c - 14) for c in skin))    # ear (hidden under long hair)
+    d.ellipse([x + 7 * s, head_y - 3 * s, x + 12 * s, head_y + 1.5 * s], fill=(250, 247, 242))
+    d.ellipse([x + 9 * s, head_y - 2.6 * s, x + 12 * s, head_y + 1 * s], fill=(60, 40, 32))                            # eye looking ahead
+    d.arc([x + 6 * s, head_y - 6 * s, x + 13 * s, head_y + 1 * s], 200, 340, fill=(44, 32, 30), width=max(1, int(1.2 * s)))
+    d.arc([x + 5 * s, head_y + 8 * s, x + 14 * s, head_y + 14 * s], 20, 150, fill=(196, 74, 86) if colors.get("female") else (44, 32, 30), width=max(1, int(1.4 * s)))   # smile
+    return {"head": (x, head_y), "L": hnd, "R": hnd}
 
 
 def _draw_arm(d, shoulder, target, s, colors):
@@ -1180,7 +1280,27 @@ def illustrate_scene(
             wk = (anim or {}).get("phase", 0) + 2 * i
             sw_ = math.sin(2 * math.pi * wk / 8)
             hands = {"L": (x - 24 * scale_, gy - 62 * scale_ + 12 * scale_ * sw_), "R": (x + 24 * scale_, gy - 62 * scale_ - 12 * scale_ * sw_)}   # arms swing up/down at the sides
-        pos = draw_fig(d, x, gy, scale_, col, sitting=seat is not None, expression=face, hands=hands, walk=wk)
+        coffee = "coffee" in props and wk is None and seat is None
+        carrying = "carrying" in props and wk is None and seat is None
+        if coffee or carrying:
+            lift = max(0.0, math.sin(math.pi * _ANIM["phase"] / 8)) ** 2 if coffee else 0.0   # a sip each cycle
+            rx = x + (26 - 14 * lift) * scale_
+            ry = gy - (66 + 74 * lift) * scale_ + (3 * scale_ * math.sin(_ANIM["phase"] * 0.8) if carrying else 0)
+            hands = {"L": (x - 27 * scale_, gy - 61 * scale_), "R": (rx, ry)}
+        if wk is not None and _ANIM["prog"] is not None:   # crossing the frame: draw her side-on, a real stride
+            _ground_shadow(d, x, gy, scale_, night_)
+            pos = _draw_walker_side(d, x, gy, scale_, col, wk, face)
+        else:
+            pos = draw_fig(d, x, gy, scale_, col, sitting=seat is not None, expression=face, hands=hands, walk=wk)
+        if coffee:       # paper cup in the hand: it travels up to the mouth and back
+            hx, hy = pos["R"]
+            d.rounded_rectangle([hx - 6.5 * scale_, hy - 15 * scale_, hx + 6.5 * scale_, hy + 5 * scale_], 2 * scale_, fill=(250, 246, 238), outline=(190, 170, 150), width=max(1, int(1.5 * scale_)))
+            d.rectangle([hx - 6.5 * scale_, hy - 9 * scale_, hx + 6.5 * scale_, hy - 3 * scale_], fill=(150, 98, 60))
+            d.rounded_rectangle([hx - 7.5 * scale_, hy - 18 * scale_, hx + 7.5 * scale_, hy - 14 * scale_], 2 * scale_, fill=(60, 44, 36))
+        if carrying:     # a big shopping bag swinging from the hand
+            hx, hy = pos["R"]
+            d.rounded_rectangle([hx - 15 * scale_, hy + 8 * scale_, hx + 15 * scale_, hy + 46 * scale_], 4 * scale_, fill=(236, 98, 120), outline=(170, 60, 84), width=max(1, int(2 * scale_)))
+            d.arc([hx - 8 * scale_, hy - 2 * scale_, hx + 8 * scale_, hy + 16 * scale_], 180, 360, fill=(120, 40, 56), width=max(2, int(2.4 * scale_)))
         if "headlamp" in col.get("items", ()):  # the lamp lights his face and the wall behind
             lights.append(((pos["head"][0], pos["head"][1] - int(10 * s)), int(h * 0.22), (255, 246, 210)))
 
@@ -1192,6 +1312,8 @@ def illustrate_scene(
     for paint in fg:
         paint(d)
     layer = _shade_layer(layer, mood)                       # volume: rim light, far-edge shadow, foot occlusion
+    if setting != "compare":
+        img = _cast_shadow(img, layer, 0.22 if _is_night(mood) else 0.34)   # soft cast shadow on the set behind
     img = Image.alpha_composite(img.convert("RGBA"), layer).convert("RGB")
     night = _is_night(mood)
     ph = _ANIM["phase"]
