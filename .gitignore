@@ -11,6 +11,8 @@ data/*.db
 data/*.db-journal
 output/audio/*
 output/video/*
+output/publish/*
+output/cache/
 !output/audio/.gitkeep
 !output/video/.gitkeep
 
