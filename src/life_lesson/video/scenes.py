@@ -197,27 +197,34 @@ def _run(command: list[str], what: str) -> None:
         raise VideoAssemblyError(f"ffmpeg failed while {what}: {result.stderr[-1500:]}")
 
 
-ANIM_FPS = 6          # character animation steps per second (flat 2D "limited animation")
-_BREATH = (0.0, 0.6, 1.0, 0.6, 0.0, -0.6, -1.0, -0.6)   # one breath cycle, 8 steps (~1.3 s)
+ANIM_FPS = 12         # pose steps per second (was 6): half-steps of the same motion = visibly smoother
+_BREATH = (0.0, 0.6, 1.0, 0.6, 0.0, -0.6, -1.0, -0.6)   # one breath cycle, 8 beats (~1.3 s)
 
 
-def anim_schedule(scene: Scene, steps: int) -> list[tuple[int, bool, int]]:
-    """Per-step (phase 0-7, blink, mouth). `phase` drives breathing, the cook's stir-fry and the walking cycle;
-    the speaker's mouth works open / half / closed with it while the line is being said."""
+def _breath_at(phase: float) -> float:
+    i = int(phase) % 8
+    f = phase - int(phase)
+    return _BREATH[i] * (1 - f) + _BREATH[(i + 1) % 8] * f
+
+
+def anim_schedule(scene: Scene, steps: int, fps: int = ANIM_FPS) -> list[tuple[float, bool, int]]:
+    """Per-step (phase, blink, mouth). `phase` advances 0.5 per step (so motion keeps its speed at 12 steps/s) and
+    drives breathing, the cook's stir-fry, the walking cycle and flames; the speaker's mouth works open / half /
+    closed on whole beats while the line is being said."""
     mouth = (1, 2, 0, 1, 1, 2, 0, 2)     # open, half, shut ... irregular, like speech
     out = []
     for i in range(steps):
-        ph = i % 8
-        blink = i % 24 == 21
-        out.append((ph, blink, mouth[ph] if scene.speaker else 0))
+        ph = (i * 6 / fps) % 8                 # same motion speed whatever the step rate
+        blink = i % (fps * 4) == int(fps * 3.5)
+        out.append((ph, blink, mouth[int(ph) % 8] if scene.speaker else 0))
     return out
 
 
-def _animated_listing(frames: list[Path], steps: list[int], path: Path) -> Path:
+def _animated_listing(frames: list[Path], steps: list[int], path: Path, fps: int = ANIM_FPS) -> Path:
     """ffmpeg concat list that plays frames[steps[i]] for 1/ANIM_FPS s each."""
     lines = []
     for k in steps:
-        lines.append(f"file '{frames[k].as_posix()}'\nduration {1 / ANIM_FPS:.5f}\n")
+        lines.append(f"file '{frames[k].as_posix()}'\nduration {1 / fps:.5f}\n")
     lines.append(f"file '{frames[steps[-1]].as_posix()}'\n")   # concat demuxer drops the last duration
     path.write_text("".join(lines), encoding="utf-8")
     return path
@@ -317,6 +324,7 @@ def assemble_scene_video(
     background_offset: int = 0,
     visual_mode: str = "stock",
     captions: list[tuple[str, int, int]] | None = None,
+    anim_fps: int = ANIM_FPS,
 ) -> Path:
     if not scenes:
         raise VideoAssemblyError("No scenes to assemble")
@@ -332,8 +340,8 @@ def assemble_scene_video(
         for n, scene in enumerate(scenes):
             focus: dict = {}
             if illustrated:
-                steps_n = max(2, int(scene.duration_s * ANIM_FPS) + 1)
-                schedule = anim_schedule(scene, steps_n)
+                steps_n = max(2, int(scene.duration_s * anim_fps) + 1)
+                schedule = anim_schedule(scene, steps_n, anim_fps)
                 variants: dict[tuple, int] = {}
                 frames: list[Path] = []
                 order: list[int] = []
@@ -352,11 +360,11 @@ def assemble_scene_video(
                             seed=f"{scene.index}-{scene.title}", out_path=png,
                             font_path=font_path, reference_palette=scene.ref_palette, props=scene.props,
                             speaker=scene.speaker, focus_out=focus, compare=scene.compare, signs=scene.signs,
-                            anim={"phase": key[0], "breath": _BREATH[key[0]], "blink": key[1], "mouth": key[2], "prog": prog},
+                            anim={"phase": key[0], "breath": _breath_at(key[0]), "blink": key[1], "mouth": key[2], "prog": prog},
                         )
                         frames.append(png)
                     order.append(variants[key])
-                clip = _animated_listing(frames, order, tmp_dir / f"anim{scene.index:03d}.txt")
+                clip = _animated_listing(frames, order, tmp_dir / f"anim{scene.index:03d}.txt", anim_fps)
             else:
                 clip = chosen[n]
             card = None

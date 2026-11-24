@@ -1106,12 +1106,12 @@ def illustrate_scene(
                 ph = (anim or {}).get("phase", 0)
                 chop = abs(math.sin(math.pi * ph / 4))              # cleaver rises and falls twice per cycle
                 bxm = (bx0 + bx1) // 2
-                pos = draw_fig(d, info["cook_x"], ground, s, col, expression=face,
+                pos = draw_fig(d, info["cook_x"], ground, s * 1.25, col, expression=face,
                                hands={"R": (bxm + 14 * s, by0 - 38 * s + 30 * s * (1 - chop)), "L": (bxm - 26 * s, by0 - 8 * s)})
                 if "serving" in props:                               # lifts the plate across the counter toward the customer
                     t_ = (math.sin(2 * math.pi * ph / 8) + 1) / 2
                     px_, py_ = bxm + (30 + 80 * t_) * s, by0 - (26 + 14 * t_) * s
-                    pos = draw_fig(d, info["cook_x"], ground, s, col, expression=face, hands={"R": (px_ + 20 * s, py_ + 4 * s), "L": (px_ - 22 * s, py_ + 4 * s)})
+                    pos = draw_fig(d, info["cook_x"], ground, s * 1.25, col, expression=face, hands={"R": (px_ + 20 * s, py_ + 4 * s), "L": (px_ - 22 * s, py_ + 4 * s)})
                     from life_lesson.video.places import plate_chicken_rice
                     plate_chicken_rice(d, px_, py_ + 8 * s, s * 0.8)
                 else:
@@ -1138,7 +1138,7 @@ def illustrate_scene(
             hands = {"L": (x - 4 * s, desk_top - 6), "R": (x + 38 * s, desk_top - 6)}
         if subject_x is None:
             subject_x = x / w
-        scale_ = s * (1.1 if seat else (1.3 if setting == "alley" else (1.6 if setting in ("mall", "market") else (1.5 if setting == "bts" else (1.7 if setting == "bus_stop" else (1.55 if setting == "home_front" else 1.4))))))
+        scale_ = s * (1.45 if seat == "sit" else (1.1 if seat else (1.3 if setting == "alley" else (1.7 if setting == "kitchen" else (1.6 if setting in ("mall", "market") else (1.5 if setting == "bts" else (1.7 if setting == "bus_stop" else (1.55 if setting == "home_front" else 1.4))))))))
         wk = None
         if "walking" in props and seat is None and _ANIM["prog"] is not None:   # really crosses the frame
             x = int(w * (0.14 + 0.72 * _ANIM["prog"]) - i * 0.07 * w)

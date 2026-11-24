@@ -395,6 +395,7 @@ def _assemble_video(
             font_path=settings.thai_font_path,
             visual_mode=settings.visual_mode,
             captions=captions,
+            anim_fps=6 if settings.preview_scale < 1 else 12,   # previews stay fast; real renders get 12 poses/s
         )
     else:
         assemble_video(
