@@ -466,11 +466,14 @@ def _draw_walker_side(d, x, ground_y, s, colors, phase, expression="neutral"):
     d.ellipse([x - 16 * s, head_y - 19 * s, x + 16 * s, head_y + 19 * s], fill=skin)                                   # skull / face
     d.ellipse([x + 4 * s, head_y + 6 * s, x + 17 * s, head_y + 21 * s], fill=skin)                                    # chin + jaw line
     d.polygon([(x + 14 * s, head_y + 0 * s), (x + 20 * s, head_y + 6 * s), (x + 14 * s, head_y + 9 * s)], fill=skin)    # nose
-    d.ellipse([x - 19 * s, head_y - 22 * s, x + 6 * s, head_y + 13 * s], fill=hair)                                   # back of the head is hair
-    d.pieslice([x - 18 * s, head_y - 25 * s, x + 14 * s, head_y + 5 * s], 188, 335, fill=hair)                         # crown, ends in a soft fringe
-    d.line([(x - 12 * s, head_y - 18 * s), (x + 2 * s, head_y - 20 * s)], fill=tuple(min(255, c + 34) for c in hair), width=max(1, int(1.8 * s)))   # shine
+    # hair in profile: it covers the whole crown, the back of the head and sweeps to a hairline above the brow
+    d.ellipse([x - 21 * s, head_y - 28 * s, x + 15 * s, head_y - 2 * s], fill=hair)                                     # crown (no bald forehead)
+    d.polygon([(x - 21 * s, head_y - 14 * s), (x - 19 * s, head_y + 16 * s), (x - 4 * s, head_y + 14 * s),
+               (x - 2 * s, head_y - 2 * s), (x + 10 * s, head_y - 11 * s), (x + 4 * s, head_y - 24 * s)], fill=hair)  # back of head, ear covered
+    d.polygon([(x + 14 * s, head_y - 14 * s), (x + 18 * s, head_y - 6 * s), (x + 12 * s, head_y - 8 * s), (x + 6 * s, head_y - 12 * s)], fill=hair)   # fringe over the brow
+    d.arc([x - 15 * s, head_y - 26 * s, x + 6 * s, head_y - 8 * s], 200, 330, fill=tuple(min(255, c + 36) for c in hair), width=max(1, int(2 * s)))  # shine
     if style == "bun":
-        d.ellipse([x - 18 * s, head_y - 34 * s, x - 4 * s, head_y - 20 * s], fill=hair)
+        d.ellipse([x - 20 * s, head_y - 36 * s, x - 5 * s, head_y - 21 * s], fill=hair)
     if style not in ("long", "ponytail", "bob"):
         d.ellipse([x - 5 * s, head_y + 1 * s, x + 2 * s, head_y + 8 * s], fill=tuple(max(0, c - 14) for c in skin))    # ear (hidden under long hair)
     d.ellipse([x + 7 * s, head_y - 3 * s, x + 12 * s, head_y + 1.5 * s], fill=(250, 247, 242))
